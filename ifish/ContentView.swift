@@ -3,88 +3,132 @@ import CloudKit
 
 struct ContentView: View {
     @State private var isLoggedInToiCloud = false
+    @State private var usuarioJaVinculado = false
+    @State private var NomeCasaUsuario: String = ""
+    @State private var casaNomeInput = ""
+    @State private var codigoConviteInput = ""
     @State private var casaRecord: CKRecord?
     @State private var casasEncontradas: [CKRecord] = []
 
     var body: some View {
-        VStack(spacing: 30) {
+        VStack(spacing: 20) {
             Text("App de Tarefas da Casa")
-                .font(.largeTitle)
-                .multilineTextAlignment(.center)
+                .font(.title)
+                .bold()
 
-            Button("Logar com iCloud", action: checkiCloudAccountStatus)
-                .buttonStyle(.borderedProminent)
+            if !isLoggedInToiCloud {
+                Button("Logar com iCloud", action: verificarConta)
+                    .buttonStyle(.borderedProminent)
+            }
 
             if isLoggedInToiCloud {
-                Button("Criar Casa", action: createCasa)
-                    .buttonStyle(.borderedProminent)
-
-                Button("Buscar Casas", action: buscarCasas)
-                    .buttonStyle(.bordered)
-
-                if !casasEncontradas.isEmpty {
-                    List(casasEncontradas, id: \.recordID) { casa in
-                        VStack(alignment: .leading) {
-                            Text(casa["nome"] as? String ?? "Sem nome")
-                                .font(.caption)
-                                .foregroundColor(.gray)
+                if usuarioJaVinculado {
+                    VStack(spacing: 10) {
+                        Text("🏠 Sua casa: \(NomeCasaUsuario)")
+                        if let codigo = casaRecord?["InviteCode"] as? String {
+                            Text("🔑 Código de convite: \(codigo)")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
                         }
                     }
+                } else {
+                    VStack(spacing: 16) {
+                        TextField("Nome da nova casa", text: $casaNomeInput)
+                            .textFieldStyle(.roundedBorder)
+
+                        Button("Criar Casa") {
+                            criarCasa(Nome: casaNomeInput)
+                        }
+                        .buttonStyle(.borderedProminent)
+
+                        Divider()
+
+                        TextField("Código de convite", text: $codigoConviteInput)
+                            .textFieldStyle(.roundedBorder)
+
+                        Button("Entrar com código") {
+                            entrarComCodigoConvite(codigo: codigoConviteInput)
+                        }
+                        .buttonStyle(.bordered)
+                    }
+                    .padding()
                 }
             }
         }
         .padding()
+        .onAppear {
+            verificarConta()
+        }
     }
 
-    // MARK: - iCloud Login
+    // MARK: - Verificar Login e Casa
 
-    func checkiCloudAccountStatus() {
-        CKContainer.default().accountStatus { status, error in
+    func verificarConta() {
+        CKContainer.default().accountStatus { status, _ in
             DispatchQueue.main.async {
                 isLoggedInToiCloud = (status == .available)
-                print(isLoggedInToiCloud ? "✅ Logado no iCloud" : "❌ Não logado: \(String(describing: error))")
+                if isLoggedInToiCloud {
+                    verificarSeUsuarioJaTemCasa()
+                }
+            }
+        }
+    }
+
+    func verificarSeUsuarioJaTemCasa() {
+        CKContainer.default().fetchUserRecordID { userRecordID, error in
+            guard let userRecordID = userRecordID else { return }
+
+            let predicate = NSPredicate(format: "UserID == %@", userRecordID.recordName)
+            let query = CKQuery(recordType: "User", predicate: predicate)
+
+            CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil) { results, _ in
+                if let user = results?.first,
+                   let ref = user["UserHouseID"] as? CKRecord.Reference {
+                    CKContainer.default().publicCloudDatabase.fetch(withRecordID: ref.recordID) { casaRecord, _ in
+                        DispatchQueue.main.async {
+                            self.NomeCasaUsuario = casaRecord?["Nome"] as? String ?? "Casa desconhecida"
+                            self.usuarioJaVinculado = true
+                        }
+                    }
+                }
             }
         }
     }
 
     // MARK: - Criar Casa
 
-    func createCasa() {
+    func criarCasa(Nome: String) {
         pedirPermissaoDescoberta { granted in
-            if granted {
-                let casa = CKRecord(recordType: "Casa")
-                casa["nome"] = "Casa do Gardini" as CKRecordValue
+            guard granted else { return }
 
-                let publicDB = CKContainer.default().publicCloudDatabase
-                publicDB.save(casa) { savedRecord, error in
-                    DispatchQueue.main.async {
-                        if let error = error {
-                            print("❌ Erro ao salvar casa: \(error)")
-                        } else if let savedCasa = savedRecord {
-                            print("✅ Casa criada")
-                            casaRecord = savedCasa
-                            registrarUsuario(casa: savedCasa)
-                        }
+            let casa = CKRecord(recordType: "Casa")
+            casa["Nome"] = Nome as CKRecordValue
+            casa["InviteCode"] = UUID().uuidString.prefix(6).uppercased() as CKRecordValue
+
+            let db = CKContainer.default().publicCloudDatabase
+            db.save(casa) { savedCasa, error in
+                DispatchQueue.main.async {
+                    if let savedCasa = savedCasa {
+                        self.casaRecord = savedCasa
+                        registrarUsuario(casa: savedCasa)
                     }
                 }
-            } else {
-                print("⚠️ Permissão de descoberta de usuário não concedida")
             }
         }
     }
 
-    // MARK: - Permissão de Descoberta
+    // MARK: - Entrar com Código
 
-    func pedirPermissaoDescoberta(completion: @escaping (Bool) -> Void) {
-        CKContainer.default().requestApplicationPermission([.userDiscoverability]) { status, error in
-            DispatchQueue.main.async {
-                if status == .granted {
-                    print("✅ Permissão de descoberta concedida")
-                    completion(true)
-                } else {
-                    print("❌ Permissão de descoberta negada: \(String(describing: error))")
-                    completion(false)
-                }
+    func entrarComCodigoConvite(codigo: String) {
+        let predicate = NSPredicate(format: "InviteCode == %@", codigo)
+        let query = CKQuery(recordType: "Casa", predicate: predicate)
+
+        CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil) { results, _ in
+            if let casa = results?.first {
+                self.casaRecord = casa
+                registrarUsuario(casa: casa)
+            } else {
+                print("❌ Código de convite inválido")
             }
         }
     }
@@ -94,14 +138,10 @@ struct ContentView: View {
     func registrarUsuario(casa: CKRecord) {
         let container = CKContainer.default()
 
-        container.fetchUserRecordID { userRecordID, error in
-            if let error = error {
-                print("❌ Erro ao buscar ID do usuário: \(error)")
-                return
-            }
+        container.fetchUserRecordID { userRecordID, _ in
             guard let userRecordID = userRecordID else { return }
 
-            container.discoverUserIdentity(withUserRecordID: userRecordID) { identity, error in
+            container.discoverUserIdentity(withUserRecordID: userRecordID) { identity, _ in
                 var nome = "Usuário Desconhecido"
                 if let components = identity?.nameComponents {
                     let firstName = components.givenName ?? ""
@@ -116,10 +156,10 @@ struct ContentView: View {
 
                 container.publicCloudDatabase.save(userRecord) { savedUser, error in
                     DispatchQueue.main.async {
-                        if let error = error {
-                            print("❌ Erro ao salvar usuário: \(error)")
-                        } else {
+                        if let _ = savedUser {
                             print("✅ Usuário registrado: \(nome)")
+                            self.usuarioJaVinculado = true
+                            self.NomeCasaUsuario = casa["Nome"] as? String ?? "Casa"
                         }
                     }
                 }
@@ -127,20 +167,12 @@ struct ContentView: View {
         }
     }
 
-    // MARK: - Buscar Casas
+    // MARK: - Permissão
 
-    func buscarCasas() {
-        let predicate = NSPredicate(value: true)
-        let query = CKQuery(recordType: "Casa", predicate: predicate)
-
-        CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil) { results, error in
+    func pedirPermissaoDescoberta(completion: @escaping (Bool) -> Void) {
+        CKContainer.default().requestApplicationPermission([.userDiscoverability]) { status, _ in
             DispatchQueue.main.async {
-                if let error = error {
-                    print("❌ Erro na busca: \(error.localizedDescription)")
-                } else {
-                    casasEncontradas = results ?? []
-                    print("✅ Encontradas \(casasEncontradas.count) casas")
-                }
+                completion(status == .granted)
             }
         }
     }
