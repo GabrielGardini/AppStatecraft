@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E639E752DF866860034E362 /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E742DF866860034E362 /* House.swift */; };
+		4E639E832DF867DB0034E362 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E822DF867DB0034E362 /* Task.swift */; };
+		4E639E852DF867EC0034E362 /* Finance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E842DF867EC0034E362 /* Finance.swift */; };
+		4E639E872DF867F90034E362 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E862DF867F90034E362 /* User.swift */; };
+		4E639E892DF868190034E362 /* MuralComunication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E882DF868190034E362 /* MuralComunication.swift */; };
+		4E639E8B2DF8749F0034E362 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 4E639E8A2DF8749F0034E362 /* .gitignore */; };
 		E75ECE0B2DF088E100E1A579 /* ifishApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE0A2DF088E100E1A579 /* ifishApp.swift */; };
 		E75ECE0D2DF088E100E1A579 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE0C2DF088E100E1A579 /* ContentView.swift */; };
 		E75ECE0F2DF088EB00E1A579 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E75ECE0E2DF088EB00E1A579 /* Assets.xcassets */; };
@@ -35,6 +41,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4E639E742DF866860034E362 /* House.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = House.swift; sourceTree = "<group>"; };
+		4E639E822DF867DB0034E362 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
+		4E639E842DF867EC0034E362 /* Finance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Finance.swift; sourceTree = "<group>"; };
+		4E639E862DF867F90034E362 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		4E639E882DF868190034E362 /* MuralComunication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuralComunication.swift; sourceTree = "<group>"; };
+		4E639E8A2DF8749F0034E362 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		E75ECE072DF088E100E1A579 /* ifish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ifish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E75ECE0A2DF088E100E1A579 /* ifishApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ifishApp.swift; sourceTree = "<group>"; };
 		E75ECE0C2DF088E100E1A579 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -76,11 +88,130 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4E639E722DF8642F0034E362 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E75ECE0E2DF088EB00E1A579 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		4E639E732DF866610034E362 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				4E639E742DF866860034E362 /* House.swift */,
+				4E639E822DF867DB0034E362 /* Task.swift */,
+				4E639E842DF867EC0034E362 /* Finance.swift */,
+				4E639E862DF867F90034E362 /* User.swift */,
+				4E639E882DF868190034E362 /* MuralComunication.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		4E639E762DF8668F0034E362 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4E639E7A2DF867050034E362 /* Mural */,
+				4E639E7B2DF8670B0034E362 /* Tasks */,
+				4E639E7C2DF867190034E362 /* Finances */,
+				4E639E7D2DF867200034E362 /* HouseProfile */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		4E639E772DF8669C0034E362 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				4E639E812DF867B00034E362 /* Mural */,
+				4E639E802DF867A70034E362 /* Tasks */,
+				4E639E7F2DF867970034E362 /* Finances */,
+				4E639E7E2DF8678E0034E362 /* HouseProfile */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		4E639E782DF866D20034E362 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		4E639E792DF866E70034E362 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		4E639E7A2DF867050034E362 /* Mural */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Mural;
+			sourceTree = "<group>";
+		};
+		4E639E7B2DF8670B0034E362 /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Tasks;
+			sourceTree = "<group>";
+		};
+		4E639E7C2DF867190034E362 /* Finances */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Finances;
+			sourceTree = "<group>";
+		};
+		4E639E7D2DF867200034E362 /* HouseProfile */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = HouseProfile;
+			sourceTree = "<group>";
+		};
+		4E639E7E2DF8678E0034E362 /* HouseProfile */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = HouseProfile;
+			sourceTree = "<group>";
+		};
+		4E639E7F2DF867970034E362 /* Finances */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Finances;
+			sourceTree = "<group>";
+		};
+		4E639E802DF867A70034E362 /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Tasks;
+			sourceTree = "<group>";
+		};
+		4E639E812DF867B00034E362 /* Mural */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Mural;
+			sourceTree = "<group>";
+		};
 		E75ECDFE2DF088E000E1A579 = {
 			isa = PBXGroup;
 			children = (
+				4E639E8A2DF8749F0034E362 /* .gitignore */,
 				E75ECE382DF1B8F200E1A579 /* Info.plist */,
 				E75ECE092DF088E100E1A579 /* ifish */,
+				4E639E732DF866610034E362 /* Models */,
+				4E639E772DF8669C0034E362 /* ViewModels */,
+				4E639E762DF8668F0034E362 /* Views */,
+				4E639E722DF8642F0034E362 /* Resources */,
+				4E639E792DF866E70034E362 /* Utils */,
+				4E639E782DF866D20034E362 /* Services */,
 				E75ECE1A2DF088EB00E1A579 /* ifishTests */,
 				E75ECE242DF088EB00E1A579 /* ifishUITests */,
 				E75ECE082DF088E100E1A579 /* Products */,
@@ -104,7 +235,6 @@
 				E75ECE342DF08CC800E1A579 /* ifish.entitlements */,
 				E75ECE0A2DF088E100E1A579 /* ifishApp.swift */,
 				E75ECE0C2DF088E100E1A579 /* ContentView.swift */,
-				E75ECE0E2DF088EB00E1A579 /* Assets.xcassets */,
 				E75ECE102DF088EB00E1A579 /* Preview Content */,
 			);
 			path = ifish;
@@ -248,6 +378,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E75ECE122DF088EB00E1A579 /* Preview Assets.xcassets in Resources */,
+				4E639E8B2DF8749F0034E362 /* .gitignore in Resources */,
 				E75ECE0F2DF088EB00E1A579 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -273,7 +404,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E639E832DF867DB0034E362 /* Task.swift in Sources */,
+				4E639E892DF868190034E362 /* MuralComunication.swift in Sources */,
 				E75ECE0D2DF088E100E1A579 /* ContentView.swift in Sources */,
+				4E639E872DF867F90034E362 /* User.swift in Sources */,
+				4E639E852DF867EC0034E362 /* Finance.swift in Sources */,
+				4E639E752DF866860034E362 /* House.swift in Sources */,
 				E75ECE0B2DF088E100E1A579 /* ifishApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -466,6 +602,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ifish/Preview Content\"";
+				DEVELOPMENT_TEAM = 7JULNSTCHT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
