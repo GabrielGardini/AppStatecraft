@@ -21,6 +21,19 @@
 		E75ECE262DF088EB00E1A579 /* ifishUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE252DF088EB00E1A579 /* ifishUITests.swift */; };
 		E75ECE282DF088EC00E1A579 /* ifishUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE272DF088EC00E1A579 /* ifishUITestsLaunchTests.swift */; };
 		E75ECE372DF08D5900E1A579 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E75ECE362DF08D5900E1A579 /* CloudKit.framework */; };
+		E75ECE472E00461800E1A579 /* HouseProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE462E00461800E1A579 /* HouseProfileViewModel.swift */; };
+		E75ECE492E004D6200E1A579 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE482E004D6200E1A579 /* LoginView.swift */; };
+		E75ECE4B2E004D9B00E1A579 /* EntrarOuCriarCasaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE4A2E004D9B00E1A579 /* EntrarOuCriarCasaView.swift */; };
+		E75ECE4D2E004DB900E1A579 /* CriarCasaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE4C2E004DB900E1A579 /* CriarCasaView.swift */; };
+		E75ECE4F2E004DDF00E1A579 /* CasaCriadaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE4E2E004DDF00E1A579 /* CasaCriadaView.swift */; };
+		E75ECE512E004E0C00E1A579 /* EntrarCasaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE502E004E0C00E1A579 /* EntrarCasaView.swift */; };
+		E75ECE592E00616800E1A579 /* Mural.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE582E00616800E1A579 /* Mural.swift */; };
+		E75ECE5C2E0061AC00E1A579 /* Tasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE5B2E0061AC00E1A579 /* Tasks.swift */; };
+		E75ECE5F2E0061C300E1A579 /* Finances.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE5E2E0061C300E1A579 /* Finances.swift */; };
+		E75ECE622E0061F700E1A579 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE612E0061F700E1A579 /* User.swift */; };
+		E75ECE672E00629600E1A579 /* Finances.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE662E00629600E1A579 /* Finances.swift */; };
+		E75ECE6A2E0062B000E1A579 /* Mural.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE692E0062B000E1A579 /* Mural.swift */; };
+		E75ECE6D2E0062C300E1A579 /* Tasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE6C2E0062C300E1A579 /* Tasks.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +73,19 @@
 		E75ECE342DF08CC800E1A579 /* ifish.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ifish.entitlements; sourceTree = "<group>"; };
 		E75ECE362DF08D5900E1A579 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		E75ECE382DF1B8F200E1A579 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E75ECE462E00461800E1A579 /* HouseProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HouseProfileViewModel.swift; path = ifish/ViewModels/HouseProfile/HouseProfileViewModel.swift; sourceTree = SOURCE_ROOT; };
+		E75ECE482E004D6200E1A579 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LoginView.swift; path = ifish/Views/HouseProfile/LoginView.swift; sourceTree = SOURCE_ROOT; };
+		E75ECE4A2E004D9B00E1A579 /* EntrarOuCriarCasaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EntrarOuCriarCasaView.swift; path = ifish/Views/HouseProfile/EntrarOuCriarCasaView.swift; sourceTree = SOURCE_ROOT; };
+		E75ECE4C2E004DB900E1A579 /* CriarCasaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CriarCasaView.swift; path = ifish/Views/HouseProfile/CriarCasaView.swift; sourceTree = SOURCE_ROOT; };
+		E75ECE4E2E004DDF00E1A579 /* CasaCriadaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CasaCriadaView.swift; path = ifish/Views/HouseProfile/CasaCriadaView.swift; sourceTree = SOURCE_ROOT; };
+		E75ECE502E004E0C00E1A579 /* EntrarCasaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EntrarCasaView.swift; path = ifish/Views/HouseProfile/EntrarCasaView.swift; sourceTree = SOURCE_ROOT; };
+		E75ECE582E00616800E1A579 /* Mural.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mural.swift; sourceTree = "<group>"; };
+		E75ECE5B2E0061AC00E1A579 /* Tasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tasks.swift; sourceTree = "<group>"; };
+		E75ECE5E2E0061C300E1A579 /* Finances.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Finances.swift; sourceTree = "<group>"; };
+		E75ECE612E0061F700E1A579 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		E75ECE662E00629600E1A579 /* Finances.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Finances.swift; sourceTree = "<group>"; };
+		E75ECE692E0062B000E1A579 /* Mural.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mural.swift; sourceTree = "<group>"; };
+		E75ECE6C2E0062C300E1A579 /* Tasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tasks.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,28 +134,6 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		4E639E762DF8668F0034E362 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				4E639E7A2DF867050034E362 /* Mural */,
-				4E639E7B2DF8670B0034E362 /* Tasks */,
-				4E639E7C2DF867190034E362 /* Finances */,
-				4E639E7D2DF867200034E362 /* HouseProfile */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		4E639E772DF8669C0034E362 /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				4E639E812DF867B00034E362 /* Mural */,
-				4E639E802DF867A70034E362 /* Tasks */,
-				4E639E7F2DF867970034E362 /* Finances */,
-				4E639E7E2DF8678E0034E362 /* HouseProfile */,
-			);
-			path = ViewModels;
-			sourceTree = "<group>";
-		};
 		4E639E782DF866D20034E362 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -140,64 +144,11 @@
 		4E639E792DF866E70034E362 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				4E639E722DF8642F0034E362 /* Resources */,
+				4E639E782DF866D20034E362 /* Services */,
 			);
-			path = Utils;
-			sourceTree = "<group>";
-		};
-		4E639E7A2DF867050034E362 /* Mural */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Mural;
-			sourceTree = "<group>";
-		};
-		4E639E7B2DF8670B0034E362 /* Tasks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Tasks;
-			sourceTree = "<group>";
-		};
-		4E639E7C2DF867190034E362 /* Finances */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Finances;
-			sourceTree = "<group>";
-		};
-		4E639E7D2DF867200034E362 /* HouseProfile */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = HouseProfile;
-			sourceTree = "<group>";
-		};
-		4E639E7E2DF8678E0034E362 /* HouseProfile */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = HouseProfile;
-			sourceTree = "<group>";
-		};
-		4E639E7F2DF867970034E362 /* Finances */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Finances;
-			sourceTree = "<group>";
-		};
-		4E639E802DF867A70034E362 /* Tasks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Tasks;
-			sourceTree = "<group>";
-		};
-		4E639E812DF867B00034E362 /* Mural */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Mural;
+			name = Utils;
+			path = ../Utils;
 			sourceTree = "<group>";
 		};
 		E75ECDFE2DF088E000E1A579 = {
@@ -206,13 +157,6 @@
 				4E639E8A2DF8749F0034E362 /* .gitignore */,
 				E75ECE382DF1B8F200E1A579 /* Info.plist */,
 				E75ECE092DF088E100E1A579 /* ifish */,
-				4E639E732DF866610034E362 /* Models */,
-				4E639E772DF8669C0034E362 /* ViewModels */,
-				4E639E762DF8668F0034E362 /* Views */,
-				4E639E722DF8642F0034E362 /* Resources */,
-				4E639E792DF866E70034E362 /* Utils */,
-				4E639E782DF866D20034E362 /* Services */,
-				E75ECE1A2DF088EB00E1A579 /* ifishTests */,
 				E75ECE242DF088EB00E1A579 /* ifishUITests */,
 				E75ECE082DF088E100E1A579 /* Products */,
 				E75ECE352DF08D5900E1A579 /* Frameworks */,
@@ -232,9 +176,14 @@
 		E75ECE092DF088E100E1A579 /* ifish */ = {
 			isa = PBXGroup;
 			children = (
+				E75ECE632E00620F00E1A579 /* Views */,
+				E75ECE552E005FAD00E1A579 /* ViewModels */,
 				E75ECE342DF08CC800E1A579 /* ifish.entitlements */,
+				4E639E732DF866610034E362 /* Models */,
 				E75ECE0A2DF088E100E1A579 /* ifishApp.swift */,
 				E75ECE0C2DF088E100E1A579 /* ContentView.swift */,
+				E75ECE1A2DF088EB00E1A579 /* ifishTests */,
+				4E639E792DF866E70034E362 /* Utils */,
 				E75ECE102DF088EB00E1A579 /* Preview Content */,
 			);
 			path = ifish;
@@ -271,6 +220,105 @@
 				E75ECE362DF08D5900E1A579 /* CloudKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E75ECE552E005FAD00E1A579 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				E75ECE602E0061E800E1A579 /* User */,
+				E75ECE5D2E0061B100E1A579 /* Finances */,
+				E75ECE5A2E00619200E1A579 /* Tasks */,
+				E75ECE572E00614B00E1A579 /* Mural */,
+				E75ECE562E005FCA00E1A579 /* HouseProfile */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		E75ECE562E005FCA00E1A579 /* HouseProfile */ = {
+			isa = PBXGroup;
+			children = (
+				E75ECE462E00461800E1A579 /* HouseProfileViewModel.swift */,
+			);
+			path = HouseProfile;
+			sourceTree = "<group>";
+		};
+		E75ECE572E00614B00E1A579 /* Mural */ = {
+			isa = PBXGroup;
+			children = (
+				E75ECE582E00616800E1A579 /* Mural.swift */,
+			);
+			path = Mural;
+			sourceTree = "<group>";
+		};
+		E75ECE5A2E00619200E1A579 /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				E75ECE5B2E0061AC00E1A579 /* Tasks.swift */,
+			);
+			path = Tasks;
+			sourceTree = "<group>";
+		};
+		E75ECE5D2E0061B100E1A579 /* Finances */ = {
+			isa = PBXGroup;
+			children = (
+				E75ECE5E2E0061C300E1A579 /* Finances.swift */,
+			);
+			path = Finances;
+			sourceTree = "<group>";
+		};
+		E75ECE602E0061E800E1A579 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				E75ECE612E0061F700E1A579 /* User.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		E75ECE632E00620F00E1A579 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E75ECE6B2E0062B400E1A579 /* Tasks */,
+				E75ECE682E0062A000E1A579 /* Mural */,
+				E75ECE652E00626600E1A579 /* Finances */,
+				E75ECE642E00622A00E1A579 /* HouseProfile */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E75ECE642E00622A00E1A579 /* HouseProfile */ = {
+			isa = PBXGroup;
+			children = (
+				E75ECE4A2E004D9B00E1A579 /* EntrarOuCriarCasaView.swift */,
+				E75ECE4E2E004DDF00E1A579 /* CasaCriadaView.swift */,
+				E75ECE4C2E004DB900E1A579 /* CriarCasaView.swift */,
+				E75ECE502E004E0C00E1A579 /* EntrarCasaView.swift */,
+				E75ECE482E004D6200E1A579 /* LoginView.swift */,
+			);
+			path = HouseProfile;
+			sourceTree = "<group>";
+		};
+		E75ECE652E00626600E1A579 /* Finances */ = {
+			isa = PBXGroup;
+			children = (
+				E75ECE662E00629600E1A579 /* Finances.swift */,
+			);
+			path = Finances;
+			sourceTree = "<group>";
+		};
+		E75ECE682E0062A000E1A579 /* Mural */ = {
+			isa = PBXGroup;
+			children = (
+				E75ECE692E0062B000E1A579 /* Mural.swift */,
+			);
+			path = Mural;
+			sourceTree = "<group>";
+		};
+		E75ECE6B2E0062B400E1A579 /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				E75ECE6C2E0062C300E1A579 /* Tasks.swift */,
+			);
+			path = Tasks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -404,13 +452,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E75ECE5F2E0061C300E1A579 /* Finances.swift in Sources */,
 				4E639E832DF867DB0034E362 /* Task.swift in Sources */,
 				4E639E892DF868190034E362 /* MuralComunication.swift in Sources */,
+				E75ECE4D2E004DB900E1A579 /* CriarCasaView.swift in Sources */,
 				E75ECE0D2DF088E100E1A579 /* ContentView.swift in Sources */,
+				E75ECE492E004D6200E1A579 /* LoginView.swift in Sources */,
+				E75ECE6A2E0062B000E1A579 /* Mural.swift in Sources */,
+				E75ECE4B2E004D9B00E1A579 /* EntrarOuCriarCasaView.swift in Sources */,
+				E75ECE6D2E0062C300E1A579 /* Tasks.swift in Sources */,
+				E75ECE622E0061F700E1A579 /* User.swift in Sources */,
+				E75ECE672E00629600E1A579 /* Finances.swift in Sources */,
+				E75ECE4F2E004DDF00E1A579 /* CasaCriadaView.swift in Sources */,
 				4E639E872DF867F90034E362 /* User.swift in Sources */,
+				E75ECE512E004E0C00E1A579 /* EntrarCasaView.swift in Sources */,
+				E75ECE592E00616800E1A579 /* Mural.swift in Sources */,
 				4E639E852DF867EC0034E362 /* Finance.swift in Sources */,
 				4E639E752DF866860034E362 /* House.swift in Sources */,
 				E75ECE0B2DF088E100E1A579 /* ifishApp.swift in Sources */,
+				E75ECE5C2E0061AC00E1A579 /* Tasks.swift in Sources */,
+				E75ECE472E00461800E1A579 /* HouseProfileViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
