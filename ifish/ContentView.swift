@@ -9,6 +9,8 @@ struct ContentView: View {
     @State private var codigoConviteInput = ""
     @State private var casaRecord: CKRecord?
     @State private var casasEncontradas: [CKRecord] = []
+    
+    @State private var mostrarAlertaICloud = false
 
     var body: some View {
         VStack(spacing: 20) {
@@ -17,8 +19,15 @@ struct ContentView: View {
                 .bold()
 
             if !isLoggedInToiCloud {
-                Button("Logar com iCloud", action: verificarConta)
-                    .buttonStyle(.borderedProminent)
+                Button(action: verificarConta) {
+                    Label("Entrar com iCloud", systemImage: "icloud")
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                .padding(.horizontal)
             }
 
             if isLoggedInToiCloud {
@@ -59,6 +68,11 @@ struct ContentView: View {
         .onAppear {
             verificarConta()
         }
+        .alert("iCloud não disponível", isPresented: $mostrarAlertaICloud) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Você precisa estar logado no iCloud para usar este app.")
+        }
     }
 
     // MARK: - Verificar Login e Casa
@@ -66,9 +80,16 @@ struct ContentView: View {
     func verificarConta() {
         CKContainer.default().accountStatus { status, _ in
             DispatchQueue.main.async {
-                isLoggedInToiCloud = (status == .available)
-                if isLoggedInToiCloud {
+                switch status {
+                case .available:
+                    isLoggedInToiCloud = true
                     verificarSeUsuarioJaTemCasa()
+                case .noAccount, .restricted, .couldNotDetermine:
+                    isLoggedInToiCloud = false
+                    mostrarAlertaICloud = true
+                @unknown default:
+                    isLoggedInToiCloud = false
+                    mostrarAlertaICloud = true
                 }
             }
         }
