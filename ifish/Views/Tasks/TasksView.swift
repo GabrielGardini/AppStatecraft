@@ -6,15 +6,80 @@
 //
 
 import SwiftUI
+import CloudKit
 
 struct TasksView: View {
+    @ObservedObject var viewModel: TasksViewModel
+    @State private var escolha = "Minhas tarefas"
+    
+    let casaID: CKRecord.ID
+    let userID: CKRecord.ID
+    
+    private let filtros = ["Minhas tarefas", "Todas"]
+
+    var tarefasFiltradas: [TaskModel] {
+        if escolha == "Minhas tarefas" {
+            return viewModel.tarefas.filter { $0.userID == userID }
+        } else {
+            return viewModel.tarefas
+        }
+    }
+    
     var body: some View {
-        Text("Hello, World!")
+        VStack {
+            Picker("", selection: $escolha) {
+                ForEach(filtros, id: \.self) {
+                    Text($0)
+                }
+            }
+            .pickerStyle(.segmented)
+            
+            ForEach(tarefasFiltradas) { tarefa in
+                TaskCard(task: tarefa)
+            }
+            
+            Spacer()
+        }
     }
 }
 
 struct TaskListView_Previews: PreviewProvider {
     static var previews: some View {
-        TasksView()
+        // IDs mock
+        let mockUserID = CKRecord.ID(recordName: "mock-user-id")
+        let mockHouseID = CKRecord.ID(recordName: "mock-house-id")
+
+        // usuário mock
+        let mockUser = UserModel(id: mockUserID, name: "Maria Lucia", houseID: mockHouseID)
+
+        // task mock associando o user
+        let mockTask = TaskModel(
+            id: CKRecord.ID(recordName: "mock-task-id"),
+            userID: mockUserID,
+            casaID: mockHouseID,
+            icone: "trash.fill",
+            titulo: "Tirar o lixo",
+            descricao: "",
+            prazo: Date(),
+            completo: false,
+            user: mockUser
+        )
+        
+        // task mock associando o user
+        let mockTask2 = TaskModel(
+            id: CKRecord.ID(recordName: "mock-task2-id"),
+            userID: mockUserID,
+            casaID: mockHouseID,
+            icone: "leaf.fill",
+            titulo: "Regar as plantas",
+            descricao: "",
+            prazo: Date(),
+            completo: false,
+            user: mockUser
+        )
+        
+        let viewModel = TasksViewModel(tarefas: [mockTask, mockTask2])
+        
+        TasksView(viewModel: viewModel, casaID: mockHouseID, userID: mockUserID)
     }
 }
