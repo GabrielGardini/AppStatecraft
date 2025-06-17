@@ -1,37 +1,29 @@
 # --- Diretórios de Build e Caches ---
-# Pasta de builds gerados
 build/
-# Derived Data (caches do Xcode)
 DerivedData/
-# Swift Package Manager
 /.build/
 /Packages/
 
 # --- Arquivos de Projeto e de Workspace ---
-# Xcode
 *.xcworkspace
-!Podfile  # se usar CocoaPods
-!Package.swift  # se usar SwiftPM
+!Podfile
+!Package.swift
 
-# Arquivos de configuração de usuário (não versionar ajustes individuais)
 *.xcuserstate
 *.xcuserdata/
 
 # --- Schemes e Logs ---
-# Schemes gerados localmente
 xcshareddata/
-# Logs de execução
 *.log
 
 # --- CarPlay, Simuladores e Devices ---
-# Simuladores
 CoreSimulator/
-# iOS device logs
 *.iOSDeviceCompatibility.json
 
 # --- Arquivos Temporários e Outros ---
-# Arquivos de backup e trocas de texto
 *~
 *.swp
 *.lockfile
 
+# --- macOS ---
+.DS_Store
