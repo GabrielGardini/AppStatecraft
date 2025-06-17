@@ -11,6 +11,7 @@ DerivedData/
 
 *.xcuserstate
 *.xcuserdata/
+*.xcurserdatad/
 
 # --- Schemes e Logs ---
 xcshareddata/
