@@ -13,6 +13,7 @@
 		4E639E872DF867F90034E362 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E862DF867F90034E362 /* UserModel.swift */; };
 		4E639E892DF868190034E362 /* MuralComunicationModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E882DF868190034E362 /* MuralComunicationModal.swift */; };
 		4E639E8B2DF8749F0034E362 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 4E639E8A2DF8749F0034E362 /* .gitignore */; };
+		A93B17082E01B12900B55257 /* DespesasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93B17072E01B12900B55257 /* DespesasView.swift */; };
 		E75ECE0B2DF088E100E1A579 /* ifishApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE0A2DF088E100E1A579 /* ifishApp.swift */; };
 		E75ECE0D2DF088E100E1A579 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE0C2DF088E100E1A579 /* ContentView.swift */; };
 		E75ECE0F2DF088EB00E1A579 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E75ECE0E2DF088EB00E1A579 /* Assets.xcassets */; };
@@ -60,6 +61,7 @@
 		4E639E862DF867F90034E362 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		4E639E882DF868190034E362 /* MuralComunicationModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuralComunicationModal.swift; sourceTree = "<group>"; };
 		4E639E8A2DF8749F0034E362 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		A93B17072E01B12900B55257 /* DespesasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DespesasView.swift; sourceTree = "<group>"; };
 		E75ECE072DF088E100E1A579 /* ifish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ifish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E75ECE0A2DF088E100E1A579 /* ifishApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ifishApp.swift; sourceTree = "<group>"; };
 		E75ECE0C2DF088E100E1A579 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -301,6 +303,7 @@
 			isa = PBXGroup;
 			children = (
 				E75ECE662E00629600E1A579 /* FinancesView.swift */,
+				A93B17072E01B12900B55257 /* DespesasView.swift */,
 			);
 			path = Finances;
 			sourceTree = "<group>";
@@ -462,6 +465,7 @@
 				E75ECE4B2E004D9B00E1A579 /* EntrarOuCriarCasaView.swift in Sources */,
 				E75ECE6D2E0062C300E1A579 /* TasksView.swift in Sources */,
 				E75ECE622E0061F700E1A579 /* UserViewModel.swift in Sources */,
+				A93B17082E01B12900B55257 /* DespesasView.swift in Sources */,
 				E75ECE672E00629600E1A579 /* FinancesView.swift in Sources */,
 				E75ECE4F2E004DDF00E1A579 /* CasaCriadaView.swift in Sources */,
 				4E639E872DF867F90034E362 /* UserModel.swift in Sources */,
