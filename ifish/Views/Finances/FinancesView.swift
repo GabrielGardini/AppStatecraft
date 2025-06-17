@@ -1,8 +1,11 @@
-//
-//  Finances.swift
-//  ifish
-//
-//  Created by Aluno 15 on 16/06/25.
-//
+import SwiftUI
 
-import Foundation
+struct FinanceView: View {
+    
+
+    var body: some View {
+        NavigationView {
+        Text("view de teste")
+    }
+}
+}

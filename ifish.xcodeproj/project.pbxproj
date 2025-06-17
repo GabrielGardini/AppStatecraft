@@ -34,6 +34,9 @@
 		E75ECE6A2E0062B000E1A579 /* MuralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE692E0062B000E1A579 /* MuralView.swift */; };
 		E75ECE6D2E0062C300E1A579 /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE6C2E0062C300E1A579 /* TasksView.swift */; };
 		E75ECE6E2E018A9A00E1A579 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E75ECE112DF088EB00E1A579 /* Preview Assets.xcassets */; };
+		E75ECE702E0192E900E1A579 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE6F2E0192E900E1A579 /* Extensions.swift */; };
+		E75ECE722E01972A00E1A579 /* MainAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE712E01972A00E1A579 /* MainAppView.swift */; };
+		E75ECE742E01A8FF00E1A579 /* AppStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE732E01A8FF00E1A579 /* AppStartView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +89,9 @@
 		E75ECE662E00629600E1A579 /* FinancesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancesView.swift; sourceTree = "<group>"; };
 		E75ECE692E0062B000E1A579 /* MuralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuralView.swift; sourceTree = "<group>"; };
 		E75ECE6C2E0062C300E1A579 /* TasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
+		E75ECE6F2E0192E900E1A579 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		E75ECE712E01972A00E1A579 /* MainAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppView.swift; sourceTree = "<group>"; };
+		E75ECE732E01A8FF00E1A579 /* AppStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +152,7 @@
 			children = (
 				4E639E722DF8642F0034E362 /* Resources */,
 				4E639E782DF866D20034E362 /* Services */,
+				E75ECE6F2E0192E900E1A579 /* Extensions.swift */,
 			);
 			name = Utils;
 			path = ../Utils;
@@ -293,6 +300,8 @@
 				E75ECE4C2E004DB900E1A579 /* CriarCasaView.swift */,
 				E75ECE502E004E0C00E1A579 /* EntrarCasaView.swift */,
 				E75ECE482E004D6200E1A579 /* LoginView.swift */,
+				E75ECE712E01972A00E1A579 /* MainAppView.swift */,
+				E75ECE732E01A8FF00E1A579 /* AppStartView.swift */,
 			);
 			path = HouseProfile;
 			sourceTree = "<group>";
@@ -457,6 +466,7 @@
 				4E639E892DF868190034E362 /* MuralComunicationModal.swift in Sources */,
 				E75ECE4D2E004DB900E1A579 /* CriarCasaView.swift in Sources */,
 				E75ECE0D2DF088E100E1A579 /* ContentView.swift in Sources */,
+				E75ECE722E01972A00E1A579 /* MainAppView.swift in Sources */,
 				E75ECE492E004D6200E1A579 /* LoginView.swift in Sources */,
 				E75ECE6A2E0062B000E1A579 /* MuralView.swift in Sources */,
 				E75ECE4B2E004D9B00E1A579 /* EntrarOuCriarCasaView.swift in Sources */,
@@ -465,6 +475,7 @@
 				E75ECE672E00629600E1A579 /* FinancesView.swift in Sources */,
 				E75ECE4F2E004DDF00E1A579 /* CasaCriadaView.swift in Sources */,
 				4E639E872DF867F90034E362 /* UserModel.swift in Sources */,
+				E75ECE702E0192E900E1A579 /* Extensions.swift in Sources */,
 				E75ECE512E004E0C00E1A579 /* EntrarCasaView.swift in Sources */,
 				E75ECE592E00616800E1A579 /* MuralViewModel.swift in Sources */,
 				4E639E852DF867EC0034E362 /* FinanceModel.swift in Sources */,
@@ -472,6 +483,7 @@
 				E75ECE0B2DF088E100E1A579 /* ifishApp.swift in Sources */,
 				E75ECE5C2E0061AC00E1A579 /* TasksViewModel.swift in Sources */,
 				E75ECE472E00461800E1A579 /* HouseProfileViewModel.swift in Sources */,
+				E75ECE742E01A8FF00E1A579 /* AppStartView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
