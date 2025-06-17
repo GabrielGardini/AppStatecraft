@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CasaCriadaView: View {
     @ObservedObject var viewModel: HouseProfileViewModel
+    @State private var navegarParaApp = false
 
     var body: some View {
         VStack(spacing: 24) {
@@ -34,9 +35,14 @@ struct CasaCriadaView: View {
             }
 
             Button("Continuar") {
-                // navegue para tela principal do app
+                navegarParaApp = true
             }
             .buttonStyle(.borderedProminent)
+
+            // Este é o NavigationLink ativado pelo botão acima
+            NavigationLink(destination: MainAppView(), isActive: $navegarParaApp) {
+                EmptyView()
+            }
         }
         .padding()
     }
