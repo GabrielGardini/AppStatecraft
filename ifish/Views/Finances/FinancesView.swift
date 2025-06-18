@@ -7,35 +7,39 @@ let fundoFinances = LinearGradient(
     
 
 struct FinancesView: View {
+    @State private var teste = 0
     var body: some View {
+        NavigationView {
             ZStack {
-                fundoFinances
-                    .ignoresSafeArea()
-                VStack {
-                    HStack {
-                        Text("Despesas")
-                            .font(.system(size: 34, weight: .bold))
-                        Spacer()
-                        Button(action: {
-                            print("botao")
-                        }) {
-                            Image(systemName: "plus")
-                                .font(.title2)
-                                .foregroundColor(.primary)
+                    fundoFinances
+                        .ignoresSafeArea()
+                    VStack{
+                        Picker("teste", selection: $teste){
+                            Text("Pendentes").tag(0)
+                            Text("Paga por todos").tag(1)
                         }
-                        .contentShape(Rectangle())
-                        .zIndex(1)                    }
-                    .padding([.top, .horizontal], 24)
-                    
-                    Spacer()
-                    
-                    Text("teste")
-                        .padding()
+                        .pickerStyle(.segmented)
+                        }
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .navigationTitle("Despesas")
+            .toolbar{
+                ToolbarItem(placement: .navigationBarTrailing){
+                    Button{
+                        print("oi")
+                    }label:{
+                        Image(systemName: "plus")
+                            .foregroundColor(.blue)
+                    }
+                }
             }
-            .navigationBarHidden(true) // Opcional: esconde a barra do NavigationView
-            .navigationBarTitleDisplayMode(.inline)
         }
-    }
 
+    }
+}
+
+struct teste_preview: PreviewProvider{
+    
+    static var previews: some View{
+        FinancesView()
+    }
+}
