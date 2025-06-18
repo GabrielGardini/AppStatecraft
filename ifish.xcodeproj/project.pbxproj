@@ -42,7 +42,6 @@
 		E75ECE722E01972A00E1A579 /* MainAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE712E01972A00E1A579 /* MainAppView.swift */; };
 		E75ECE742E01A8FF00E1A579 /* AppStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE732E01A8FF00E1A579 /* AppStartView.swift */; };
 		E8BB11B42E02EF0B00D712F4 /* MoradorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BB11B32E02EF0B00D712F4 /* MoradorViewModel.swift */; };
-		E8F31F702E01AEEC009913A9 /* PerfilView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,7 +102,6 @@
 		E75ECE712E01972A00E1A579 /* MainAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppView.swift; sourceTree = "<group>"; };
 		E75ECE732E01A8FF00E1A579 /* AppStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartView.swift; sourceTree = "<group>"; };
 		E8BB11B32E02EF0B00D712F4 /* MoradorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoradorViewModel.swift; sourceTree = "<group>"; };
-		E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfilView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -498,7 +496,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E75ECE5F2E0061C300E1A579 /* FinancesViewModel.swift in Sources */,
-				E8F31F702E01AEEC009913A9 /* PerfilView.swift in Sources */,
 				4E639E832DF867DB0034E362 /* TaskModel.swift in Sources */,
 				4E639E892DF868190034E362 /* MuralComunicationModal.swift in Sources */,
 				4E8C088D2E02E82900655A67 /* AppState.swift in Sources */,
