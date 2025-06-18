@@ -8,12 +8,12 @@ struct MainAppView: View {
                     Label("Início", systemImage: "house")
                 }
 
-            FinancesView()
+            TasksView()
                 .tabItem {
                     Label("Tarefas", systemImage: "checkmark.circle")
                 }
 
-            FinancesView()
+            PerfilView()
                 .tabItem {
                     Label("Config", systemImage: "gear")
                 }
