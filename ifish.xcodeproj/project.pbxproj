@@ -205,6 +205,7 @@
 		E75ECE092DF088E100E1A579 /* ifish */ = {
 			isa = PBXGroup;
 			children = (
+				E7AA58022E02EAB40099EBF3 /* App */,
 				4E8C088E2E02E83C00655A67 /* App */,
 				E75ECE632E00620F00E1A579 /* Views */,
 				E75ECE552E005FAD00E1A579 /* ViewModels */,
@@ -324,6 +325,7 @@
 				E75ECE4C2E004DB900E1A579 /* CriarCasaView.swift */,
 				E75ECE502E004E0C00E1A579 /* EntrarCasaView.swift */,
 				E75ECE482E004D6200E1A579 /* LoginView.swift */,
+				E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */,
 				4E8C088A2E02E73B00655A67 /* PerfilView.swift */,
 			);
 			path = HouseProfile;
@@ -353,6 +355,15 @@
 				4E8C08882E02E18E00655A67 /* EditarTaskView.swift */,
 			);
 			path = Tasks;
+			sourceTree = "<group>";
+		};
+		E7AA58022E02EAB40099EBF3 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				E75ECE732E01A8FF00E1A579 /* AppStartView.swift */,
+				E75ECE712E01972A00E1A579 /* MainAppView.swift */,
+			);
+			path = App;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
