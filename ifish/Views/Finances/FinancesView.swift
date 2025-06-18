@@ -7,15 +7,35 @@ let fundoFinances = LinearGradient(
     
 
 struct FinancesView: View {
-    
     var body: some View {
-        NavigationView {
-            ZStack{
-                fundoFinances.ignoresSafeArea()
-                Text("Teste")
+            ZStack {
+                fundoFinances
+                    .ignoresSafeArea()
+                VStack {
+                    HStack {
+                        Text("Despesas")
+                            .font(.system(size: 34, weight: .bold))
+                        Spacer()
+                        Button(action: {
+                            print("botao")
+                        }) {
+                            Image(systemName: "plus")
+                                .font(.title2)
+                                .foregroundColor(.primary)
+                        }
+                        .contentShape(Rectangle())
+                        .zIndex(1)                    }
+                    .padding([.top, .horizontal], 24)
+                    
+                    Spacer()
+                    
+                    Text("teste")
+                        .padding()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
+            .navigationBarHidden(true) // Opcional: esconde a barra do NavigationView
+            .navigationBarTitleDisplayMode(.inline)
         }
-        .navigationTitle("Despesas")
+    }
 
-}
-}
