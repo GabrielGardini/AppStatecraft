@@ -9,6 +9,7 @@ import SwiftUI
 import CloudKit
 
 struct TasksView: View {
+    @State var mostrarCriarTask: Bool = false
     @ObservedObject var viewModel: TasksViewModel
     @State private var escolha = "Minhas tarefas"
     
@@ -34,11 +35,28 @@ struct TasksView: View {
             }
             .pickerStyle(.segmented)
             
-            ForEach(tarefasFiltradas) { tarefa in
-                TaskCard(task: tarefa)
+            ScrollView {
+                LazyVStack(spacing: 10) {
+                    ForEach(tarefasFiltradas) { tarefa in
+                        TaskCard(task: tarefa)
+                    }
+                }
             }
             
             Spacer()
+        }
+        .sheet(isPresented: $mostrarCriarTask) {
+            EditarTaskView()
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    mostrarCriarTask = true;
+                }) {
+                    Text(Image(systemName: "plus"))
+                        .foregroundColor(.blue)
+                }
+            }
         }
     }
 }
