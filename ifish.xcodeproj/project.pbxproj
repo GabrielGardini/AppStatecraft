@@ -34,6 +34,7 @@
 		E75ECE6A2E0062B000E1A579 /* MuralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE692E0062B000E1A579 /* MuralView.swift */; };
 		E75ECE6D2E0062C300E1A579 /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE6C2E0062C300E1A579 /* TasksView.swift */; };
 		E75ECE6E2E018A9A00E1A579 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E75ECE112DF088EB00E1A579 /* Preview Assets.xcassets */; };
+		E8F31F702E01AEEC009913A9 /* PerfilView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */; };
 		E75ECE702E0192E900E1A579 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE6F2E0192E900E1A579 /* Extensions.swift */; };
 		E75ECE722E01972A00E1A579 /* MainAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE712E01972A00E1A579 /* MainAppView.swift */; };
 		E75ECE742E01A8FF00E1A579 /* AppStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE732E01A8FF00E1A579 /* AppStartView.swift */; };
@@ -89,6 +90,7 @@
 		E75ECE662E00629600E1A579 /* FinancesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancesView.swift; sourceTree = "<group>"; };
 		E75ECE692E0062B000E1A579 /* MuralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuralView.swift; sourceTree = "<group>"; };
 		E75ECE6C2E0062C300E1A579 /* TasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
+		E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfilView.swift; sourceTree = "<group>"; };
 		E75ECE6F2E0192E900E1A579 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		E75ECE712E01972A00E1A579 /* MainAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppView.swift; sourceTree = "<group>"; };
 		E75ECE732E01A8FF00E1A579 /* AppStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartView.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 				E75ECE4C2E004DB900E1A579 /* CriarCasaView.swift */,
 				E75ECE502E004E0C00E1A579 /* EntrarCasaView.swift */,
 				E75ECE482E004D6200E1A579 /* LoginView.swift */,
+				E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */,
 				E75ECE712E01972A00E1A579 /* MainAppView.swift */,
 				E75ECE732E01A8FF00E1A579 /* AppStartView.swift */,
 			);
@@ -462,6 +465,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E75ECE5F2E0061C300E1A579 /* FinancesViewModel.swift in Sources */,
+				E8F31F702E01AEEC009913A9 /* PerfilView.swift in Sources */,
 				4E639E832DF867DB0034E362 /* TaskModel.swift in Sources */,
 				4E639E892DF868190034E362 /* MuralComunicationModal.swift in Sources */,
 				E75ECE4D2E004DB900E1A579 /* CriarCasaView.swift in Sources */,
