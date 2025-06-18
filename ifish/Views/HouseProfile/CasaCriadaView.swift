@@ -5,45 +5,67 @@ struct CasaCriadaView: View {
     @State private var navegarParaApp = false
 
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 32) {
+
             Image(systemName: "house.fill")
-                .font(.largeTitle)
-                .foregroundColor(.green)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 64, height: 64)
+                .foregroundColor(.accentColor)
 
-            Text("Pronto!")
-                .font(.title2)
-                .bold()
+            VStack(spacing: 8) {
+                Text("Pronto!")
+                    .font(.title)
+                    .bold()
 
-            Text("Agora você pode convidar mais moradores através do código:")
-                .multilineTextAlignment(.center)
+                Text("Agora você pode convidar\nmais moradores através do\ncódigo de convite:")
+                    .multilineTextAlignment(.center)
+                    .font(.title2)
+                    .foregroundColor(.primary)
+            }
 
             if let codigo = viewModel.houseModel?.inviteCode {
                 HStack {
                     Text(codigo)
                         .font(.title3)
-                        .bold()
-                        .padding(8)
-                        .background(Color(.systemGray6))
-                        .cornerRadius(8)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.accentColor)
 
                     Button(action: {
                         UIPasteboard.general.string = codigo
                     }) {
                         Image(systemName: "doc.on.doc")
+                            .foregroundColor(.accentColor)
                     }
                 }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color.white)
+                .cornerRadius(12)
+                .shadow(color: Color.black.opacity(0.05), radius: 1, x: 0, y: 1)
+                .padding(.horizontal)
             }
 
-            Button("Continuar") {
+            Button(action: {
                 navegarParaApp = true
+            }) {
+                Text("Continuar")
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.accentColor)
+                    .foregroundColor(.white)
+                    .cornerRadius(12)
             }
-            .buttonStyle(.borderedProminent)
+            .padding(.horizontal)
 
-            // Este é o NavigationLink ativado pelo botão acima
             NavigationLink(destination: MainAppView(), isActive: $navegarParaApp) {
                 EmptyView()
             }
+
+            Spacer()
         }
         .padding()
+        .navigationBarBackButtonHidden(true)
     }
 }
