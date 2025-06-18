@@ -5,29 +5,67 @@ struct CriarCasaView: View {
     @State private var navegarParaConfirmacao = false
 
     var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "house.fill")
-                .font(.largeTitle)
-                .foregroundColor(.green)
+        NavigationView {
+            VStack(spacing: 32) {
+                Image(systemName: "house.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 64, height: 64)
+                    .foregroundColor(Color.accentColor)
 
-            Text("Crie sua casa")
-                .font(.title2)
+                VStack(spacing: 8) {
+                    Text("Crie sua casa")
+                        .font(.title)
+                        .bold()
 
-            TextField("Nome da casa", text: $viewModel.casaNomeInput)
-                .textFieldStyle(.roundedBorder)
+                    Text("Escolha um nome\npara sua casa")
+                        .multilineTextAlignment(.center)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
 
-            Button("Criar Casa") {
-                Task {
-                    await viewModel.criarCasa()
-                    navegarParaConfirmacao = true
+                TextField("Nome da casa", text: $viewModel.casaNomeInput)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+                    .overlay(
+                        HStack {
+                            Spacer()
+                            if !viewModel.casaNomeInput.isEmpty {
+                                Button(action: {
+                                    viewModel.casaNomeInput = ""
+                                }) {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundColor(.gray)
+                                }
+                                .padding(.trailing, 8)
+                            }
+                        }
+                    )
+
+                Button(action: {
+                    Task {
+                        await viewModel.criarCasa()
+                        navegarParaConfirmacao = true
+                    }
+                }) {
+                    Text("Criar Casa")
+                        .fontWeight(.bold)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(viewModel.casaNomeInput.isEmpty ? Color.accentColor.opacity(0.5) : Color.accentColor)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                .disabled(viewModel.casaNomeInput.isEmpty)
+
+                Spacer()
+
+                NavigationLink(destination: CasaCriadaView(viewModel: viewModel), isActive: $navegarParaConfirmacao) {
+                    EmptyView()
                 }
             }
-            .buttonStyle(.borderedProminent)
-
-            NavigationLink(destination: CasaCriadaView(viewModel: viewModel), isActive: $navegarParaConfirmacao) {
-                EmptyView()
-            }
+            .padding()
         }
-        .padding()
     }
 }

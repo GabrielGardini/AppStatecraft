@@ -46,7 +46,7 @@ struct EntrarOuCriarCasaView: View {
                     Text("Entrar na casa")
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color(hex: "#134700"))
+                        .background(Color.accentColor)
                         .foregroundColor(.white)
                         .cornerRadius(12)
                 }
@@ -73,7 +73,7 @@ struct EntrarOuCriarCasaView: View {
                     Text("Criar Casa")
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color(hex: "#134700"))
+                        .background(Color.accentColor)
                         .foregroundColor(.white)
                         .cornerRadius(12)
                 }

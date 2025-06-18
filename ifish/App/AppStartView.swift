@@ -8,6 +8,12 @@ struct AppStartView: View {
     var body: some View {
         NavigationView {
             VStack {
+                NavigationLink(destination: MainAppView(), isActive: $navegarParaMain) {
+                    EmptyView()
+                }
+                NavigationLink(destination: LoginView(viewModel: viewModel), isActive: $navegarParaLogin) {
+                    EmptyView()
+                }
                 ProgressView("Verificando...")
                     .onAppear {
                         Task {
@@ -24,13 +30,11 @@ struct AppStartView: View {
                     }
 
                 // Redirecionamentos automáticos
-                NavigationLink(destination: MainAppView(), isActive: $navegarParaMain) {
-                    EmptyView()
-                }
-                NavigationLink(destination: LoginView(viewModel: viewModel), isActive: $navegarParaLogin) {
-                    EmptyView()
-                }
-            }
+                
+            }.frame(maxWidth: .infinity,
+                    maxHeight: .infinity)
+                .background(.red)
         }
+            .ignoresSafeArea()
     }
 }
