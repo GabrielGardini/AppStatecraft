@@ -12,7 +12,7 @@ struct AppStartView: View {
                     .onAppear {
                         Task {
                             await viewModel.verificarConta()
-                            await viewModel.verificarSeUsuarioJaTemCasa()
+//                            await viewModel.verificarSeUsuarioJaTemCasa()
 
                             // Espera a verificação de vínculo ser feita
                             if viewModel.usuarioJaVinculado {

@@ -17,7 +17,7 @@ struct CasaCriadaView: View {
             Text("Agora você pode convidar mais moradores através do código:")
                 .multilineTextAlignment(.center)
 
-            if let codigo = viewModel.casaRecord?["InviteCode"] as? String {
+            if let codigo = viewModel.houseModel?.inviteCode {
                 HStack {
                     Text(codigo)
                         .font(.title3)

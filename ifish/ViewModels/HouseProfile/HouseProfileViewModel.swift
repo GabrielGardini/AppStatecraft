@@ -9,7 +9,7 @@ class HouseProfileViewModel: ObservableObject {
     @Published var nomeCasaUsuario = ""
     @Published var casaNomeInput = ""
     @Published var codigoConviteInput = ""
-    @Published var casaRecord: CKRecord?
+    @Published var houseModel: HouseModel?
     @Published var mostrarAlertaICloud = false
 
     func verificarConta() {
@@ -17,11 +17,11 @@ class HouseProfileViewModel: ObservableObject {
             Task { @MainActor in
                 switch status {
                 case .available:
-                    print("usuário logado no icloud")
+                    print("usuário logado no iCloud")
                     self.isLoggedInToiCloud = true
                     await self.verificarSeUsuarioJaTemCasa()
                 default:
-                    print("usuario nao logado")
+                    print("usuário não logado")
                     self.isLoggedInToiCloud = false
                     self.mostrarAlertaICloud = true
                 }
@@ -39,8 +39,9 @@ class HouseProfileViewModel: ObservableObject {
         if let user = results.first,
            let ref = user["UserHouseID"] as? CKRecord.Reference {
             if let casaRecord = try? await CKContainer.default().publicCloudDatabase.record(for: ref.recordID) {
-                self.casaRecord = casaRecord
-                self.nomeCasaUsuario = casaRecord["Nome"] as? String ?? "Casa desconhecida"
+                let casa = HouseModel(record: casaRecord)
+                self.houseModel = casa
+                self.nomeCasaUsuario = casa.nome
                 self.usuarioJaVinculado = true
             }
         }
@@ -50,33 +51,40 @@ class HouseProfileViewModel: ObservableObject {
         let granted = await pedirPermissaoDescoberta()
         guard granted else { return }
 
-        let casa = CKRecord(recordType: "Casa")
-        casa["Nome"] = casaNomeInput as CKRecordValue
-        casa["InviteCode"] = UUID().uuidString.prefix(6).uppercased() as CKRecordValue
+        let id = CKRecord.ID(recordName: UUID().uuidString)
+        let nome = casaNomeInput
+        let inviteCode = String(UUID().uuidString.prefix(6)).uppercased()
+        let novaCasa = HouseModel(id: id, nome: nome, inviteCode: inviteCode)
 
         do {
-            let savedCasa = try await CKContainer.default().publicCloudDatabase.save(casa)
-            self.casaRecord = savedCasa
-            await registrarUsuario(casa: savedCasa)
+            let savedRecord = try await CKContainer.default().publicCloudDatabase.save(novaCasa.toCKRecord())
+            let savedModel = HouseModel(record: savedRecord)
+            self.houseModel = savedModel
+            await registrarUsuario(casa: savedModel)
         } catch {
             print("Erro ao criar casa: \(error)")
         }
     }
 
-    func entrarComCodigoConvite() async {
+    func entrarComCodigoConvite() async -> Bool {
+        print("➡️ Tentando entrar com código \(codigoConviteInput)")
         let predicate = NSPredicate(format: "InviteCode == %@", codigoConviteInput)
         let query = CKQuery(recordType: "Casa", predicate: predicate)
 
         let results = await fetchRecords(matching: query)
-        if let casa = results.first {
-            self.casaRecord = casa
+        if let casaRecord = results.first {
+            let casa = HouseModel(record: casaRecord)
+            self.houseModel = casa
             await registrarUsuario(casa: casa)
+            return true
         } else {
             print("❌ Código de convite inválido")
+            return false
         }
     }
 
-    func registrarUsuario(casa: CKRecord) async {
+    func registrarUsuario(casa: HouseModel) async {
+        print("👤 Registrando usuário")
         guard let userRecordID = try? await CKContainer.default().userRecordID() else { return }
         let identity = try? await CKContainer.default().userIdentity(forUserRecordID: userRecordID)
 
@@ -90,11 +98,19 @@ class HouseProfileViewModel: ObservableObject {
         let userRecord = CKRecord(recordType: "User")
         userRecord["UserID"] = userRecordID.recordName as CKRecordValue
         userRecord["FullName"] = nome as CKRecordValue
-        userRecord["UserHouseID"] = CKRecord.Reference(record: casa, action: .none)
+        userRecord["UserHouseID"] = CKRecord.Reference(recordID: casa.id, action: .none)
 
-        _ = try? await CKContainer.default().publicCloudDatabase.save(userRecord)
-        self.usuarioJaVinculado = true
-        self.nomeCasaUsuario = casa["Nome"] as? String ?? "Casa"
+        do {
+            _ = try await CKContainer.default().publicCloudDatabase.save(userRecord)
+
+            await MainActor.run {
+                self.usuarioJaVinculado = true
+                self.nomeCasaUsuario = casa.nome
+            }
+
+        } catch {
+            print("❌ Erro ao salvar usuário: \(error)")
+        }
     }
 
     func pedirPermissaoDescoberta() async -> Bool {
