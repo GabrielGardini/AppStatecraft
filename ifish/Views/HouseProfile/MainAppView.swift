@@ -13,7 +13,7 @@ struct MainAppView: View {
                     Label("Tarefas", systemImage: "checkmark.circle")
                 }
 
-            FinancesView()
+            PerfilView()
                 .tabItem {
                     Label("Config", systemImage: "gear")
                 }

@@ -13,7 +13,7 @@ struct PerfilView: View {
                     Color(red: 249/255, green: 249/255, blue: 249/255) // #F9F9F9
                         .ignoresSafeArea()
                 
-            VStack(spacing: 20) {
+            HStack(spacing: 20) {
                 // Ícone e título
                 VStack {
                     Image(systemName: "house.fill")
@@ -25,14 +25,15 @@ struct PerfilView: View {
                       .multilineTextAlignment(.center)
                       .foregroundColor(.black)
                       .frame(width: 190, height: 39, alignment: .top)
-
-                                    Spacer() // empurra o resto pra baixo
-                    Rectangle()
-                      .foregroundColor(.clear)
-                      .frame(width: 327, height: 247)
-                      .background(Color("#F6F6F6"))
-                      .cornerRadius(6)
                                 }
+                HStack{
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(Color(hex: "#E1E1E1"))
+                        .frame(width: 327, height: 106)
+                    
+                }
+                
+                
                 }}}
     // Nome da casa + mascote
     
