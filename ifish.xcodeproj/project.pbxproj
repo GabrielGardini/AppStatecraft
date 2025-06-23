@@ -41,7 +41,7 @@
 		E75ECE702E0192E900E1A579 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE6F2E0192E900E1A579 /* Extensions.swift */; };
 		E75ECE722E01972A00E1A579 /* MainAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE712E01972A00E1A579 /* MainAppView.swift */; };
 		E75ECE742E01A8FF00E1A579 /* AppStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE732E01A8FF00E1A579 /* AppStartView.swift */; };
-		E8BB11B42E02EF0B00D712F4 /* MoradorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BB11B32E02EF0B00D712F4 /* MoradorViewModel.swift */; };
+		E8F31F702E01AEEC009913A9 /* PerfilView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,7 +101,7 @@
 		E75ECE6F2E0192E900E1A579 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		E75ECE712E01972A00E1A579 /* MainAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppView.swift; sourceTree = "<group>"; };
 		E75ECE732E01A8FF00E1A579 /* AppStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartView.swift; sourceTree = "<group>"; };
-		E8BB11B32E02EF0B00D712F4 /* MoradorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoradorViewModel.swift; sourceTree = "<group>"; };
+		E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfilView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +187,7 @@
 				E75ECE242DF088EB00E1A579 /* ifishUITests */,
 				E75ECE082DF088E100E1A579 /* Products */,
 				E75ECE352DF08D5900E1A579 /* Frameworks */,
+				E8BB11B62E02F16A00D712F4 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -267,7 +268,6 @@
 			isa = PBXGroup;
 			children = (
 				E75ECE462E00461800E1A579 /* HouseProfileViewModel.swift */,
-				E8BB11B32E02EF0B00D712F4 /* MoradorViewModel.swift */,
 			);
 			path = HouseProfile;
 			sourceTree = "<group>";
@@ -353,6 +353,14 @@
 				4E8C08882E02E18E00655A67 /* EditarTaskView.swift */,
 			);
 			path = Tasks;
+			sourceTree = "<group>";
+		};
+		E8BB11B62E02F16A00D712F4 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		E7AA58022E02EAB40099EBF3 /* App */ = {
@@ -503,7 +511,6 @@
 				E75ECE0D2DF088E100E1A579 /* ContentView.swift in Sources */,
 				E75ECE722E01972A00E1A579 /* MainAppView.swift in Sources */,
 				E75ECE492E004D6200E1A579 /* LoginView.swift in Sources */,
-				E8BB11B42E02EF0B00D712F4 /* MoradorViewModel.swift in Sources */,
 				E75ECE6A2E0062B000E1A579 /* MuralView.swift in Sources */,
 				E75ECE4B2E004D9B00E1A579 /* EntrarOuCriarCasaView.swift in Sources */,
 				E75ECE6D2E0062C300E1A579 /* TasksView.swift in Sources */,
