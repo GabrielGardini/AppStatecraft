@@ -16,20 +16,57 @@ struct TasksView: View {
     let casaID: CKRecord.ID
     let userID: CKRecord.ID
     
-    private let filtros = ["Minhas tarefas", "Todas"]
-
+    private let filtroPicker = ["Minhas tarefas", "Todas"]
+    @State private var filtroData = Date()     // a tela inicia com o filtro no mes e ano atual
+    
     var tarefasFiltradas: [TaskModel] {
-        if escolha == "Minhas tarefas" {
-            return viewModel.tarefas.filter { $0.userID == userID }
-        } else {
-            return viewModel.tarefas
+        let calendar = Calendar.current
+        let filtroMes = calendar.component(.month, from: filtroData)
+        let filtroAno = calendar.component(.year, from: filtroData)
+        
+        return viewModel.tarefas.filter { tarefa in
+            let tarefaMes = calendar.component(.month, from: tarefa.prazo)
+            let tarefaAno = calendar.component(.year, from: tarefa.prazo)
+            
+            let filtroMesAno = {
+                                tarefaMes == filtroMes &&
+                                tarefaAno == filtroAno
+                                }
+
+            if escolha == "Minhas tarefas" {
+                return tarefa.userID == userID && filtroMesAno()
+            } else {
+                return filtroMesAno()
+            }
         }
     }
     
     var body: some View {
         VStack {
+            // filtro do mes e ano:   < jun 2025 >
+            HStack {
+                Button(action: {
+                       filtroData = Calendar.current.date(byAdding: .month, value: -1, to: filtroData) ?? filtroData
+                }) {
+                   Text(">")
+                       .font(.title2)
+                       .padding(.horizontal)
+               }
+                
+                let dateformatter = DateFormatter()
+                Text(dateformatter.string(from: filtroData))
+                
+                Button(action: {
+                       filtroData = Calendar.current.date(byAdding: .month, value: 1, to: filtroData) ?? filtroData
+                }) {
+                   Text(">")
+                       .font(.title2)
+                       .padding(.horizontal)
+               }
+            }
+            
             Picker("", selection: $escolha) {
-                ForEach(filtros, id: \.self) {
+                ForEach(filtroPicker, id: \.self) {
                     Text($0)
                 }
             }
