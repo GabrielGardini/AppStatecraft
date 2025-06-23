@@ -17,6 +17,7 @@
 		4E8C088B2E02E73B00655A67 /* PerfilView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C088A2E02E73B00655A67 /* PerfilView.swift */; };
 		4E8C088D2E02E82900655A67 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C088C2E02E82900655A67 /* AppState.swift */; };
 		4EC26C542E018CC300C99805 /* TaskCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC26C532E018CC300C99805 /* TaskCardView.swift */; };
+		4EE3DEBA2E0983170061172B /* FormatDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE3DEB92E0983170061172B /* FormatDateExtension.swift */; };
 		E75ECE0B2DF088E100E1A579 /* ifishApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE0A2DF088E100E1A579 /* ifishApp.swift */; };
 		E75ECE0D2DF088E100E1A579 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE0C2DF088E100E1A579 /* ContentView.swift */; };
 		E75ECE0F2DF088EB00E1A579 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E75ECE0E2DF088EB00E1A579 /* Assets.xcassets */; };
@@ -42,7 +43,6 @@
 		E75ECE722E01972A00E1A579 /* MainAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE712E01972A00E1A579 /* MainAppView.swift */; };
 		E75ECE742E01A8FF00E1A579 /* AppStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE732E01A8FF00E1A579 /* AppStartView.swift */; };
 		E8BB11B42E02EF0B00D712F4 /* MoradorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BB11B32E02EF0B00D712F4 /* MoradorViewModel.swift */; };
-		E8F31F702E01AEEC009913A9 /* PerfilView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +73,7 @@
 		4E8C088A2E02E73B00655A67 /* PerfilView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfilView.swift; sourceTree = "<group>"; };
 		4E8C088C2E02E82900655A67 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		4EC26C532E018CC300C99805 /* TaskCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCardView.swift; sourceTree = "<group>"; };
+		4EE3DEB92E0983170061172B /* FormatDateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatDateExtension.swift; sourceTree = "<group>"; };
 		E75ECE072DF088E100E1A579 /* ifish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ifish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E75ECE0A2DF088E100E1A579 /* ifishApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ifishApp.swift; sourceTree = "<group>"; };
 		E75ECE0C2DF088E100E1A579 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -162,9 +163,10 @@
 		4E639E792DF866E70034E362 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				E75ECE6F2E0192E900E1A579 /* Extensions.swift */,
+				4EE3DEB82E0982D80061172B /* Extensions */,
 				4E639E722DF8642F0034E362 /* Resources */,
 				4E639E782DF866D20034E362 /* Services */,
-				E75ECE6F2E0192E900E1A579 /* Extensions.swift */,
 			);
 			name = Utils;
 			path = ../Utils;
@@ -180,6 +182,22 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		4EE3DEB72E030A2F0061172B /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		4EE3DEB82E0982D80061172B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				4EE3DEB92E0983170061172B /* FormatDateExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		E75ECDFE2DF088E000E1A579 = {
 			isa = PBXGroup;
 			children = (
@@ -189,6 +207,7 @@
 				E75ECE242DF088EB00E1A579 /* ifishUITests */,
 				E75ECE082DF088E100E1A579 /* Products */,
 				E75ECE352DF08D5900E1A579 /* Frameworks */,
+				4EE3DEB72E030A2F0061172B /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -487,7 +506,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E75ECE5F2E0061C300E1A579 /* FinancesViewModel.swift in Sources */,
-				E8F31F702E01AEEC009913A9 /* PerfilView.swift in Sources */,
 				4E639E832DF867DB0034E362 /* TaskModel.swift in Sources */,
 				4E639E892DF868190034E362 /* MuralComunicationModal.swift in Sources */,
 				4E8C088D2E02E82900655A67 /* AppState.swift in Sources */,
@@ -505,6 +523,7 @@
 				4E639E872DF867F90034E362 /* UserModel.swift in Sources */,
 				4EC26C542E018CC300C99805 /* TaskCardView.swift in Sources */,
 				E75ECE702E0192E900E1A579 /* Extensions.swift in Sources */,
+				4EE3DEBA2E0983170061172B /* FormatDateExtension.swift in Sources */,
 				4E8C088B2E02E73B00655A67 /* PerfilView.swift in Sources */,
 				E75ECE512E004E0C00E1A579 /* EntrarCasaView.swift in Sources */,
 				E75ECE592E00616800E1A579 /* MuralViewModel.swift in Sources */,
