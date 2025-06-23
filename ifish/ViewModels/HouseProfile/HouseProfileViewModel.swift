@@ -125,7 +125,21 @@ class HouseProfileViewModel: ObservableObject {
 
     func registrarUsuario(casa: HouseModel) async {
         print("👤 Registrando usuário")
-        guard let userRecordID = try? await CKContainer.default().userRecordID() else { return }
+
+        // 🟡 Verifica a permissão de descoberta
+        let permissaoOK = await pedirPermissaoDescoberta()
+        guard permissaoOK else {
+            print("❌ Permissão de descoberta de usuário não concedida")
+            return
+        }
+
+        // 🟢 Obtém o userRecordID
+        guard let userRecordID = try? await CKContainer.default().userRecordID() else {
+            print("❌ Não foi possível obter o userRecordID")
+            return
+        }
+
+        // 🟢 Tenta pegar a identidade (nome do usuário)
         let identity = try? await CKContainer.default().userIdentity(forUserRecordID: userRecordID)
 
         let nome: String
@@ -135,6 +149,7 @@ class HouseProfileViewModel: ObservableObject {
             nome = "Usuário Desconhecido"
         }
 
+        // 🟢 Cria o registro do usuário
         let userRecord = CKRecord(recordType: "User")
         userRecord["UserID"] = userRecordID.recordName as CKRecordValue
         userRecord["FullName"] = nome as CKRecordValue
@@ -152,6 +167,7 @@ class HouseProfileViewModel: ObservableObject {
             print("❌ Erro ao salvar usuário: \(error)")
         }
     }
+
 
     func pedirPermissaoDescoberta() async -> Bool {
         let status = try? await CKContainer.default().requestApplicationPermission([.userDiscoverability])
