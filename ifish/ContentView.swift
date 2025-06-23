@@ -2,8 +2,8 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        NavigationView {
-            LoginView()
+            AppStartView()
+                .background(Color("BackgroundColor").ignoresSafeArea())
         }
     }
-}
+

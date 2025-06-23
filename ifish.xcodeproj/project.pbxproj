@@ -13,6 +13,10 @@
 		4E639E872DF867F90034E362 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E862DF867F90034E362 /* UserModel.swift */; };
 		4E639E892DF868190034E362 /* MuralComunicationModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E882DF868190034E362 /* MuralComunicationModal.swift */; };
 		4E639E8B2DF8749F0034E362 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 4E639E8A2DF8749F0034E362 /* .gitignore */; };
+		4E8C08892E02E18E00655A67 /* EditarTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C08882E02E18E00655A67 /* EditarTaskView.swift */; };
+		4E8C088B2E02E73B00655A67 /* PerfilView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C088A2E02E73B00655A67 /* PerfilView.swift */; };
+		4E8C088D2E02E82900655A67 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C088C2E02E82900655A67 /* AppState.swift */; };
+		4EC26C542E018CC300C99805 /* TaskCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC26C532E018CC300C99805 /* TaskCardView.swift */; };
 		E75ECE0B2DF088E100E1A579 /* ifishApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE0A2DF088E100E1A579 /* ifishApp.swift */; };
 		E75ECE0D2DF088E100E1A579 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE0C2DF088E100E1A579 /* ContentView.swift */; };
 		E75ECE0F2DF088EB00E1A579 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E75ECE0E2DF088EB00E1A579 /* Assets.xcassets */; };
@@ -34,6 +38,10 @@
 		E75ECE6A2E0062B000E1A579 /* MuralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE692E0062B000E1A579 /* MuralView.swift */; };
 		E75ECE6D2E0062C300E1A579 /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE6C2E0062C300E1A579 /* TasksView.swift */; };
 		E75ECE6E2E018A9A00E1A579 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E75ECE112DF088EB00E1A579 /* Preview Assets.xcassets */; };
+		E75ECE702E0192E900E1A579 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE6F2E0192E900E1A579 /* Extensions.swift */; };
+		E75ECE722E01972A00E1A579 /* MainAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE712E01972A00E1A579 /* MainAppView.swift */; };
+		E75ECE742E01A8FF00E1A579 /* AppStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE732E01A8FF00E1A579 /* AppStartView.swift */; };
+		E8F31F702E01AEEC009913A9 /* PerfilView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +68,10 @@
 		4E639E862DF867F90034E362 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		4E639E882DF868190034E362 /* MuralComunicationModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuralComunicationModal.swift; sourceTree = "<group>"; };
 		4E639E8A2DF8749F0034E362 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		4E8C08882E02E18E00655A67 /* EditarTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditarTaskView.swift; sourceTree = "<group>"; };
+		4E8C088A2E02E73B00655A67 /* PerfilView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfilView.swift; sourceTree = "<group>"; };
+		4E8C088C2E02E82900655A67 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		4EC26C532E018CC300C99805 /* TaskCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCardView.swift; sourceTree = "<group>"; };
 		E75ECE072DF088E100E1A579 /* ifish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ifish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E75ECE0A2DF088E100E1A579 /* ifishApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ifishApp.swift; sourceTree = "<group>"; };
 		E75ECE0C2DF088E100E1A579 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -86,6 +98,10 @@
 		E75ECE662E00629600E1A579 /* FinancesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancesView.swift; sourceTree = "<group>"; };
 		E75ECE692E0062B000E1A579 /* MuralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuralView.swift; sourceTree = "<group>"; };
 		E75ECE6C2E0062C300E1A579 /* TasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
+		E75ECE6F2E0192E900E1A579 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		E75ECE712E01972A00E1A579 /* MainAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppView.swift; sourceTree = "<group>"; };
+		E75ECE732E01A8FF00E1A579 /* AppStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartView.swift; sourceTree = "<group>"; };
+		E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfilView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,9 +162,20 @@
 			children = (
 				4E639E722DF8642F0034E362 /* Resources */,
 				4E639E782DF866D20034E362 /* Services */,
+				E75ECE6F2E0192E900E1A579 /* Extensions.swift */,
 			);
 			name = Utils;
 			path = ../Utils;
+			sourceTree = "<group>";
+		};
+		4E8C088E2E02E83C00655A67 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				4E8C088C2E02E82900655A67 /* AppState.swift */,
+				E75ECE712E01972A00E1A579 /* MainAppView.swift */,
+				E75ECE732E01A8FF00E1A579 /* AppStartView.swift */,
+			);
+			path = App;
 			sourceTree = "<group>";
 		};
 		E75ECDFE2DF088E000E1A579 = {
@@ -160,6 +187,7 @@
 				E75ECE242DF088EB00E1A579 /* ifishUITests */,
 				E75ECE082DF088E100E1A579 /* Products */,
 				E75ECE352DF08D5900E1A579 /* Frameworks */,
+				E8BB11B62E02F16A00D712F4 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -176,6 +204,8 @@
 		E75ECE092DF088E100E1A579 /* ifish */ = {
 			isa = PBXGroup;
 			children = (
+				E7AA58022E02EAB40099EBF3 /* App */,
+				4E8C088E2E02E83C00655A67 /* App */,
 				E75ECE632E00620F00E1A579 /* Views */,
 				E75ECE552E005FAD00E1A579 /* ViewModels */,
 				E75ECE342DF08CC800E1A579 /* ifish.entitlements */,
@@ -293,6 +323,8 @@
 				E75ECE4C2E004DB900E1A579 /* CriarCasaView.swift */,
 				E75ECE502E004E0C00E1A579 /* EntrarCasaView.swift */,
 				E75ECE482E004D6200E1A579 /* LoginView.swift */,
+				E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */,
+				4E8C088A2E02E73B00655A67 /* PerfilView.swift */,
 			);
 			path = HouseProfile;
 			sourceTree = "<group>";
@@ -317,8 +349,27 @@
 			isa = PBXGroup;
 			children = (
 				E75ECE6C2E0062C300E1A579 /* TasksView.swift */,
+				4EC26C532E018CC300C99805 /* TaskCardView.swift */,
+				4E8C08882E02E18E00655A67 /* EditarTaskView.swift */,
 			);
 			path = Tasks;
+			sourceTree = "<group>";
+		};
+		E8BB11B62E02F16A00D712F4 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		E7AA58022E02EAB40099EBF3 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				E75ECE732E01A8FF00E1A579 /* AppStartView.swift */,
+				E75ECE712E01972A00E1A579 /* MainAppView.swift */,
+			);
+			path = App;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -455,8 +506,10 @@
 				E75ECE5F2E0061C300E1A579 /* FinancesViewModel.swift in Sources */,
 				4E639E832DF867DB0034E362 /* TaskModel.swift in Sources */,
 				4E639E892DF868190034E362 /* MuralComunicationModal.swift in Sources */,
+				4E8C088D2E02E82900655A67 /* AppState.swift in Sources */,
 				E75ECE4D2E004DB900E1A579 /* CriarCasaView.swift in Sources */,
 				E75ECE0D2DF088E100E1A579 /* ContentView.swift in Sources */,
+				E75ECE722E01972A00E1A579 /* MainAppView.swift in Sources */,
 				E75ECE492E004D6200E1A579 /* LoginView.swift in Sources */,
 				E75ECE6A2E0062B000E1A579 /* MuralView.swift in Sources */,
 				E75ECE4B2E004D9B00E1A579 /* EntrarOuCriarCasaView.swift in Sources */,
@@ -465,13 +518,18 @@
 				E75ECE672E00629600E1A579 /* FinancesView.swift in Sources */,
 				E75ECE4F2E004DDF00E1A579 /* CasaCriadaView.swift in Sources */,
 				4E639E872DF867F90034E362 /* UserModel.swift in Sources */,
+				4EC26C542E018CC300C99805 /* TaskCardView.swift in Sources */,
+				E75ECE702E0192E900E1A579 /* Extensions.swift in Sources */,
+				4E8C088B2E02E73B00655A67 /* PerfilView.swift in Sources */,
 				E75ECE512E004E0C00E1A579 /* EntrarCasaView.swift in Sources */,
 				E75ECE592E00616800E1A579 /* MuralViewModel.swift in Sources */,
+				4E8C08892E02E18E00655A67 /* EditarTaskView.swift in Sources */,
 				4E639E852DF867EC0034E362 /* FinanceModel.swift in Sources */,
 				4E639E752DF866860034E362 /* HouseModel.swift in Sources */,
 				E75ECE0B2DF088E100E1A579 /* ifishApp.swift in Sources */,
 				E75ECE5C2E0061AC00E1A579 /* TasksViewModel.swift in Sources */,
 				E75ECE472E00461800E1A579 /* HouseProfileViewModel.swift in Sources */,
+				E75ECE742E01A8FF00E1A579 /* AppStartView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

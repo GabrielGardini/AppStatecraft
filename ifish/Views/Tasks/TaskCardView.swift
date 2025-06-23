@@ -9,7 +9,7 @@ import SwiftUI
 import CloudKit
 
 struct TaskCard: View {
-    var task: TaskModel
+    @ObservedObject var task: TaskModel
     
     var body: some View {
         HStack {
