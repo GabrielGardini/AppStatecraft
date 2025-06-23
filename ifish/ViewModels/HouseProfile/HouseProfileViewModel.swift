@@ -11,6 +11,7 @@ class HouseProfileViewModel: ObservableObject {
     @Published var codigoConviteInput = ""
     @Published var houseModel: HouseModel?
     @Published var mostrarAlertaICloud = false
+    @Published var usuariosDaCasa: [UserModel] = []
 
     func verificarConta() {
         CKContainer.default().accountStatus { status, _ in
@@ -28,6 +29,43 @@ class HouseProfileViewModel: ObservableObject {
             }
         }
     }
+    
+    func buscarUsuariosDaMinhaCasa() async {
+        guard let casaID = houseModel?.id else {
+            print("❌ Nenhuma casa vinculada ao usuário atual.")
+            return
+        }
+
+        print("🔍 Buscando usuários com casa ID: \(casaID.recordName)")
+
+        let casaReference = CKRecord.Reference(recordID: casaID, action: .none)
+        let predicate = NSPredicate(format: "UserHouseID == %@", casaReference)
+        let query = CKQuery(recordType: "User", predicate: predicate)
+
+        let records = await fetchRecords(matching: query)
+        print("📦 Registros encontrados: \(records.count)")
+
+        for record in records {
+            print("👤 Usuário: \(record["FullName"] as? String ?? "sem nome")")
+        }
+
+        let usuarios = records.compactMap { record -> UserModel? in
+            guard
+                let nome = record["FullName"] as? String,
+                let casaRef = record["UserHouseID"] as? CKRecord.Reference
+            else {
+                return nil
+            }
+
+            return UserModel(id: record.recordID, name: nome, houseID: casaRef.recordID)
+        }
+
+        await MainActor.run {
+            self.usuariosDaCasa = usuarios
+        }
+
+        print("✅ Total de usuários vinculados: \(usuarios.count)")
+    }
 
     func verificarSeUsuarioJaTemCasa() async {
         guard let userRecordID = try? await CKContainer.default().userRecordID() else { return }
@@ -38,6 +76,7 @@ class HouseProfileViewModel: ObservableObject {
         let results = await fetchRecords(matching: query)
         if let user = results.first,
            let ref = user["UserHouseID"] as? CKRecord.Reference {
+            
             if let casaRecord = try? await CKContainer.default().publicCloudDatabase.record(for: ref.recordID) {
                 let casa = HouseModel(record: casaRecord)
                 self.houseModel = casa
@@ -45,6 +84,7 @@ class HouseProfileViewModel: ObservableObject {
                 self.usuarioJaVinculado = true
             }
         }
+        await buscarUsuariosDaMinhaCasa()
     }
 
     func criarCasa() async {
@@ -120,7 +160,10 @@ class HouseProfileViewModel: ObservableObject {
 
     func fetchRecords(matching query: CKQuery) async -> [CKRecord] {
         await withCheckedContinuation { continuation in
-            CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil) { records, _ in
+            CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil) { records, error in
+                if let error = error {
+                    print("❌ Erro ao executar query: \(error.localizedDescription)")
+                }
                 continuation.resume(returning: records ?? [])
             }
         }
