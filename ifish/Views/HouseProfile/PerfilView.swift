@@ -30,7 +30,7 @@ struct PerfilView: View {
                     RoundedRectangle(cornerRadius: 6)
                         .fill(Color(hex: "#E1E1E1"))
                         .frame(width: 327, height: 106)
-                    Text(casaID)
+//                    Text(casaID)
                         .font(.custom("SF Pro", size: 24))
                         .foregroundColor(.black)
 
