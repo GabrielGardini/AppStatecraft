@@ -48,13 +48,12 @@ struct TasksView: View {
                 Button(action: {
                        filtroData = Calendar.current.date(byAdding: .month, value: -1, to: filtroData) ?? filtroData
                 }) {
-                   Text(">")
+                   Text("<")
                        .font(.title2)
                        .padding(.horizontal)
                }
                 
-                let dateformatter = DateFormatter()
-                Text(dateformatter.string(from: filtroData))
+                Text(filtroData.formatadoMesAno())
                 
                 Button(action: {
                        filtroData = Calendar.current.date(byAdding: .month, value: 1, to: filtroData) ?? filtroData
