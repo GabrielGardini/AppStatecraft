@@ -9,12 +9,14 @@ import SwiftUI
 import CloudKit
 
 struct TasksView: View {
-    @State var mostrarCriarTask: Bool = false
     @ObservedObject var viewModel: TasksViewModel
     @State private var escolha = "Minhas tarefas"
     
     let casaID: CKRecord.ID
     let userID: CKRecord.ID
+    
+    @State private var mostrarCriarTaskModalView: Bool = false
+    @State private var mostrarInfoTaskModalView: Bool = false
     
     private let filtroPicker = ["Minhas tarefas", "Todas"]
     @State private var filtroData = Date()     // a tela inicia com o filtro no mes e ano atual
@@ -81,13 +83,13 @@ struct TasksView: View {
             
             Spacer()
         }
-        .sheet(isPresented: $mostrarCriarTask) {
-            EditarTaskView()
-        }
+//        .sheet(isPresented: $mostrarInfoTaskModelView) {
+//            InfoTaskModelView()
+//        }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
-                    mostrarCriarTask = true;
+                    mostrarCriarTaskModalView = true;
                 }) {
                     Text(Image(systemName: "plus"))
                         .foregroundColor(.blue)
@@ -115,6 +117,8 @@ struct TaskListView_Previews: PreviewProvider {
             titulo: "Tirar o lixo",
             descricao: "",
             prazo: Date(),
+            repeticao: .semanalmente,
+            lembrete: .quinzeMinutos,
             completo: false,
             user: mockUser
         )
@@ -128,6 +132,8 @@ struct TaskListView_Previews: PreviewProvider {
             titulo: "Regar as plantas",
             descricao: "",
             prazo: Date(),
+            repeticao: .semanalmente,
+            lembrete: .quinzeMinutos,
             completo: false,
             user: mockUser
         )

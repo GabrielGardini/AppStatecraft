@@ -58,6 +58,8 @@ struct TaskCard_Previews: PreviewProvider {
             titulo: "Regar as plantas",
             descricao: "Lembrar de regar todas as plantas da varanda",
             prazo: Date(),
+            repeticao: .semanalmente,
+            lembrete: .quinzeMinutos,
             completo: false,
             user: mockUser
         )

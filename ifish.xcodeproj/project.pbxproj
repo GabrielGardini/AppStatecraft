@@ -13,6 +13,7 @@
 		4E639E872DF867F90034E362 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E862DF867F90034E362 /* UserModel.swift */; };
 		4E639E892DF868190034E362 /* MuralComunicationModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E882DF868190034E362 /* MuralComunicationModal.swift */; };
 		4E639E8B2DF8749F0034E362 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 4E639E8A2DF8749F0034E362 /* .gitignore */; };
+		4E7E231F2E09907300F8E86E /* CriarTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7E231E2E09907300F8E86E /* CriarTaskView.swift */; };
 		4E8C08892E02E18E00655A67 /* EditarTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C08882E02E18E00655A67 /* EditarTaskView.swift */; };
 		4E8C088B2E02E73B00655A67 /* PerfilView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C088A2E02E73B00655A67 /* PerfilView.swift */; };
 		4E8C088D2E02E82900655A67 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C088C2E02E82900655A67 /* AppState.swift */; };
@@ -42,7 +43,6 @@
 		E75ECE702E0192E900E1A579 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE6F2E0192E900E1A579 /* Extensions.swift */; };
 		E75ECE722E01972A00E1A579 /* MainAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE712E01972A00E1A579 /* MainAppView.swift */; };
 		E75ECE742E01A8FF00E1A579 /* AppStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE732E01A8FF00E1A579 /* AppStartView.swift */; };
-		E8BB11B42E02EF0B00D712F4 /* MoradorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BB11B32E02EF0B00D712F4 /* MoradorViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +69,7 @@
 		4E639E862DF867F90034E362 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		4E639E882DF868190034E362 /* MuralComunicationModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuralComunicationModal.swift; sourceTree = "<group>"; };
 		4E639E8A2DF8749F0034E362 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		4E7E231E2E09907300F8E86E /* CriarTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CriarTaskView.swift; sourceTree = "<group>"; };
 		4E8C08882E02E18E00655A67 /* EditarTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditarTaskView.swift; sourceTree = "<group>"; };
 		4E8C088A2E02E73B00655A67 /* PerfilView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfilView.swift; sourceTree = "<group>"; };
 		4E8C088C2E02E82900655A67 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -342,7 +343,6 @@
 				E75ECE4C2E004DB900E1A579 /* CriarCasaView.swift */,
 				E75ECE502E004E0C00E1A579 /* EntrarCasaView.swift */,
 				E75ECE482E004D6200E1A579 /* LoginView.swift */,
-				E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */,
 				4E8C088A2E02E73B00655A67 /* PerfilView.swift */,
 			);
 			path = HouseProfile;
@@ -370,23 +370,14 @@
 				E75ECE6C2E0062C300E1A579 /* TasksView.swift */,
 				4EC26C532E018CC300C99805 /* TaskCardView.swift */,
 				4E8C08882E02E18E00655A67 /* EditarTaskView.swift */,
+				4E7E231E2E09907300F8E86E /* CriarTaskView.swift */,
 			);
 			path = Tasks;
-			sourceTree = "<group>";
-		};
-		E8BB11B62E02F16A00D712F4 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */,
-			);
-			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		E7AA58022E02EAB40099EBF3 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				E75ECE732E01A8FF00E1A579 /* AppStartView.swift */,
-				E75ECE712E01972A00E1A579 /* MainAppView.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -540,6 +531,7 @@
 				4EC26C542E018CC300C99805 /* TaskCardView.swift in Sources */,
 				E75ECE702E0192E900E1A579 /* Extensions.swift in Sources */,
 				4EE3DEBA2E0983170061172B /* FormatDateExtension.swift in Sources */,
+				4E7E231F2E09907300F8E86E /* CriarTaskView.swift in Sources */,
 				4E8C088B2E02E73B00655A67 /* PerfilView.swift in Sources */,
 				E75ECE512E004E0C00E1A579 /* EntrarCasaView.swift in Sources */,
 				E75ECE592E00616800E1A579 /* MuralViewModel.swift in Sources */,
