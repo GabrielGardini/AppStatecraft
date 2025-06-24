@@ -11,7 +11,7 @@ import SwiftUI
 struct ifishApp: App {
     var body: some Scene {
         WindowGroup {
-            MuralView()
+            ContentView()
         }
     }
 }
