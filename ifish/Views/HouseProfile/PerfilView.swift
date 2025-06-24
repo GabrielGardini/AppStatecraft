@@ -18,9 +18,7 @@ struct PerfilView: View {
                         .foregroundColor(.green)
 
                     Text("Minha casa")
-<<<<<<< HEAD
-                        .font(.system(size: 24, weight: .semibold))
-=======
+
                       .font(Font.custom("SF Pro", size: 24))
                       .multilineTextAlignment(.center)
                       .foregroundColor(.black)
@@ -32,7 +30,6 @@ struct PerfilView: View {
                         .frame(width: 327, height: 106)
 //                    Text(casaID)
                         .font(.custom("SF Pro", size: 24))
->>>>>>> master
                         .foregroundColor(.black)
                         .frame(height: 39)
                         .multilineTextAlignment(.center)
