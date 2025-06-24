@@ -7,117 +7,142 @@
 
 import Foundation
 import SwiftUI
+import CloudKit
+
+struct MockMessage: Identifiable {
+    let id = UUID()
+    let descricao: String
+    let houseID: CKRecord.Reference
+    let timestamp: Date
+    let titulo: String
+    let userID: CKRecord.Reference
+}
+let mockMessages: [MockMessage] = [
+    MockMessage(
+        descricao: "Lembrete da reunião amanhã às 10h.",
+        houseID: CKRecord.Reference(recordID: CKRecord.ID(recordName: "Casa123"), action: .none),
+        timestamp: Date(),
+        titulo: "Reunião",
+        userID: CKRecord.Reference(recordID: CKRecord.ID(recordName: "UserA"), action: .none)
+    ),
+    MockMessage(
+        descricao: "Precisamos comprar papel higiênico.snisnjjnjnjnjnjnjnjnjnjjhvjhvjkyhkyfkyhkyfkykfddgjhdygjhfykugfhdyfkgjfkuggjfkyugfhkygukfyugkfgjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjnjn",
+        houseID: CKRecord.Reference(recordID: CKRecord.ID(recordName: "Casa123"), action: .none),
+        timestamp: Date().addingTimeInterval(-3600),
+        titulo: "Compras",
+        userID: CKRecord.Reference(recordID: CKRecord.ID(recordName: "UserB"), action: .none)
+    ),
+    MockMessage(
+        descricao: "Feliz aniversário, João!",
+        houseID: CKRecord.Reference(recordID: CKRecord.ID(recordName: "Casa123"), action: .none),
+        timestamp: Date().addingTimeInterval(-86400),
+        titulo: "Parabéns",
+        userID: CKRecord.Reference(recordID: CKRecord.ID(recordName: "UserC"), action: .none)
+    )
+]
+
+
+
+
 
 struct MuralView: View {
     @State private var mostrarModalNovoAviso = false
     
     var body: some View{
-        NavigationView {
-
-            ScrollView {
-                ForEach(1..<10) { i in
+        NavigationView{
+            ZStack{
+                LinearGradient(colors: [Color("LaranjaFundoMural"), Color("BackgroundColor")], startPoint: .top, endPoint: UnitPoint(x: 0.5, y: 0.2))
+                    .ignoresSafeArea()
+                
+                ScrollView {
                     Rectangle()
-                        .frame(height: 150)
                         .frame(maxWidth: .infinity)
+                        .frame(height:150)
                         .cornerRadius(10)
                         .padding(.horizontal)
-                }
-            }
-            .frame(maxHeight: .infinity)
-            .navigationTitle("Mural")
-            .toolbar {
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        mostrarModalNovoAviso = true
-                    }) {
-                        Image(systemName: "plus")
+                        .padding(.top)
+                        Spacer().frame(height: 10)
+                    
+                    ForEach(mockMessages) { aviso in
+                        AvisoView(nomeAviso: aviso.titulo, descricaoAviso: aviso.descricao, userID: aviso.userID)
+                            .frame(maxWidth: .infinity)
+                            .cornerRadius(10)
+                            .padding(.horizontal)
+                            Spacer().frame(height: 10)
                     }
                 }
-            }
-            
-            .sheet(isPresented: $mostrarModalNovoAviso) {
-                NovoAvisoModalView()
-            }
-            
-        }
-    }
-}
-
-
-struct NovoAvisoModalView: View {
-    @Environment(\.dismiss) var fecharModalNovoAviso
-    @State private var nomeAviso: String = ""
-    @State private var descricao: String = ""
-    @State private var dataAviso: Date = Date()
-    @State private var notificacoesAviso: Bool = true
-
-    var body: some View {
-        NavigationView {
-            List {
-                Section {
-                    TextField("Título", text: $nomeAviso)
-                }
-
-                Section {
-                    DatePicker("Data", selection: $dataAviso, displayedComponents: [.date, .hourAndMinute])
-                }
-
-                Section {
-                    ZStack(alignment: .topLeading) {
-                        if descricao.isEmpty {
-                            Text("Descrição")
-                                .foregroundColor(.gray)
-                                .padding(.top, 8)
+                .frame(maxHeight: .infinity)
+                .navigationTitle("Mural")
+                .toolbar {
+                    
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            mostrarModalNovoAviso = true
+                        }) {
+                            Image(systemName: "plus")
                         }
-
-                        TextEditor(text: $descricao)
-                            .frame(minHeight: 100)
-                            .padding(4)
                     }
                 }
-
-                Section {
-                    Toggle("Notificações", isOn: $notificacoesAviso)
+                
+                .sheet(isPresented: $mostrarModalNovoAviso) {
+                    NovoAvisoModalView()
                 }
-            }
-            .navigationTitle("Novo Aviso")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancelar") {
-                        fecharModalNovoAviso()
-                    }
-                }
-
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Adicionar") {
-                        print("Título: \(nomeAviso)")
-                        print("Data: \(dataAviso)")
-                        print("Descrição: \(descricao)")
-                        print("Notificações: \(notificacoesAviso)")
-                    }
-                }
+                
             }
         }
-        .navigationViewStyle(.stack)
     }
 }
 
 
-/*struct AvisoView: View{
-    $Binding var nomeAviso: String
-    $Binding var descricaoAviso: String
+
+struct AvisoView: View{
+    let nomeAviso: String
+    let descricaoAviso: String
+    let userID: CKRecord.Reference
+    
+    @State private var mostrarModalEditarAviso = false
     
     
     var body: some View {
-        
-    }
-}*/
+        VStack(alignment: .leading){
+            HStack{
+                Text("Aviso")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .foregroundColor(Color("LaranjaMural"))
+                Text("•")
+                    .font(.headline)
 
-struct MuralView_Previews: PreviewProvider {
-    static var previews: some View {
-        MuralView()
-        NovoAvisoModalView()
+                Text(userID.recordID.recordName)
+                    .font(.subheadline)
+
+                Spacer()
+                Button(action: {
+                    mostrarModalEditarAviso = true
+                }) {
+                    Image(systemName: "square.and.pencil")
+                }
+           }
+            .padding(.bottom, 4)
+            .overlay(
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(.gray.opacity(0.3)),
+                alignment: .bottom
+            )
+            Spacer().frame(height: 4)
+
+            Text(nomeAviso)
+                .font(.headline)
+            Spacer().frame(height: 4)
+            Text(descricaoAviso)
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(10)
+        
+        .sheet(isPresented: $mostrarModalEditarAviso) {
+            EditarAvisoModalView()
+        }
     }
 }

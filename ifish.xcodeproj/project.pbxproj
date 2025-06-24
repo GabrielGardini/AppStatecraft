@@ -17,6 +17,8 @@
 		4E8C088B2E02E73B00655A67 /* PerfilView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C088A2E02E73B00655A67 /* PerfilView.swift */; };
 		4E8C088D2E02E82900655A67 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C088C2E02E82900655A67 /* AppState.swift */; };
 		4EC26C542E018CC300C99805 /* TaskCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC26C532E018CC300C99805 /* TaskCardView.swift */; };
+		E66FF4C72E09918100C0C95B /* NovoAvisoModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66FF4C62E09918100C0C95B /* NovoAvisoModalView.swift */; };
+		E6BFC2C52E0AEC610015B671 /* EditarAvisoModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BFC2C42E0AEC610015B671 /* EditarAvisoModalView.swift */; };
 		E75ECE0B2DF088E100E1A579 /* ifishApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE0A2DF088E100E1A579 /* ifishApp.swift */; };
 		E75ECE0D2DF088E100E1A579 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE0C2DF088E100E1A579 /* ContentView.swift */; };
 		E75ECE0F2DF088EB00E1A579 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E75ECE0E2DF088EB00E1A579 /* Assets.xcassets */; };
@@ -41,7 +43,6 @@
 		E75ECE702E0192E900E1A579 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE6F2E0192E900E1A579 /* Extensions.swift */; };
 		E75ECE722E01972A00E1A579 /* MainAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE712E01972A00E1A579 /* MainAppView.swift */; };
 		E75ECE742E01A8FF00E1A579 /* AppStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE732E01A8FF00E1A579 /* AppStartView.swift */; };
-		E8F31F702E01AEEC009913A9 /* PerfilView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,8 @@
 		4E8C088A2E02E73B00655A67 /* PerfilView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfilView.swift; sourceTree = "<group>"; };
 		4E8C088C2E02E82900655A67 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		4EC26C532E018CC300C99805 /* TaskCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCardView.swift; sourceTree = "<group>"; };
+		E66FF4C62E09918100C0C95B /* NovoAvisoModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovoAvisoModalView.swift; sourceTree = "<group>"; };
+		E6BFC2C42E0AEC610015B671 /* EditarAvisoModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditarAvisoModalView.swift; sourceTree = "<group>"; };
 		E75ECE072DF088E100E1A579 /* ifish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ifish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E75ECE0A2DF088E100E1A579 /* ifishApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ifishApp.swift; sourceTree = "<group>"; };
 		E75ECE0C2DF088E100E1A579 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -323,7 +326,6 @@
 				E75ECE4C2E004DB900E1A579 /* CriarCasaView.swift */,
 				E75ECE502E004E0C00E1A579 /* EntrarCasaView.swift */,
 				E75ECE482E004D6200E1A579 /* LoginView.swift */,
-				E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */,
 				4E8C088A2E02E73B00655A67 /* PerfilView.swift */,
 			);
 			path = HouseProfile;
@@ -341,6 +343,8 @@
 			isa = PBXGroup;
 			children = (
 				E75ECE692E0062B000E1A579 /* MuralView.swift */,
+				E66FF4C62E09918100C0C95B /* NovoAvisoModalView.swift */,
+				E6BFC2C42E0AEC610015B671 /* EditarAvisoModalView.swift */,
 			);
 			path = Mural;
 			sourceTree = "<group>";
@@ -355,21 +359,19 @@
 			path = Tasks;
 			sourceTree = "<group>";
 		};
+		E7AA58022E02EAB40099EBF3 /* App */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
 		E8BB11B62E02F16A00D712F4 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
 				E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */,
 			);
 			name = "Recovered References";
-			sourceTree = "<group>";
-		};
-		E7AA58022E02EAB40099EBF3 /* App */ = {
-			isa = PBXGroup;
-			children = (
-				E75ECE732E01A8FF00E1A579 /* AppStartView.swift */,
-				E75ECE712E01972A00E1A579 /* MainAppView.swift */,
-			);
-			path = App;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -516,6 +518,7 @@
 				E75ECE6D2E0062C300E1A579 /* TasksView.swift in Sources */,
 				E75ECE622E0061F700E1A579 /* UserViewModel.swift in Sources */,
 				E75ECE672E00629600E1A579 /* FinancesView.swift in Sources */,
+				E6BFC2C52E0AEC610015B671 /* EditarAvisoModalView.swift in Sources */,
 				E75ECE4F2E004DDF00E1A579 /* CasaCriadaView.swift in Sources */,
 				4E639E872DF867F90034E362 /* UserModel.swift in Sources */,
 				4EC26C542E018CC300C99805 /* TaskCardView.swift in Sources */,
@@ -526,6 +529,7 @@
 				4E8C08892E02E18E00655A67 /* EditarTaskView.swift in Sources */,
 				4E639E852DF867EC0034E362 /* FinanceModel.swift in Sources */,
 				4E639E752DF866860034E362 /* HouseModel.swift in Sources */,
+				E66FF4C72E09918100C0C95B /* NovoAvisoModalView.swift in Sources */,
 				E75ECE0B2DF088E100E1A579 /* ifishApp.swift in Sources */,
 				E75ECE5C2E0061AC00E1A579 /* TasksViewModel.swift in Sources */,
 				E75ECE472E00461800E1A579 /* HouseProfileViewModel.swift in Sources */,
