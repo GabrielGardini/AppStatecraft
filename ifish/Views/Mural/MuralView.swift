@@ -1,123 +1,85 @@
-//
-//  Mural.swift
-//  ifish
-//
-//  Created by Aluno 15 on 16/06/25.
-//
-
-import Foundation
 import SwiftUI
+import CloudKit
 
 struct MuralView: View {
-    @State private var mostrarModalNovoAviso = false
-    
-    var body: some View{
-        NavigationView {
+    @ObservedObject var messageViewModel: MessageViewModel
 
-            ScrollView {
-                ForEach(1..<10) { i in
-                    Rectangle()
-                        .frame(height: 150)
-                        .frame(maxWidth: .infinity)
-                        .cornerRadius(10)
-                        .padding(.horizontal)
-                }
-            }
-            .frame(maxHeight: .infinity)
-            .navigationTitle("Mural")
-            .toolbar {
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        mostrarModalNovoAviso = true
-                    }) {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
-            
-            .sheet(isPresented: $mostrarModalNovoAviso) {
-                NovoAvisoModalView()
-            }
-            
-        }
-    }
-}
-
-
-struct NovoAvisoModalView: View {
-    @Environment(\.dismiss) var fecharModalNovoAviso
-    @State private var nomeAviso: String = ""
-    @State private var descricao: String = ""
-    @State private var dataAviso: Date = Date()
-    @State private var notificacoesAviso: Bool = true
+    @State private var novoTitulo: String = ""
+    @State private var novoConteudo: String = ""
 
     var body: some View {
         NavigationView {
-            List {
-                Section {
-                    TextField("Título", text: $nomeAviso)
-                }
-
-                Section {
-                    DatePicker("Data", selection: $dataAviso, displayedComponents: [.date, .hourAndMinute])
-                }
-
-                Section {
-                    ZStack(alignment: .topLeading) {
-                        if descricao.isEmpty {
-                            Text("Descrição")
+            VStack {
+                List(messageViewModel.mensagens.reversed(), id: \.id) { mensagem in
+                    HStack(alignment: .top) {
+                        VStack(alignment: .leading) {
+                            Text(mensagem.title)
+                                .font(.headline)
+                            Text(mensagem.content)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                            Text("🕓 \(mensagem.timestamp.formatted(.dateTime))")
+                                .font(.caption2)
                                 .foregroundColor(.gray)
-                                .padding(.top, 8)
                         }
 
-                        TextEditor(text: $descricao)
-                            .frame(minHeight: 100)
-                            .padding(4)
+                        Spacer()
+
+                        Button(action: {
+                            Task {
+                                await messageViewModel.deletarMensagem(mensagem)
+                            }
+                        }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.red)
+                                .imageScale(.large)
+                        }
+                        .buttonStyle(PlainButtonStyle())
                     }
+                    .padding(.vertical, 4)
                 }
 
-                Section {
-                    Toggle("Notificações", isOn: $notificacoesAviso)
+                Divider()
+
+                VStack(spacing: 12) {
+                    TextField("Título do aviso", text: $novoTitulo)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                    TextField("Conteúdo do aviso", text: $novoConteudo)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                    Button("Criar aviso no mural") {
+                        Task {
+                            do {
+                                let userRecordID = try await CKContainer.default().userRecordID()
+                                let userRef = CKRecord.Reference(recordID: userRecordID, action: .none)
+
+                                await messageViewModel.criarMensagem(
+                                    content: novoConteudo,
+                                    title: novoTitulo,
+                                    userID: userRef
+                                )
+
+                                novoTitulo = ""
+                                novoConteudo = ""
+
+                                await messageViewModel.buscarMensagens()
+                            } catch {
+                                print("❌ Erro ao obter o userID: \(error)")
+                            }
+                        }
+                    }
+                    .disabled(novoTitulo.isEmpty || novoConteudo.isEmpty)
                 }
+                .padding()
             }
-            .navigationTitle("Novo Aviso")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancelar") {
-                        fecharModalNovoAviso()
-                    }
-                }
-
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Adicionar") {
-                        print("Título: \(nomeAviso)")
-                        print("Data: \(dataAviso)")
-                        print("Descrição: \(descricao)")
-                        print("Notificações: \(notificacoesAviso)")
-                    }
-                }
+            .navigationTitle("Mural da Casa")
+        }
+        .onAppear {
+            Task {
+                await messageViewModel.houseProfileViewModel.verificarSeUsuarioJaTemCasa()
+//                await messageViewModel.buscarMensagens()
             }
         }
-        .navigationViewStyle(.stack)
-    }
-}
-
-
-/*struct AvisoView: View{
-    $Binding var nomeAviso: String
-    $Binding var descricaoAviso: String
-    
-    
-    var body: some View {
-        
-    }
-}*/
-
-struct MuralView_Previews: PreviewProvider {
-    static var previews: some View {
-        MuralView()
-        NovoAvisoModalView()
     }
 }
