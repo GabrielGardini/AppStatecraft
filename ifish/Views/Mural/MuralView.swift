@@ -1,11 +1,3 @@
-//
-//  Mural.swift
-//  ifish
-//
-//  Created by Aluno 15 on 16/06/25.
-//
-
-import Foundation
 import SwiftUI
 import CloudKit
 
@@ -93,8 +85,6 @@ struct MuralView: View {
     }
 }
 
-
-
 struct AvisoView: View{
     let nomeAviso: String
     let descricaoAviso: String
@@ -144,5 +134,6 @@ struct AvisoView: View{
         .sheet(isPresented: $mostrarModalEditarAviso) {
             EditarAvisoModalView()
         }
+
     }
 }
