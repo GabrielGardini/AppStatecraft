@@ -13,57 +13,58 @@ struct PerfilView: View {
                 Color(red: 249/255, green: 249/255, blue: 249/255)
                     .ignoresSafeArea()
 
-                ScrollView {
+                ScrollView(.vertical, showsIndicators: false) {
+                    Color.clear.frame(height: 1) // evita espaço inicial
+
                     VStack(spacing: 20 * heightMultiplier) {
-                        
+
                         // 🏠 Ícone e Título
                         VStack(spacing: 8 * heightMultiplier) {
                             Image(systemName: "house.fill")
                                 .resizable()
-                                .frame(width: 60, height: 50)
+                                .frame(width: 75, height: 63.75)
                                 .foregroundColor(Color.accentColor)
 
                             Text("Minha casa")
-                                .font(.system(size: 24, weight: .semibold))
+                                .font(.system(size: 24))
                                 .foregroundColor(.black)
                         }
 
                         // 🏷️ Nome da casa + mascote
-                        VStack(spacing: 0) { HStack {
-                            Text(viewModel.nomeCasaUsuario.isEmpty ? "Nome da casa não disponível" : viewModel.nomeCasaUsuario)
-                                .font(.title3)
-                                .bold()
-                                .foregroundColor(.black)
-                                .lineLimit(1)
-                                .truncationMode(.tail)
-                                .layoutPriority(1)
+                        VStack(spacing: 0) {
+                            HStack {
+                                Text(viewModel.nomeCasaUsuario.isEmpty ? "Nome da casa não disponível" : viewModel.nomeCasaUsuario)
+                                    .font(.system(size: 24))
+                                    .foregroundColor(.black)
+                                    .truncationMode(.tail)
+                                    .layoutPriority(1)
 
-                            Spacer(minLength: 20)
+                                Spacer(minLength: 20)
 
-                            Image("mascote")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 50, height: 50)
-                        }
-                        .padding()
-                        .frame(width: width, height: 106 * heightMultiplier)
-                        .background(Color(red: 0.88, green: 0.88, blue: 0.88))
-                        .clipShape(
-                            RoundedCorner(radius: 6, corners: [.topLeft, .topRight])
-                        )
-                        .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
+                                Image("mascote")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 50, height: 50)
+                            }
+                            .padding()
+                            .frame(width: width, height: 106 * heightMultiplier)
+                            .background(Color(red: 0.88, green: 0.88, blue: 0.88))
+                            .clipShape(
+                                RoundedCorner(radius: 6, corners: [.topLeft, .topRight])
+                            )
+                            .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
 
-                        // 👥 Moradores
+                            // 👥 Moradores
                             VStack(alignment: .leading, spacing: 0) {
                                 Text("Moradores")
-                                    .font(.headline)
+                                    .font(.system(size: 17))
                                     .foregroundColor(.black)
                                     .padding(.horizontal, 22)
                                     .padding(.top)
                                     .padding(.bottom, 8)
 
                                 ScrollView {
-                                    VStack(spacing: 8 * heightMultiplier) {
+                                    VStack(spacing: 16.5) {
                                         if viewModel.usuariosDaCasa.isEmpty {
                                             Text("Nenhum usuário encontrado.")
                                                 .foregroundColor(.gray)
@@ -87,7 +88,7 @@ struct PerfilView: View {
                                     }
                                     .padding(.bottom)
                                 }
-                                .frame(height: 247 * heightMultiplier) // altura fixa que limita o scroll
+                                .frame(height: 247 * heightMultiplier)
                             }
                             .frame(width: width)
                             .background(Color.white)
@@ -95,9 +96,8 @@ struct PerfilView: View {
                                 RoundedCorner(radius: 6, corners: [.bottomLeft, .bottomRight])
                             )
                             .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
-
-                        .frame(width: width)
                         }
+
                         // 🔗 Convidar membros
                         HStack {
                             Text("Convidar membros")
@@ -106,7 +106,7 @@ struct PerfilView: View {
                             Spacer()
 
                             Text(viewModel.houseModel?.inviteCode ?? "-----")
-                                .font(.headline)
+                                .font(.system(size: 17))
                                 .foregroundColor(Color.accentColor)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 4)
@@ -153,13 +153,11 @@ struct PerfilView: View {
                                 .frame(width: width, height: 34.2 * heightMultiplier)
                                 .background(RoundedRectangle(cornerRadius: 15).fill(Color.white))
                                 .foregroundColor(.red)
-    
                         }
                     }
                     .frame(width: geometry.size.width)
-                    .padding(.top, -16)
-
                 }
+                .scrollContentBackground(.hidden)
 
                 // ✅ Feedback de cópia
                 if showCopyMessage {
@@ -182,14 +180,12 @@ struct PerfilView: View {
     }
 }
 
-
 struct PerfilView_Previews: PreviewProvider {
     static var previews: some View {
         PerfilView()
     }
 }
 
-// Arredondar cantos
 struct RoundedCorner: Shape {
     var radius: CGFloat = 6.0
     var corners: UIRectCorner = .allCorners
