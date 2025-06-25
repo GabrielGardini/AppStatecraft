@@ -8,14 +8,16 @@ let fundoFinances = LinearGradient(
 )
 
 struct FinancesView: View {
-    @ObservedObject var viewModel: HouseProfileViewModel
-    @StateObject private var financeViewModel: FinanceViewModel
+    @State private var mostrarModalNovaFinanca = false
+    @StateObject var viewModel = HouseProfileViewModel()
+    @StateObject var financeViewModel: FinanceViewModel
 
     @State private var teste = 0
 
-    init(viewModel: HouseProfileViewModel) {
-        self._financeViewModel = StateObject(wrappedValue: FinanceViewModel(houseProfileViewModel: viewModel))
-        self.viewModel = viewModel
+    init() {
+        let vm = HouseProfileViewModel()
+        _viewModel = StateObject(wrappedValue: vm)
+        _financeViewModel = StateObject(wrappedValue: FinanceViewModel(houseProfileViewModel: vm))
     }
 
     var body: some View {
@@ -24,32 +26,77 @@ struct FinancesView: View {
                 fundoFinances
                     .ignoresSafeArea()
                 VStack {
-                    Picker("teste", selection: $teste) {
-                        Text("Pendentes").tag(0)
-                        Text("Paga por todos").tag(1)
+                                    List(financeViewModel.despesas, id: \.id) { despesa in
+                                        
+                                        DespesaEspecifica(despesa: despesa, viewModel: viewModel)
+                                    }
+                                    .background(Color.clear)
+                                    .listStyle(PlainListStyle())
+                                    .padding(24)
+                                }
+                                .padding(.top)
+                .onAppear {
+                    Task {
+                        //await financeViewModel.buscarDespesasDaCasa()
+                        await viewModel.verificarConta()
+                        if viewModel.houseModel != nil {
+                                    await financeViewModel.buscarDespesasDaCasa()
+                                } else {
+                                    print("⚠️ Nenhuma casa encontrada após verificarConta.")
+                                }
                     }
-                    .pickerStyle(.segmented)
-                    .padding()
+                    print(viewModel.houseModel?.nome)
                 }
+
             }
             .navigationTitle("Despesas")
-            .toolbar {
+            .toolbar { //botão de add
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        Task {
-                            await financeViewModel.criarDespesa(
-                                amount: 100,
-                                deadline: Date(),
-                                paidBy: ["Gabriel"],
-                                title: "Compras do mês"
-                            )
-                        }
-                    } label: {
+                    Button(action: {
+                        mostrarModalNovaFinanca = true
+                    }) {
                         Image(systemName: "plus")
-                            .foregroundColor(.blue)
-                    }
-                }
             }
         }
     }
+            .sheet(isPresented: $mostrarModalNovaFinanca) {
+                ModalNovaFinancaView(financeViewModel: financeViewModel)
+}
+}
+}
+}
+
+
+struct DespesaEspecifica: View {
+    var despesa: FinanceModel
+    @ObservedObject var viewModel: HouseProfileViewModel
+
+    var numeroMoradores: Int {
+        viewModel.usuariosDaCasa.count
+    }
+
+    var valorIndividualConta: Double {
+        return despesa.amount / Double(numeroMoradores)
+    }
+    
+    var body: some View{
+        HStack{
+            VStack{
+                Text(despesa.title)
+                    .font(.headline)
+                Text("Vencimento: \(despesa.deadline.formatted(date: .abbreviated, time: .omitted))")
+            }
+            Spacer()
+            VStack{
+                Text("R$ \(valorIndividualConta, specifier: "%.2f")")
+                    .font(.system(size: 12))
+                Text("Total: R$ \(despesa.amount, specifier: "%.2f")")
+                    .font(.system(size: 10))
+                    .foregroundColor(.gray)
+        }
+        .padding(8)
+        .background(Color.white.opacity(0.2))
+        .cornerRadius(10)
+    }
+}
 }
