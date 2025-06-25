@@ -51,4 +51,50 @@ class TaskModel: ObservableObject, Identifiable {
         self.completo = completo
         self.user = user
     }
+    
+    convenience init?(record: CKRecord) {
+        guard
+            let userRef = record["UserID"] as? CKRecord.Reference,
+            let casaRef = record["HouseID"] as? CKRecord.Reference,
+            let icone = record["Icone"] as? String,
+            let titulo = record["Titulo"] as? String,
+            let descricao = record["Descricao"] as? String,
+            let prazo = record["Prazo"] as? Date,
+            let repeticaoStr = record["Repeticao"] as? String,
+            let repeticao = Repeticao(rawValue: repeticaoStr),
+            let lembreteStr = record["Lembrete"] as? String,
+            let lembrete = Lembrete(rawValue: lembreteStr),
+            let completo = record["Completo"] as? Bool
+        else {
+            print("❌ Erro ao converter CKRecord para TaskModel")
+            return nil
+        }
+
+        self.init(
+            id: record.recordID,
+            userID: userRef.recordID,
+            casaID: casaRef.recordID,
+            icone: icone,
+            titulo: titulo,
+            descricao: descricao,
+            prazo: prazo,
+            repeticao: repeticao,
+            lembrete: lembrete,
+            completo: completo
+        )
+    }
+
+    func toCKRecord() -> CKRecord {
+        let record = CKRecord(recordType: "Task", recordID: id)
+        record["UserID"] = CKRecord.Reference(recordID: userID, action: .none)
+        record["HouseID"] = CKRecord.Reference(recordID: casaID, action: .none)
+        record["Icone"] = icone as CKRecordValue
+        record["Titulo"] = titulo as CKRecordValue
+        record["Descricao"] = descricao as CKRecordValue
+        record["Prazo"] = prazo as CKRecordValue
+        record["Repeticao"] = repeticao.rawValue as CKRecordValue
+        record["Lembrete"] = lembrete.rawValue as CKRecordValue
+        record["Completo"] = completo as CKRecordValue
+        return record
+    }
 }
