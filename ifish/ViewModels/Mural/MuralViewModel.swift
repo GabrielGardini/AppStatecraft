@@ -5,7 +5,11 @@ import CloudKit
 class MessageViewModel: ObservableObject {
     @Published var mensagens: [MessageModel] = []
 
-    let houseProfileViewModel: HouseProfileViewModel
+    var houseProfileViewModel: HouseProfileViewModel?
+    
+    init() {
+        
+    }
 
     init(houseProfileViewModel: HouseProfileViewModel) {
         self.houseProfileViewModel = houseProfileViewModel
@@ -13,7 +17,7 @@ class MessageViewModel: ObservableObject {
 
     // Criar nova mensagem
     func criarMensagem(content: String, title: String, userID: CKRecord.Reference) async {
-        guard let house = houseProfileViewModel.houseModel else {
+        guard let house = houseProfileViewModel?.houseModel else {
             print("❌ Nenhuma casa vinculada.")
             return
         }
@@ -45,7 +49,7 @@ class MessageViewModel: ObservableObject {
 
     // Buscar mensagens da casa vinculada
     func buscarMensagens() async {
-        guard let house = houseProfileViewModel.houseModel else {
+        guard let house = houseProfileViewModel?.houseModel else {
             print("❌ Nenhuma casa vinculada.")
             return
         }
@@ -56,7 +60,14 @@ class MessageViewModel: ObservableObject {
         do {
             let records = try await fetchRecords(matching: query)
             let mensagens = records.map { MessageModel(record: $0) }
-            self.mensagens = mensagens
+            for msg in mensagens {
+                print("Título: \(msg.title), Conteúdo: \(msg.content), Usuário: \(msg.userID.recordID.recordName), Data: \(msg.timestamp)")
+            }
+            await MainActor.run {
+                self.mensagens = []
+                self.mensagens = mensagens
+            }
+            //self.mensagens = mensagens
             print("📬 \(mensagens.count) mensagens carregadas.")
         } catch {
             print("❌ Erro ao buscar mensagens: \(error)")
