@@ -27,11 +27,11 @@ struct FinancesView: View {
                     .ignoresSafeArea()
                 VStack {
                                     List(financeViewModel.despesas, id: \.id) { despesa in
-                                        
                                         DespesaEspecifica(despesa: despesa, viewModel: viewModel)
                                     }
                                     .background(Color.clear)
                                     .listStyle(PlainListStyle())
+                                    .cornerRadius(10)
                                     .padding(24)
                                 }
                                 .padding(.top)
@@ -79,19 +79,22 @@ struct DespesaEspecifica: View {
         return despesa.amount / Double(numeroMoradores)
     }
     
-    var body: some View{
+    var body: some View {
+
         HStack{
-            VStack{
+            VStack(alignment: .leading){
                 Text(despesa.title)
                     .font(.headline)
-                Text("Vencimento: \(despesa.deadline.formatted(date: .abbreviated, time: .omitted))")
+                Text("Vencimento: \(formatarData(despesa.deadline))")
+                    .font(.system(size: 12))
+                    .foregroundColor(.gray)
             }
             Spacer()
             VStack{
                 Text("R$ \(valorIndividualConta, specifier: "%.2f")")
-                    .font(.system(size: 12))
+                    .font(.system(size: 14))
                 Text("Total: R$ \(despesa.amount, specifier: "%.2f")")
-                    .font(.system(size: 10))
+                    .font(.system(size: 12))
                     .foregroundColor(.gray)
         }
         .padding(8)
@@ -99,4 +102,11 @@ struct DespesaEspecifica: View {
         .cornerRadius(10)
     }
 }
+}
+
+
+func formatarData(_ data: Date) -> String{
+    let formatter = DateFormatter()
+    formatter.dateFormat = "dd/MM/yyyy"
+    return formatter.string(from: data)
 }
