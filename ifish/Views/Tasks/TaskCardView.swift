@@ -15,14 +15,7 @@ struct TaskCard: View {
         HStack {
             
             // icone da tarefa
-            ZStack {
-                Image(systemName: task.icone)
-                    .foregroundColor(.white)
-            }
-            .frame(width: 34, height: 34)
-            .background(.blue)
-            .cornerRadius(100)
-            .padding(5)
+            IconeEstilo(icone: task.icone, selecionado: true)
             
             // titulo
             Text(task.titulo)
