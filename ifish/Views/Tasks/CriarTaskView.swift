@@ -11,8 +11,27 @@ import CloudKit
 struct CriarTaskModalView: View {
     @Environment(\.dismiss) var fecharCriarTaskModalView
     @ObservedObject var houseViewModel = HouseProfileViewModel()
+    @EnvironmentObject var appState: AppState
+
+    @State private var tarefaCriada: TaskModel
     
-    @State var tarefaCriada: TaskModel
+    init() {
+        let task = TaskModel(
+            id: CKRecord.ID(recordName: UUID().uuidString),
+            userID: AppState().userID ?? CKRecord.ID(recordName: "UserID"),
+            casaID: AppState().casaID ?? CKRecord.ID(recordName: "HouseID"),
+            icone: "square.and.pencil",
+            titulo: "",
+            descricao: "",
+            prazo: Date(),
+            repeticao: .nunca,
+            lembrete: .nenhum,
+            completo: false,
+            user: AppState().usuario
+        )
+        _tarefaCriada = State(initialValue: task)
+    }
+
     
     var body: some View {
         NavigationView {
@@ -44,8 +63,27 @@ struct CriarTaskModalView: View {
                 Section {
                     Picker("Responsável", selection: $tarefaCriada.user) {
                         ForEach(houseViewModel.usuariosDaCasa) { usuario in
-                            Text(usuario.name).tag(Optional(usuario))
+                            Text(usuario.name).tag(usuario.name)
                         }
+                    }
+                }
+                
+                Section {
+                    Label("Icones", systemImage: "")
+                        .labelStyle(.titleOnly)
+                        .foregroundColor(.gray)
+                    
+                }
+                Section {
+                    ZStack(alignment: .topLeading) {
+                        if tarefaCriada.descricao.isEmpty {
+                            Text("Descrição")
+                                .foregroundColor(.gray)
+                                .padding(.top, 8)
+                        }
+
+                        TextEditor(text: $tarefaCriada.descricao)
+                            .frame(minHeight: 100)
                     }
                 }
             }
@@ -93,6 +131,6 @@ struct CriarTaskView_Previews: PreviewProvider {
             user: mockUser
         )
         
-        CriarTaskModalView(tarefaCriada: mockTask)
+        CriarTaskModalView()
     }
 }
