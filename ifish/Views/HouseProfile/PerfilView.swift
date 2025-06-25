@@ -21,7 +21,7 @@ struct PerfilView: View {
                             Image(systemName: "house.fill")
                                 .resizable()
                                 .frame(width: 60, height: 50)
-                                .foregroundColor(.green)
+                                .foregroundColor(Color.accentColor)
 
                             Text("Minha casa")
                                 .font(.system(size: 24, weight: .semibold))
@@ -29,7 +29,7 @@ struct PerfilView: View {
                         }
 
                         // 🏷️ Nome da casa + mascote
-                        HStack {
+                        VStack(spacing: 0) { HStack {
                             Text(viewModel.nomeCasaUsuario.isEmpty ? "Nome da casa não disponível" : viewModel.nomeCasaUsuario)
                                 .font(.title3)
                                 .bold()
@@ -48,40 +48,56 @@ struct PerfilView: View {
                         .padding()
                         .frame(width: width, height: 106 * heightMultiplier)
                         .background(Color(red: 0.88, green: 0.88, blue: 0.88))
-                        .cornerRadius(6)
+                        .clipShape(
+                            RoundedCorner(radius: 6, corners: [.topLeft, .topRight])
+                        )
                         .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
 
                         // 👥 Moradores
-                        VStack(alignment: .leading, spacing: 12 * heightMultiplier) {
-                            Text("Moradores")
-                                .font(.headline)
-                                .foregroundColor(.black)
+                            VStack(alignment: .leading, spacing: 0) {
+                                Text("Moradores")
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+                                    .padding(.horizontal, 22)
+                                    .padding(.top)
+                                    .padding(.bottom, 8)
 
-                            VStack(alignment: .leading, spacing: 8 * heightMultiplier) {
-                                if viewModel.usuariosDaCasa.isEmpty {
-                                    Text("Nenhum usuário encontrado.")
-                                        .foregroundColor(.gray)
-                                } else {
-                                    ForEach(viewModel.usuariosDaCasa, id: \.id) { usuario in
-                                        HStack(spacing: 10) {
-                                            Image(systemName: "person.crop.circle")
-                                                .resizable()
-                                                .frame(width: 30, height: 30)
+                                ScrollView {
+                                    VStack(spacing: 8 * heightMultiplier) {
+                                        if viewModel.usuariosDaCasa.isEmpty {
+                                            Text("Nenhum usuário encontrado.")
                                                 .foregroundColor(.gray)
+                                                .padding(.horizontal, 22)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                        } else {
+                                            ForEach(viewModel.usuariosDaCasa, id: \.id) { usuario in
+                                                HStack(spacing: 10) {
+                                                    Image(systemName: "person.crop.circle")
+                                                        .resizable()
+                                                        .frame(width: 30, height: 30)
+                                                        .foregroundColor(.gray)
 
-                                            Text(usuario.name)
-                                                .foregroundColor(.black)
+                                                    Text(usuario.name)
+                                                        .foregroundColor(.black)
+                                                }
+                                                .padding(.horizontal, 22)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                            }
                                         }
                                     }
+                                    .padding(.bottom)
                                 }
+                                .frame(height: 247 * heightMultiplier) // altura fixa que limita o scroll
                             }
-                            .padding()
+                            .frame(width: width)
                             .background(Color.white)
-                            .cornerRadius(6)
+                            .clipShape(
+                                RoundedCorner(radius: 6, corners: [.bottomLeft, .bottomRight])
+                            )
                             .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
-                        }
-                        .frame(width: width)
 
+                        .frame(width: width)
+                        }
                         // 🔗 Convidar membros
                         HStack {
                             Text("Convidar membros")
@@ -91,7 +107,7 @@ struct PerfilView: View {
 
                             Text(viewModel.houseModel?.inviteCode ?? "-----")
                                 .font(.headline)
-                                .foregroundColor(.green)
+                                .foregroundColor(Color.accentColor)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 4)
                                 .background(Capsule().fill(Color.green.opacity(0.2)))
@@ -106,7 +122,7 @@ struct PerfilView: View {
                                 }
                             } label: {
                                 Image(systemName: "doc.on.doc.fill")
-                                    .foregroundColor(.green)
+                                    .foregroundColor(Color.accentColor)
                                     .padding(5)
                                     .background(Circle().fill(Color.green.opacity(0.1)))
                             }
@@ -134,14 +150,15 @@ struct PerfilView: View {
                             Text("Sair")
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .frame(width: width)
+                                .frame(width: width, height: 34.2 * heightMultiplier)
                                 .background(RoundedRectangle(cornerRadius: 15).fill(Color.white))
                                 .foregroundColor(.red)
-                                .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
+    
                         }
                     }
                     .frame(width: geometry.size.width)
-                    .padding(.top, 40)
+                    .padding(.top, -16)
+
                 }
 
                 // ✅ Feedback de cópia
@@ -169,5 +186,20 @@ struct PerfilView: View {
 struct PerfilView_Previews: PreviewProvider {
     static var previews: some View {
         PerfilView()
+    }
+}
+
+// Arredondar cantos
+struct RoundedCorner: Shape {
+    var radius: CGFloat = 6.0
+    var corners: UIRectCorner = .allCorners
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
+        return Path(path.cgPath)
     }
 }
