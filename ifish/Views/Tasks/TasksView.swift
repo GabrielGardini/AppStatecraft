@@ -83,9 +83,7 @@ struct TasksView: View {
             
             Spacer()
         }
-//        .sheet(isPresented: $mostrarInfoTaskModelView) {
-//            InfoTaskModelView()
-//        }
+
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
@@ -93,6 +91,9 @@ struct TasksView: View {
                 }) {
                     Text(Image(systemName: "plus"))
                         .foregroundColor(.blue)
+                }
+                .sheet(isPresented: $mostrarCriarTaskModalView) {
+                    CriarTaskModalView();
                 }
             }
         }
