@@ -8,13 +8,24 @@
 import SwiftUI
 
 struct IconeEstilo: View {
+    let icone: String
+    var selecionado: Bool
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            Circle()
+                .fill(selecionado ? Color.blue : Color.gray.opacity(0.9))
+                .frame(width: 40, height: 40)
+            
+            Image(systemName: icone)
+                .foregroundColor(.white)
+                .font(.system(size: 18, weight: .medium))
+        }
     }
 }
 
 struct IconeEstilo_Previews: PreviewProvider {
     static var previews: some View {
-        IconeEstilo()
+        IconeEstilo(icone: "trash.fill", selecionado: false)
     }
 }
