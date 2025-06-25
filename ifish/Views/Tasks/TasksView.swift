@@ -45,6 +45,7 @@ struct TasksView: View {
     
     var body: some View {
         VStack {
+            
             // filtro do mes e ano:   < jun 2025 >
             HStack {
                 Button(action: {
@@ -66,6 +67,7 @@ struct TasksView: View {
                }
             }
             
+            // picker com filtro minhas tarefas, todas tarefas
             Picker("", selection: $escolha) {
                 ForEach(filtroPicker, id: \.self) {
                     Text($0)
@@ -73,6 +75,7 @@ struct TasksView: View {
             }
             .pickerStyle(.segmented)
             
+            // lista das tarefas filtradas
             ScrollView {
                 LazyVStack(spacing: 10) {
                     ForEach(tarefasFiltradas) { tarefa in
