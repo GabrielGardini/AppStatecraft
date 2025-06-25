@@ -3,7 +3,7 @@ import SwiftUI
 struct PerfilView: View {
     @StateObject var viewModel = HouseProfileViewModel()
     @State private var showCopyMessage = false
-    @State private var showExitAlert = false // Controla a exibição do alerta de confirmação ao sair
+    @State private var showExitAlert = false
 
     var body: some View {
         GeometryReader { geometry in
@@ -11,14 +11,13 @@ struct PerfilView: View {
             let heightMultiplier = geometry.size.height / 844
 
             ZStack {
-                // Cor de fundo da tela inteira
                 Color(red: 249/255, green: 249/255, blue: 249/255)
                     .ignoresSafeArea()
 
                 ScrollView {
                     VStack(spacing: 20 * heightMultiplier) {
 
-                        // Cabeçalho com ícone de casa e título "Minha casa"
+                        // Cabeçalho com ícone de casa e título
                         VStack(spacing: 8 * heightMultiplier) {
                             Image(systemName: "house.fill")
                                 .resizable()
@@ -30,7 +29,7 @@ struct PerfilView: View {
                                 .foregroundColor(.black)
                         }
 
-                        // Bloco com o nome da casa e a imagem do mascote
+                        // Bloco do nome da casa + mascote
                         VStack(spacing: 0) {
                             HStack {
                                 Text(viewModel.nomeCasaUsuario.isEmpty ? "Nome da casa não disponível" : viewModel.nomeCasaUsuario)
@@ -52,7 +51,7 @@ struct PerfilView: View {
                             .clipShape(RoundedCorner(radius: 6, corners: [.topLeft, .topRight]))
                             .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
 
-                            // Lista de moradores da casa com título
+                            // Lista de moradores
                             VStack(alignment: .leading, spacing: 0) {
                                 Text("Moradores")
                                     .font(.system(size: 17))
@@ -94,7 +93,7 @@ struct PerfilView: View {
                             .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
                         }
 
-                        // Bloco com o código de convite e botão para copiar
+                        // Código de convite e botão de copiar
                         HStack {
                             Text("Convidar membros")
                                 .foregroundColor(.black)
@@ -129,7 +128,7 @@ struct PerfilView: View {
                         .cornerRadius(15)
                         .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
 
-                        // Botão de notificações (ainda sem ação definida)
+                        // Botão de notificações
                         Button(action: {}) {
                             Text("Notificação")
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -141,7 +140,7 @@ struct PerfilView: View {
                                 .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
                         }
 
-                        // Botão para sair da casa com confirmação via alerta
+                        // Botão "Sair" com alerta de confirmação
                         Button(action: {
                             showExitAlert = true
                         }) {
@@ -152,19 +151,21 @@ struct PerfilView: View {
                                 .background(RoundedRectangle(cornerRadius: 15).fill(Color.white))
                                 .foregroundColor(.red)
                         }
-                        .alert("Tem certeza que deseja sair da casa?", isPresented: $showExitAlert) {
+                        .alert("Sair da casa?", isPresented: $showExitAlert) {
                             Button("Cancelar", role: .cancel) {}
                             Button("Sair", role: .destructive) {
-                                // Aqui você pode colocar a lógica para remover o usuário da casa ou deslogar
                                 print("Usuário saiu da casa")
+                                // Lógica de saída da casa vai aqui
                             }
+                        } message: {
+                            Text("Tem certeza que deseja abandonar a casa? Você terá que ser convidado novamente para voltar à casa.")
                         }
                     }
                     .frame(width: geometry.size.width)
                     .padding(.top, 0)
                 }
 
-                // Feedback visual de que o código foi copiado para a área de transferência
+                // Alerta de código copiado
                 if showCopyMessage {
                     Text("Código copiado!")
                         .font(.caption)
@@ -177,7 +178,6 @@ struct PerfilView: View {
                 }
             }
             .onAppear {
-                // Quando a tela aparece, verifica se o usuário já tem uma casa associada
                 Task {
                     await viewModel.verificarSeUsuarioJaTemCasa()
                 }
@@ -192,7 +192,6 @@ struct PerfilView_Previews: PreviewProvider {
     }
 }
 
-// Componente para arredondar cantos específicos
 struct RoundedCorner: Shape {
     var radius: CGFloat = 6.0
     var corners: UIRectCorner = .allCorners
@@ -206,3 +205,4 @@ struct RoundedCorner: Shape {
         return Path(path.cgPath)
     }
 }
+
