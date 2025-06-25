@@ -13,7 +13,7 @@ struct CriarTaskModalView: View {
     @ObservedObject var houseViewModel = HouseProfileViewModel()
     @EnvironmentObject var appState: AppState
 
-    @State private var tarefaCriada: TaskModel
+    @StateObject private var tarefaCriada: TaskModel
     
     init() {
         let task = TaskModel(
@@ -29,7 +29,7 @@ struct CriarTaskModalView: View {
             completo: false,
             user: AppState().usuario
         )
-        _tarefaCriada = State(initialValue: task)
+        _tarefaCriada = StateObject(wrappedValue: task)
     }
 
     
@@ -69,11 +69,22 @@ struct CriarTaskModalView: View {
                 }
                 
                 Section {
-                    Label("Icones", systemImage: "")
+                    Label("Ícones", systemImage: "")
                         .labelStyle(.titleOnly)
                         .foregroundColor(.gray)
                     
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 35))]) {
+                        ForEach(IconesDisponiveis.todos, id: \.self) { icone in
+                            Button(action: {
+                                tarefaCriada.icone = icone
+                            }) {
+                                IconeEstilo(icone: icone, selecionado: tarefaCriada.icone == icone)
+                            }
+                            .padding(4)
+                        }
+                    }
                 }
+
                 Section {
                     ZStack(alignment: .topLeading) {
                         if tarefaCriada.descricao.isEmpty {
