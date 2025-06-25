@@ -33,6 +33,7 @@ struct PerfilView: View {
                         .foregroundColor(.black)
                         .frame(height: 39)
                         .multilineTextAlignment(.center)
+
                 }
 
                 // 🧑‍🤝‍🧑 Agora o título dinâmico com nome da casa
@@ -78,3 +79,4 @@ struct PerfilView: View {
         }
     }
 }
+
