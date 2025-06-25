@@ -2,19 +2,18 @@ import SwiftUI
 
 struct MainAppView: View {
     var body: some View {
-        let mockViewModel = HouseProfileViewModel()
         TabView {
-            FinancesView(viewModel: mockViewModel)
+            FinancesView()
                 .tabItem {
                     Label("Início", systemImage: "house")
                 }
 
-            FinancesView(viewModel: mockViewModel)
+            FinancesView()
                 .tabItem {
                     Label("Tarefas", systemImage: "checkmark.circle")
                 }
 
-            PerfilView(viewModel: mockViewModel)
+            PerfilView()
                 .tabItem {
                     Label("Config", systemImage: "gear")
                 }

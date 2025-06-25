@@ -54,7 +54,6 @@ struct ModalNovaFinancaView: View {
                     Button("Adicionar") {
                         Task{
                         await financeViewModel.criarDespesa(amount: valor, deadline: dataVencimento, paidBy: [], title: nomeFinanca)
-                            onSave?()
                             fecharModalNovaFinanca()}
                     }
                 }
