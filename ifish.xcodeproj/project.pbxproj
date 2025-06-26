@@ -13,10 +13,14 @@
 		4E639E872DF867F90034E362 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E862DF867F90034E362 /* UserModel.swift */; };
 		4E639E892DF868190034E362 /* MuralComunicationModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E882DF868190034E362 /* MuralComunicationModal.swift */; };
 		4E639E8B2DF8749F0034E362 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 4E639E8A2DF8749F0034E362 /* .gitignore */; };
+		4E7E231F2E09907300F8E86E /* CriarTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7E231E2E09907300F8E86E /* CriarTaskView.swift */; };
 		4E8C08892E02E18E00655A67 /* EditarTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C08882E02E18E00655A67 /* EditarTaskView.swift */; };
 		4E8C088B2E02E73B00655A67 /* PerfilView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C088A2E02E73B00655A67 /* PerfilView.swift */; };
 		4E8C088D2E02E82900655A67 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C088C2E02E82900655A67 /* AppState.swift */; };
 		4EC26C542E018CC300C99805 /* TaskCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC26C532E018CC300C99805 /* TaskCardView.swift */; };
+		4ECAD55F2E0C28D1000F104C /* IconesDisponiveis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECAD55E2E0C28D1000F104C /* IconesDisponiveis.swift */; };
+		4ECAD5612E0C30E3000F104C /* IconeEstilo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECAD5602E0C30E3000F104C /* IconeEstilo.swift */; };
+		4EE3DEBA2E0983170061172B /* FormatDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE3DEB92E0983170061172B /* FormatDateExtension.swift */; };
 		E66FF4C72E09918100C0C95B /* NovoAvisoModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66FF4C62E09918100C0C95B /* NovoAvisoModalView.swift */; };
 		E6BFC2C52E0AEC610015B671 /* EditarAvisoModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BFC2C42E0AEC610015B671 /* EditarAvisoModalView.swift */; };
 		4EE3DEBA2E0983170061172B /* FormatDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE3DEB92E0983170061172B /* FormatDateExtension.swift */; };
@@ -71,10 +75,14 @@
 		4E639E862DF867F90034E362 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		4E639E882DF868190034E362 /* MuralComunicationModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuralComunicationModal.swift; sourceTree = "<group>"; };
 		4E639E8A2DF8749F0034E362 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		4E7E231E2E09907300F8E86E /* CriarTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CriarTaskView.swift; sourceTree = "<group>"; };
 		4E8C08882E02E18E00655A67 /* EditarTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditarTaskView.swift; sourceTree = "<group>"; };
 		4E8C088A2E02E73B00655A67 /* PerfilView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfilView.swift; sourceTree = "<group>"; };
 		4E8C088C2E02E82900655A67 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		4EC26C532E018CC300C99805 /* TaskCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCardView.swift; sourceTree = "<group>"; };
+		4ECAD55E2E0C28D1000F104C /* IconesDisponiveis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconesDisponiveis.swift; sourceTree = "<group>"; };
+		4ECAD5602E0C30E3000F104C /* IconeEstilo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconeEstilo.swift; sourceTree = "<group>"; };
+		4EE3DEB92E0983170061172B /* FormatDateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatDateExtension.swift; sourceTree = "<group>"; };
 		E66FF4C62E09918100C0C95B /* NovoAvisoModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovoAvisoModalView.swift; sourceTree = "<group>"; };
 		E6BFC2C42E0AEC610015B671 /* EditarAvisoModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditarAvisoModalView.swift; sourceTree = "<group>"; };
 		4EE3DEB92E0983170061172B /* FormatDateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatDateExtension.swift; sourceTree = "<group>"; };
@@ -140,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				E75ECE0E2DF088EB00E1A579 /* Assets.xcassets */,
+				4ECAD55E2E0C28D1000F104C /* IconesDisponiveis.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -367,6 +376,8 @@
 				E75ECE6C2E0062C300E1A579 /* TasksView.swift */,
 				4EC26C532E018CC300C99805 /* TaskCardView.swift */,
 				4E8C08882E02E18E00655A67 /* EditarTaskView.swift */,
+				4E7E231E2E09907300F8E86E /* CriarTaskView.swift */,
+				4ECAD5602E0C30E3000F104C /* IconeEstilo.swift */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -376,14 +387,6 @@
 			children = (
 			);
 			path = App;
-			sourceTree = "<group>";
-		};
-		E8BB11B62E02F16A00D712F4 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				E8F31F6F2E01AEEC009913A9 /* PerfilView.swift */,
-			);
-			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -517,6 +520,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4ECAD55F2E0C28D1000F104C /* IconesDisponiveis.swift in Sources */,
 				A9DC66BD2E0ACCF300D50DED /* ModalNovaFinancaView.swift in Sources */,
 				E75ECE5F2E0061C300E1A579 /* FinancesViewModel.swift in Sources */,
 				4E639E832DF867DB0034E362 /* TaskModel.swift in Sources */,
@@ -537,7 +541,9 @@
 				4EC26C542E018CC300C99805 /* TaskCardView.swift in Sources */,
 				E75ECE702E0192E900E1A579 /* Extensions.swift in Sources */,
 				4EE3DEBA2E0983170061172B /* FormatDateExtension.swift in Sources */,
+				4E7E231F2E09907300F8E86E /* CriarTaskView.swift in Sources */,
 				4E8C088B2E02E73B00655A67 /* PerfilView.swift in Sources */,
+				4ECAD5612E0C30E3000F104C /* IconeEstilo.swift in Sources */,
 				E75ECE512E004E0C00E1A579 /* EntrarCasaView.swift in Sources */,
 				E75ECE592E00616800E1A579 /* MuralViewModel.swift in Sources */,
 				4E8C08892E02E18E00655A67 /* EditarTaskView.swift in Sources */,

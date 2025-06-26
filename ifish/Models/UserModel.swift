@@ -7,7 +7,15 @@
 
 import CloudKit
 
-class UserModel {
+class UserModel: ObservableObject, Identifiable, Hashable {
+    static func == (lhs: UserModel, rhs: UserModel) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
     let id: CKRecord.ID
     var name: String
     let houseID: CKRecord.ID

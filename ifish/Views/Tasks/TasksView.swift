@@ -9,12 +9,14 @@ import SwiftUI
 import CloudKit
 
 struct TasksView: View {
-    @State var mostrarCriarTask: Bool = false
     @ObservedObject var viewModel: TasksViewModel
     @State private var escolha = "Minhas tarefas"
     
     let casaID: CKRecord.ID
     let userID: CKRecord.ID
+    
+    @State private var mostrarCriarTaskModalView: Bool = false
+    @State private var mostrarInfoTaskModalView: Bool = false
     
     private let filtroPicker = ["Minhas tarefas", "Todas"]
     @State private var filtroData = Date()     // a tela inicia com o filtro no mes e ano atual
@@ -43,6 +45,7 @@ struct TasksView: View {
     
     var body: some View {
         VStack {
+            
             // filtro do mes e ano:   < jun 2025 >
             HStack {
                 Button(action: {
@@ -64,6 +67,7 @@ struct TasksView: View {
                }
             }
             
+            // picker com filtro minhas tarefas, todas tarefas
             Picker("", selection: $escolha) {
                 ForEach(filtroPicker, id: \.self) {
                     Text($0)
@@ -71,6 +75,7 @@ struct TasksView: View {
             }
             .pickerStyle(.segmented)
             
+            // lista das tarefas filtradas
             ScrollView {
                 LazyVStack(spacing: 10) {
                     ForEach(tarefasFiltradas) { tarefa in
@@ -81,16 +86,17 @@ struct TasksView: View {
             
             Spacer()
         }
-        .sheet(isPresented: $mostrarCriarTask) {
-            EditarTaskView()
-        }
+
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
-                    mostrarCriarTask = true;
+                    mostrarCriarTaskModalView = true;
                 }) {
                     Text(Image(systemName: "plus"))
                         .foregroundColor(.blue)
+                }
+                .sheet(isPresented: $mostrarCriarTaskModalView) {
+                    CriarTaskModalView();
                 }
             }
         }
@@ -115,6 +121,8 @@ struct TaskListView_Previews: PreviewProvider {
             titulo: "Tirar o lixo",
             descricao: "",
             prazo: Date(),
+            repeticao: .semanalmente,
+            lembrete: .quinzeMinutos,
             completo: false,
             user: mockUser
         )
@@ -128,6 +136,8 @@ struct TaskListView_Previews: PreviewProvider {
             titulo: "Regar as plantas",
             descricao: "",
             prazo: Date(),
+            repeticao: .semanalmente,
+            lembrete: .quinzeMinutos,
             completo: false,
             user: mockUser
         )
