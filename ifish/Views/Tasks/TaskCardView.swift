@@ -10,12 +10,16 @@ import CloudKit
 
 struct TaskCard: View {
     @ObservedObject var task: TaskModel
+    var iconeAlterado: String? = nil
+    var corFundoIcone: Color? = nil
     
     var body: some View {
         HStack {
-            
             // icone da tarefa
-            IconeEstilo(icone: task.icone, selecionado: true)
+            IconeEstilo(icone: iconeAlterado ?? task.icone,
+                        selecionado: true,
+                        corFundoIcone: corFundoIcone ?? Color("TasksMainColor")
+            )
             
             // titulo
             Text(task.titulo)
@@ -26,9 +30,9 @@ struct TaskCard: View {
                 .font(.subheadline)
                 .foregroundColor(.gray)
         }
-        .padding()
+        .padding(12)
         .background(Color.white)
-        .cornerRadius(15)
+        .cornerRadius(10)
         .shadow(color: Color.black.opacity(0.3), radius: 4, x: 0, y: 2)
     }
 }
