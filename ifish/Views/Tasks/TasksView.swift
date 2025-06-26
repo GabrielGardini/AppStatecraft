@@ -8,6 +8,12 @@
 import SwiftUI
 import CloudKit
 
+let fundoTasks = LinearGradient(
+    colors: [Color("TasksMainColor"), Color(hex: "#EFEFEF")],
+    startPoint: .top,
+    endPoint: UnitPoint(x: 0.5, y: 0.2)
+)
+
 struct TasksView: View {
     @ObservedObject var viewModel: TasksViewModel
     @State private var escolha = "Minhas tarefas"
@@ -44,49 +50,53 @@ struct TasksView: View {
     }
     
     var body: some View {
-        VStack {
+        ZStack {
+            fundoTasks
+                .ignoresSafeArea()
             
-            // filtro do mes e ano:   < jun 2025 >
-            HStack {
-                Button(action: {
-                       filtroData = Calendar.current.date(byAdding: .month, value: -1, to: filtroData) ?? filtroData
-                }) {
-                   Text("<")
-                       .font(.title2)
-                       .padding(.horizontal)
-               }
+            VStack {
                 
-                Text(filtroData.formatadoMesAno())
-                
-                Button(action: {
-                       filtroData = Calendar.current.date(byAdding: .month, value: 1, to: filtroData) ?? filtroData
-                }) {
-                   Text(">")
-                       .font(.title2)
-                       .padding(.horizontal)
-               }
-            }
-            
-            // picker com filtro minhas tarefas, todas tarefas
-            Picker("", selection: $escolha) {
-                ForEach(filtroPicker, id: \.self) {
-                    Text($0)
+                // filtro do mes e ano:   < jun 2025 >
+                HStack {
+                    Button(action: {
+                           filtroData = Calendar.current.date(byAdding: .month, value: -1, to: filtroData) ?? filtroData
+                    }) {
+                       Text("<")
+                           .font(.title2)
+                           .padding(.horizontal)
+                   }
+                    
+                    Text(filtroData.formatadoMesAno())
+                    
+                    Button(action: {
+                           filtroData = Calendar.current.date(byAdding: .month, value: 1, to: filtroData) ?? filtroData
+                    }) {
+                       Text(">")
+                           .font(.title2)
+                           .padding(.horizontal)
+                   }
                 }
-            }
-            .pickerStyle(.segmented)
-            
-            // lista das tarefas filtradas
-            ScrollView {
-                LazyVStack(spacing: 10) {
-                    ForEach(tarefasFiltradas) { tarefa in
-                        TaskCard(task: tarefa)
+                
+                // picker com filtro minhas tarefas, todas tarefas
+                Picker("", selection: $escolha) {
+                    ForEach(filtroPicker, id: \.self) {
+                        Text($0)
                     }
                 }
+                .pickerStyle(.segmented)
+                
+                // lista das tarefas filtradas
+                ScrollView {
+                    LazyVStack(spacing: 10) {
+                        ForEach(tarefasFiltradas) { tarefa in
+                            TaskCard(task: tarefa)
+                        }
+                    }
+                }
+                
+                Spacer()
             }
-            
-            Spacer()
         }
-
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
