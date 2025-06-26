@@ -12,6 +12,11 @@ class HouseProfileViewModel: ObservableObject {
     @Published var houseModel: HouseModel?
     @Published var mostrarAlertaICloud = false
     @Published var usuariosDaCasa: [UserModel] = []
+//    private var appState: AppState
+
+//       init(appState: AppState) {
+//           self.appState = appState
+//       }
 
     func verificarConta() {
         CKContainer.default().accountStatus { status, _ in
@@ -35,6 +40,7 @@ class HouseProfileViewModel: ObservableObject {
             print("❌ Nenhuma casa vinculada ao usuário atual.")
             return
         }
+//        appState.casaID = casaID
 
         print("🔍 Buscando usuários com casa ID: \(casaID.recordName)")
 
