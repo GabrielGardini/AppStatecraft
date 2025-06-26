@@ -26,13 +26,31 @@ struct FinancesView: View {
                 fundoFinances
                     .ignoresSafeArea()
                 VStack {
-                                    List(financeViewModel.despesas, id: \.id) { despesa in
+                                    /*List(financeViewModel.despesas, id: \.id) { despesa in
                                         DespesaEspecifica(despesa: despesa, viewModel: viewModel)
+                                        
                                     }
                                     .background(Color.clear)
                                     .listStyle(PlainListStyle())
                                     .cornerRadius(10)
-                                    .padding(24)
+                                    .padding(24)*/
+                    List {
+                        ForEach(financeViewModel.despesas.indices, id: \.self) { index in
+                            VStack(alignment: .leading, spacing: 8) {
+                                DespesaEspecifica(despesa: financeViewModel.despesas[index], viewModel: viewModel)
+
+                                // Só mostra o Divider se não for o último item
+                                if index < financeViewModel.despesas.count - 1 {
+                                    Divider()
+                                        .padding(.leading) // opcional, para alinhar com o conteúdo
+                                }
+                            }
+                            .listRowInsets(EdgeInsets()) // remove padding padrão da List
+                            .padding(.vertical, 8)
+                        }
+                    }
+                    .listStyle(PlainListStyle())
+                    .padding(.horizontal, 24)
                                 }
                                 .padding(.top)
                 .onAppear {
