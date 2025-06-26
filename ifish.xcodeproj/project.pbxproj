@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E36C2DE2E0D793900276EA7 /* DetalheTaskModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E36C2DD2E0D793900276EA7 /* DetalheTaskModalView.swift */; };
 		4E639E752DF866860034E362 /* HouseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E742DF866860034E362 /* HouseModel.swift */; };
 		4E639E832DF867DB0034E362 /* TaskModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E822DF867DB0034E362 /* TaskModel.swift */; };
 		4E639E852DF867EC0034E362 /* FinanceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E842DF867EC0034E362 /* FinanceModel.swift */; };
@@ -21,10 +22,9 @@
 		4ECAD55F2E0C28D1000F104C /* IconesDisponiveis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECAD55E2E0C28D1000F104C /* IconesDisponiveis.swift */; };
 		4ECAD5612E0C30E3000F104C /* IconeEstilo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECAD5602E0C30E3000F104C /* IconeEstilo.swift */; };
 		4EE3DEBA2E0983170061172B /* FormatDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE3DEB92E0983170061172B /* FormatDateExtension.swift */; };
+		A9DC66BD2E0ACCF300D50DED /* ModalNovaFinancaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC66BC2E0ACCF300D50DED /* ModalNovaFinancaView.swift */; };
 		E66FF4C72E09918100C0C95B /* NovoAvisoModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66FF4C62E09918100C0C95B /* NovoAvisoModalView.swift */; };
 		E6BFC2C52E0AEC610015B671 /* EditarAvisoModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BFC2C42E0AEC610015B671 /* EditarAvisoModalView.swift */; };
-		4EE3DEBA2E0983170061172B /* FormatDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE3DEB92E0983170061172B /* FormatDateExtension.swift */; };
-		A9DC66BD2E0ACCF300D50DED /* ModalNovaFinancaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC66BC2E0ACCF300D50DED /* ModalNovaFinancaView.swift */; };
 		E75ECE0B2DF088E100E1A579 /* ifishApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE0A2DF088E100E1A579 /* ifishApp.swift */; };
 		E75ECE0D2DF088E100E1A579 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE0C2DF088E100E1A579 /* ContentView.swift */; };
 		E75ECE0F2DF088EB00E1A579 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E75ECE0E2DF088EB00E1A579 /* Assets.xcassets */; };
@@ -69,6 +69,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4E36C2DD2E0D793900276EA7 /* DetalheTaskModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetalheTaskModalView.swift; sourceTree = "<group>"; };
 		4E639E742DF866860034E362 /* HouseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseModel.swift; sourceTree = "<group>"; };
 		4E639E822DF867DB0034E362 /* TaskModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskModel.swift; sourceTree = "<group>"; };
 		4E639E842DF867EC0034E362 /* FinanceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceModel.swift; sourceTree = "<group>"; };
@@ -83,10 +84,9 @@
 		4ECAD55E2E0C28D1000F104C /* IconesDisponiveis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconesDisponiveis.swift; sourceTree = "<group>"; };
 		4ECAD5602E0C30E3000F104C /* IconeEstilo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconeEstilo.swift; sourceTree = "<group>"; };
 		4EE3DEB92E0983170061172B /* FormatDateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatDateExtension.swift; sourceTree = "<group>"; };
+		A9DC66BC2E0ACCF300D50DED /* ModalNovaFinancaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalNovaFinancaView.swift; sourceTree = "<group>"; };
 		E66FF4C62E09918100C0C95B /* NovoAvisoModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovoAvisoModalView.swift; sourceTree = "<group>"; };
 		E6BFC2C42E0AEC610015B671 /* EditarAvisoModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditarAvisoModalView.swift; sourceTree = "<group>"; };
-		4EE3DEB92E0983170061172B /* FormatDateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatDateExtension.swift; sourceTree = "<group>"; };
-		A9DC66BC2E0ACCF300D50DED /* ModalNovaFinancaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalNovaFinancaView.swift; sourceTree = "<group>"; };
 		E75ECE072DF088E100E1A579 /* ifish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ifish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E75ECE0A2DF088E100E1A579 /* ifishApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ifishApp.swift; sourceTree = "<group>"; };
 		E75ECE0C2DF088E100E1A579 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -378,6 +378,7 @@
 				4E8C08882E02E18E00655A67 /* EditarTaskView.swift */,
 				4E7E231E2E09907300F8E86E /* CriarTaskView.swift */,
 				4ECAD5602E0C30E3000F104C /* IconeEstilo.swift */,
+				4E36C2DD2E0D793900276EA7 /* DetalheTaskModalView.swift */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -538,6 +539,7 @@
 				E6BFC2C52E0AEC610015B671 /* EditarAvisoModalView.swift in Sources */,
 				E75ECE4F2E004DDF00E1A579 /* CasaCriadaView.swift in Sources */,
 				4E639E872DF867F90034E362 /* UserModel.swift in Sources */,
+				4E36C2DE2E0D793900276EA7 /* DetalheTaskModalView.swift in Sources */,
 				4EC26C542E018CC300C99805 /* TaskCardView.swift in Sources */,
 				E75ECE702E0192E900E1A579 /* Extensions.swift in Sources */,
 				4EE3DEBA2E0983170061172B /* FormatDateExtension.swift in Sources */,
