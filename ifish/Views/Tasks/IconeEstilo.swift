@@ -10,11 +10,12 @@ import SwiftUI
 struct IconeEstilo: View {
     let icone: String
     var selecionado: Bool
+    var corFundoIcone: Color = Color("TasksMainColor")
     
     var body: some View {
         ZStack {
             Circle()
-                .fill(selecionado ? Color.blue : Color.gray.opacity(0.9))
+                .fill(selecionado ? corFundoIcone : Color.gray.opacity(0.9))
                 .frame(width: 40, height: 40)
             
             Image(systemName: icone)
