@@ -9,80 +9,80 @@ let fundoFinances = LinearGradient(
 
 struct FinancesView: View {
     @State private var mostrarModalNovaFinanca = false
+    @State private var mostrarModalInfo = false
     @StateObject var viewModel = HouseProfileViewModel()
+    @StateObject var appState = AppState()
     @StateObject var financeViewModel: FinanceViewModel
+    @State private var despesaSelecionada: FinanceModel? = nil
 
     @State private var teste = 0
 
     init() {
         let vm = HouseProfileViewModel()
+        let appState = AppState()
         _viewModel = StateObject(wrappedValue: vm)
-        _financeViewModel = StateObject(wrappedValue: FinanceViewModel(houseProfileViewModel: vm))
+        _financeViewModel = StateObject(wrappedValue: FinanceViewModel(houseProfileViewModel: vm, appState: appState))
     }
+    
 
     var body: some View {
-        NavigationView {
-            ZStack {
-                fundoFinances
-                    .ignoresSafeArea()
-                VStack {
-                                    /*List(financeViewModel.despesas, id: \.id) { despesa in
-                                        DespesaEspecifica(despesa: despesa, viewModel: viewModel)
-                                        
-                                    }
-                                    .background(Color.clear)
-                                    .listStyle(PlainListStyle())
-                                    .cornerRadius(10)
-                                    .padding(24)*/
-                    List {
-                        ForEach(financeViewModel.despesas.indices, id: \.self) { index in
-                            VStack(alignment: .leading, spacing: 8) {
-                                DespesaEspecifica(despesa: financeViewModel.despesas[index], viewModel: viewModel)
+        ZStack {
+            fundoFinances
+                .ignoresSafeArea()
 
-                                // Só mostra o Divider se não for o último item
-                                if index < financeViewModel.despesas.count - 1 {
-                                    Divider()
-                                        .padding(.leading) // opcional, para alinhar com o conteúdo
-                                }
-                            }
-                            .listRowInsets(EdgeInsets()) // remove padding padrão da List
-                            .padding(.vertical, 8)
-                        }
+            List(financeViewModel.despesas, id: \.id) { despesa in
+                DespesaEspecifica(despesa: despesa, viewModel: viewModel)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(color: .gray.opacity(0.2), radius: 3)
+                    .listRowInsets(EdgeInsets())
+                    .padding(.vertical, 4)
+                    .onTapGesture{
+                        mostrarModalInfo = true
+                        despesaSelecionada = despesa
                     }
-                    .listStyle(PlainListStyle())
-                    .padding(.horizontal, 24)
-                                }
-                                .padding(.top)
-                .onAppear {
-                    Task {
-                        //await financeViewModel.buscarDespesasDaCasa()
-                        await viewModel.verificarConta()
-                        if viewModel.houseModel != nil {
-                                    await financeViewModel.buscarDespesasDaCasa()
-                                } else {
-                                    print("⚠️ Nenhuma casa encontrada após verificarConta.")
-                                }
-                    }
-                    print(viewModel.houseModel?.nome)
-                }
 
             }
+            .listStyle(PlainListStyle())
+            .background(Color.clear)
+            .padding(.horizontal, 16)
             .navigationTitle("Despesas")
-            .toolbar { //botão de add
+            .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         mostrarModalNovaFinanca = true
                     }) {
                         Image(systemName: "plus")
+                    }
+                }
+            }
+            .sheet(isPresented: $mostrarModalNovaFinanca) {
+                ModalNovaFinancaView(financeViewModel: financeViewModel)
+            }
+            .sheet(item: $despesaSelecionada) { despesa in
+                ModalInfoDespesasView(financeViewModel: financeViewModel, despesa: despesa, valorIndividual: DespesaEspecifica(despesa: despesa, viewModel: viewModel).valorIndividualConta)
+                    .onDisappear {
+                        despesaSelecionada = nil
+                    }
+            }
+        }
+        .onAppear {
+            Task {
+                await viewModel.verificarConta()
+            }
+        }
+        .onReceive(viewModel.$houseModel) { novoModelo in
+            if novoModelo != nil {
+                Task {
+                    await financeViewModel.buscarDespesasDaCasa()
+                }
             }
         }
     }
-            .sheet(isPresented: $mostrarModalNovaFinanca) {
-                ModalNovaFinancaView(financeViewModel: financeViewModel)
 }
-}
-}
-}
+
+
 
 
 struct DespesaEspecifica: View {
@@ -98,14 +98,15 @@ struct DespesaEspecifica: View {
     }
     
     var body: some View {
-
         HStack{
+            Image(systemName: "checkmark.circle.fill")
             VStack(alignment: .leading){
                 Text(despesa.title)
-                    .font(.headline)
-                Text("Vencimento: \(formatarData(despesa.deadline))")
+                    .font(.system(size: 17))
+                Text("Vencimento: \(despesa.deadline.formatted(date: .numeric, time: .omitted))")
                     .font(.system(size: 12))
                     .foregroundColor(.gray)
+
             }
             Spacer()
             VStack{

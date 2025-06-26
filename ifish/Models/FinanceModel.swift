@@ -1,6 +1,6 @@
 import CloudKit
 
-class FinanceModel {
+class FinanceModel: Identifiable {
     let id: CKRecord.ID
     var amount: Double
     var deadline: Date

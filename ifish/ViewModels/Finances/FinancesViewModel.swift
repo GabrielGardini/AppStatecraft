@@ -1,14 +1,18 @@
 import Foundation
 import CloudKit
+import SwiftUI
 
 @MainActor
 class FinanceViewModel: ObservableObject {
     @Published var despesas: [FinanceModel] = []
+    
 
     private let houseProfileViewModel: HouseProfileViewModel
-
-    init(houseProfileViewModel: HouseProfileViewModel) {
+    private let appState: AppState
+    
+    init(houseProfileViewModel: HouseProfileViewModel, appState: AppState) {
         self.houseProfileViewModel = houseProfileViewModel
+        self.appState = appState
     }
 
     // MARK: - Criar nova despesa
@@ -105,4 +109,29 @@ class FinanceViewModel: ObservableObject {
             }
         }
     }
+    
+    func marcarComoPago(despesa: FinanceModel, nomeUsuario: String) async {
+        print("\(nomeUsuario) pagou")
+        /*guard let index = despesas.firstIndex(where: { $0.id == despesa.id }) else {
+            print("❌ Despesa não encontrada")
+            return
+        }
+
+        var despesaAtualizada = despesas[index]
+
+        if despesaAtualizada.paidBy.contains(nomeUsuario) {
+            print("ℹ️ Usuário já marcou como pago")
+            return
+        }
+
+        despesaAtualizada.paidBy.append(nomeUsuario)
+
+        // Atualiza no array (isso sim pode fazer com segurança no MainActor)
+        despesas[index] = despesaAtualizada
+
+        // Agora salva
+        await editarDespesa(despesaAtualizada)*/
+    }
+
+
 }
