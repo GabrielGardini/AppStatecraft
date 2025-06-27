@@ -1,19 +1,18 @@
-//
-//  NovoAvisoModalView.swift
-//  ifish
-//
-//  Created by Aluno 19 on 23/06/25.
-//
-
-import Foundation
 import SwiftUI
+import CloudKit
 
 struct EditarAvisoModalView: View {
     @Environment(\.dismiss) var fecharModalEditarAviso
+    @EnvironmentObject var messageViewModel: MessageViewModel
+
     @State private var nomeAviso: String = ""
     @State private var descricaoAviso: String = ""
     @State private var dataAviso: Date = Date()
     @State private var notificacoesAviso: Bool = true
+
+    @State private var mostrarConfirmacaoExclusao = false
+
+    var aviso: MessageModel
 
     var body: some View {
         NavigationView {
@@ -43,6 +42,17 @@ struct EditarAvisoModalView: View {
                 Section {
                     Toggle("Notificações", isOn: $notificacoesAviso)
                 }
+
+                Section {
+                    Button(role: .destructive) {
+                        mostrarConfirmacaoExclusao = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "trash")
+                            Text("Excluir Aviso")
+                        }
+                    }
+                }
             }
             .navigationTitle("Editar Aviso")
             .navigationBarTitleDisplayMode(.inline)
@@ -55,15 +65,38 @@ struct EditarAvisoModalView: View {
 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Salvar") {
-                        print("Título: \(nomeAviso)")
-                        print("Data: \(dataAviso)")
-                        print("Descrição: \(descricaoAviso)")
-                        print("Notificações: \(notificacoesAviso)")
+                        Task {
+                            await salvarEdicao()
+                        }
                     }
                 }
             }
+            .alert("Excluir aviso?", isPresented: $mostrarConfirmacaoExclusao) {
+                Button("Excluir", role: .destructive) {
+                    Task {
+                        await messageViewModel.deletarMensagem(aviso)
+                        fecharModalEditarAviso()
+                    }
+                }
+                Button("Cancelar", role: .cancel) {}.foregroundColor(Color("AccentColor"))
+            } message: {
+                Text("Tem certeza que deseja excluir este aviso? Esta ação não poderá ser desfeita.")
+            }
         }
         .navigationViewStyle(.stack)
+        .onAppear {
+            nomeAviso = aviso.title
+            descricaoAviso = aviso.content
+            dataAviso = aviso.timestamp
+        }
+    }
+
+    private func salvarEdicao() async {
+        aviso.title = nomeAviso
+        aviso.content = descricaoAviso
+        aviso.timestamp = dataAviso
+
+        await messageViewModel.editarMensagem(aviso)
+        fecharModalEditarAviso()
     }
 }
-
