@@ -1,15 +1,9 @@
-//
-//  NovoAvisoModalView.swift
-//  ifish
-//
-//  Created by Aluno 19 on 23/06/25.
-//
-
-import Foundation
 import SwiftUI
+import CloudKit
 
 struct NovoAvisoModalView: View {
     @Environment(\.dismiss) var fecharModalNovoAviso
+    @EnvironmentObject var messageViewModel: MessageViewModel
     @State private var nomeAviso: String = ""
     @State private var descricaoAviso: String = ""
     @State private var dataAviso: Date = Date()
@@ -55,10 +49,22 @@ struct NovoAvisoModalView: View {
 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Adicionar") {
-                        print("Título: \(nomeAviso)")
-                        print("Data: \(dataAviso)")
-                        print("Descrição: \(descricaoAviso)")
-                        print("Notificações: \(notificacoesAviso)")
+                        Task {
+                            guard let userRecordID = try? await CKContainer.default().userRecordID() else {
+                                print("❌ Não foi possível obter o userRecordID")
+                                return
+                            }
+
+                            let userReference = CKRecord.Reference(recordID: userRecordID, action: .none)
+
+                            await messageViewModel.criarMensagem(
+                                content: descricaoAviso,
+                                title: nomeAviso,
+                                userID: userReference
+                            )
+
+                            fecharModalNovoAviso()
+                        }
                     }
                 }
             }
