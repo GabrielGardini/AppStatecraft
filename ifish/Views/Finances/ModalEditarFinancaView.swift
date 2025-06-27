@@ -10,6 +10,7 @@ import SwiftUI
 import CloudKit
 
 struct ModalEditarFincancaView: View {
+    @State private var mostrarConfirmacaoApagar = false
     @State private var numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -63,13 +64,19 @@ struct ModalEditarFincancaView: View {
                     
                     HStack{
                         Spacer()
-                        Button("Apagar despesa"){
-                            Task{
-                                await financeViewModel.apagarDespesa(despesa)
-                                fecharModalEditar()
-                            }
+                        Button("Apagar despesa") {
+                            mostrarConfirmacaoApagar = true
                         }
                         .foregroundColor(.red)
+                        .confirmationDialog("Tem certeza que deseja apagar?", isPresented: $mostrarConfirmacaoApagar, titleVisibility: .visible) {
+                            Button("Apagar", role: .destructive) {
+                                Task {
+                                    await financeViewModel.apagarDespesa(despesa)
+                                    fecharModalEditar()
+                                }
+                            }
+                            Button("Cancelar", role: .cancel) { }
+                        }
                         Spacer()
                     }
                 }
