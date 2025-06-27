@@ -52,6 +52,22 @@ class TaskModel: ObservableObject, Identifiable {
         self.user = user
     }
     
+    static func vazia(casaID: CKRecord.ID?, userID: CKRecord.ID?, user: UserModel?) -> TaskModel {
+        return TaskModel(
+            id: CKRecord.ID(recordName: "temp_\(UUID().uuidString)"),
+            userID: userID ?? CKRecord.ID(recordName: "default_user"),
+            casaID: casaID ?? CKRecord.ID(recordName: "default_house"),
+            icone: "trash.fill",
+            titulo: "",
+            descricao: "",
+            prazo: Date(),
+            repeticao: .nunca,
+            lembrete: .nenhum,
+            completo: false,
+            user: user
+        )
+    }
+    
     convenience init?(record: CKRecord) {
         guard
             let userRef = record["UserID"] as? CKRecord.Reference,

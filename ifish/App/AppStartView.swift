@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct AppStartView: View {
-    @StateObject private var appState = AppState()
+    @EnvironmentObject var appState: AppState
 
     @StateObject private var viewModel = HouseProfileViewModel()
     @State private var verificando = true
@@ -12,15 +12,15 @@ struct AppStartView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .onAppear {
                     Task {
-                        await viewModel.verificarConta()
-                        await viewModel.verificarSeUsuarioJaTemCasa()
+                        await viewModel.inicializarAppState(appState)
+                        
                         verificando = false
                     }
                 }
         } else {
             if viewModel.usuarioJaVinculado {
-                MainAppView(
-                ).environmentObject(appState)
+                MainAppView()
+                    .environmentObject(appState)
             } else {
                 NavigationView{
                     LoginView(viewModel: viewModel)

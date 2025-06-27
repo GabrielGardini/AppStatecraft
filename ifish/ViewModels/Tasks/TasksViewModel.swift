@@ -11,7 +11,11 @@ import CloudKit
 class TasksViewModel: ObservableObject {
     @Published var tarefas: [TaskModel] = []
     
-    init(tarefas: [TaskModel]) {
-        self.tarefas = tarefas
+//    func buscarTarefas() -> tarefas {
+//        
+//    }
+    
+    init() {
+        self.tarefas = []
     }
 }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4E36C2DE2E0D793900276EA7 /* DetalheTaskModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E36C2DD2E0D793900276EA7 /* DetalheTaskModalView.swift */; };
+		4E36C2E02E0EBCF900276EA7 /* CriarTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E36C2DF2E0EBCF900276EA7 /* CriarTaskViewModel.swift */; };
 		4E639E752DF866860034E362 /* HouseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E742DF866860034E362 /* HouseModel.swift */; };
 		4E639E832DF867DB0034E362 /* TaskModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E822DF867DB0034E362 /* TaskModel.swift */; };
 		4E639E852DF867EC0034E362 /* FinanceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E842DF867EC0034E362 /* FinanceModel.swift */; };
@@ -70,6 +71,7 @@
 
 /* Begin PBXFileReference section */
 		4E36C2DD2E0D793900276EA7 /* DetalheTaskModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetalheTaskModalView.swift; sourceTree = "<group>"; };
+		4E36C2DF2E0EBCF900276EA7 /* CriarTaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CriarTaskViewModel.swift; sourceTree = "<group>"; };
 		4E639E742DF866860034E362 /* HouseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseModel.swift; sourceTree = "<group>"; };
 		4E639E822DF867DB0034E362 /* TaskModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskModel.swift; sourceTree = "<group>"; };
 		4E639E842DF867EC0034E362 /* FinanceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceModel.swift; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 			isa = PBXGroup;
 			children = (
 				E75ECE5B2E0061AC00E1A579 /* TasksViewModel.swift */,
+				4E36C2DF2E0EBCF900276EA7 /* CriarTaskViewModel.swift */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -540,6 +543,7 @@
 				E75ECE4F2E004DDF00E1A579 /* CasaCriadaView.swift in Sources */,
 				4E639E872DF867F90034E362 /* UserModel.swift in Sources */,
 				4E36C2DE2E0D793900276EA7 /* DetalheTaskModalView.swift in Sources */,
+				4E36C2E02E0EBCF900276EA7 /* CriarTaskViewModel.swift in Sources */,
 				4EC26C542E018CC300C99805 /* TaskCardView.swift in Sources */,
 				E75ECE702E0192E900E1A579 /* Extensions.swift in Sources */,
 				4EE3DEBA2E0983170061172B /* FormatDateExtension.swift in Sources */,

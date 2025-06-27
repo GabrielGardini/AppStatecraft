@@ -10,49 +10,35 @@ import CloudKit
 
 struct CriarTaskModalView: View {
     @Environment(\.dismiss) var fecharCriarTaskModalView
-    @ObservedObject var houseViewModel = HouseProfileViewModel()
+    @EnvironmentObject var houseViewModel: HouseProfileViewModel
     @EnvironmentObject var appState: AppState
 
-    @StateObject private var tarefaCriada: TaskModel
+    @StateObject var criarTaskViewModel: CriarTaskViewModel
     
-    init() {
-        let task = TaskModel(
-            id: CKRecord.ID(recordName: UUID().uuidString),
-            userID: AppState().userID ?? CKRecord.ID(recordName: "UserID"),
-            casaID: AppState().casaID ?? CKRecord.ID(recordName: "HouseID"),
-            icone: "square.and.pencil",
-            titulo: "",
-            descricao: "",
-            prazo: Date(),
-            repeticao: .nunca,
-            lembrete: .nenhum,
-            completo: false,
-            user: AppState().usuario
-        )
-        _tarefaCriada = StateObject(wrappedValue: task)
+    init(task: TaskModel) {
+        _criarTaskViewModel = StateObject(wrappedValue: CriarTaskViewModel(task: task))
     }
-
     
     var body: some View {
         NavigationView {
             Form {
                 Section {
-                    TextField("Título", text: $tarefaCriada.titulo)
+                    TextField("Título", text: $criarTaskViewModel.task.titulo)
                     // retangulo para navegar pra outra tela (modelos pre prontos >)
                 }
                 
                 Section {
-                    DatePicker("Prazo", selection: $tarefaCriada.prazo, displayedComponents: [.date, .hourAndMinute])
+                    DatePicker("Prazo", selection: $criarTaskViewModel.task.prazo, displayedComponents: [.date, .hourAndMinute])
                 }
                 
                 Section {
-                    Picker("Repetição", selection: $tarefaCriada.repeticao) {
+                    Picker("Repetição", selection: $criarTaskViewModel.task.repeticao) {
                         ForEach(Repeticao.allCases) { opcao in
                             Text(opcao.rawValue.capitalized)
                                 .tag(opcao)
                         }
                     }
-                    Picker("Lembrete", selection: $tarefaCriada.lembrete) {
+                    Picker("Lembrete", selection: $criarTaskViewModel.task.lembrete) {
                         ForEach(Lembrete.allCases) { opcao in
                             Text(opcao.rawValue.capitalized)
                                 .tag(opcao)
@@ -61,9 +47,9 @@ struct CriarTaskModalView: View {
                 }
                 
                 Section {
-                    Picker("Responsável", selection: $tarefaCriada.user) {
+                    Picker("Responsável", selection: $criarTaskViewModel.task.user) {
                         ForEach(houseViewModel.usuariosDaCasa) { usuario in
-                            Text(usuario.name).tag(usuario.name)
+                            Text(usuario.name).tag(Optional(usuario.name))
                         }
                     }
                 }
@@ -76,9 +62,9 @@ struct CriarTaskModalView: View {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 35))]) {
                         ForEach(IconesDisponiveis.todos, id: \.self) { icone in
                             Button(action: {
-                                tarefaCriada.icone = icone
+                                criarTaskViewModel.task.icone = icone
                             }) {
-                                IconeEstilo(icone: icone, selecionado: tarefaCriada.icone == icone)
+                                IconeEstilo(icone: icone, selecionado: criarTaskViewModel.task.icone == icone)
                             }
                             .padding(4)
                         }
@@ -87,13 +73,13 @@ struct CriarTaskModalView: View {
 
                 Section {
                     ZStack(alignment: .topLeading) {
-                        if tarefaCriada.descricao.isEmpty {
+                        if criarTaskViewModel.task.descricao.isEmpty {
                             Text("Descrição")
                                 .foregroundColor(.gray)
                                 .padding(.top, 8)
                         }
 
-                        TextEditor(text: $tarefaCriada.descricao)
+                        TextEditor(text: $criarTaskViewModel.task.descricao)
                             .frame(minHeight: 100)
                     }
                 }
@@ -117,6 +103,7 @@ struct CriarTaskModalView: View {
         }
         .navigationViewStyle(.stack)
     }
+    
 }
 
 struct CriarTaskView_Previews: PreviewProvider {
@@ -128,7 +115,8 @@ struct CriarTaskView_Previews: PreviewProvider {
         // usuário mock
         let mockUser = UserModel(id: mockUserID, name: "Maria Lucia", houseID: mockHouseID)
 
-        let mockTask = TaskModel(
+        let mockTasks = [
+            TaskModel(
             id: CKRecord.ID(recordName: "mock-task2-id"),
             userID: mockUserID,
             casaID: mockHouseID,
@@ -140,8 +128,16 @@ struct CriarTaskView_Previews: PreviewProvider {
             lembrete: .quinzeMinutos,
             completo: false,
             user: mockUser
-        )
+            )
+        ]
         
-        CriarTaskModalView()
+        let viewModel = TasksViewModel()
+        let appState = AppState()
+        appState.userID = mockUserID
+        appState.casaID = mockHouseID
+        appState.usuario = mockUser
+        
+        return TasksView(viewModel: viewModel)
+            .environmentObject(appState)
     }
 }

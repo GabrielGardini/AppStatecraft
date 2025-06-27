@@ -4,6 +4,7 @@ import SwiftUI
 
 @MainActor
 class HouseProfileViewModel: ObservableObject {
+    @Published var usuarioAtual: UserModel?
     @Published var isLoggedInToiCloud = false
     @Published var usuarioJaVinculado = false
     @Published var nomeCasaUsuario = ""
@@ -12,11 +13,18 @@ class HouseProfileViewModel: ObservableObject {
     @Published var houseModel: HouseModel?
     @Published var mostrarAlertaICloud = false
     @Published var usuariosDaCasa: [UserModel] = []
-//    private var appState: AppState
 
-//       init(appState: AppState) {
-//           self.appState = appState
-//       }
+    func inicializarAppState(_ appState: AppState) async {
+        await verificarConta()
+        await verificarSeUsuarioJaTemCasa()
+        
+        if let usuario = self.usuarioAtual {
+            appState.usuario = usuario
+            appState.userID = usuario.id
+            appState.casaID = usuario.houseID
+        }
+    }
+
 
     func verificarConta() {
         CKContainer.default().accountStatus { status, _ in

@@ -15,20 +15,21 @@ let fundoTasks = LinearGradient(
 )
 
 struct TasksView: View {
-    @ObservedObject var viewModel: TasksViewModel
-    @State private var escolha = "Minhas tarefas"
+    @EnvironmentObject var appState: AppState
+    @EnvironmentObject var houseViewModel: HouseProfileViewModel
     
-    let casaID: CKRecord.ID
-    let userID: CKRecord.ID
+    @StateObject var viewModel = TasksViewModel()
     
     @State private var mostrarCriarTaskModalView: Bool = false
     @State private var mostrarDetalheTaskModalView: Bool = false
     @State private var tarefaSelecionada: TaskModel? = nil
     
+    @State private var escolha = "Minhas tarefas"
     private let filtroPicker = ["Minhas tarefas", "Todas"]
     @State private var filtroData = Date()     // a tela inicia com o filtro no mes e ano atual
     
     var tarefasFiltradas: [TaskModel] {
+        guard let userID = appState.userID else { return [] }
         let calendar = Calendar.current
         let filtroMes = calendar.component(.month, from: filtroData)
         let filtroAno = calendar.component(.year, from: filtroData)
@@ -52,8 +53,7 @@ struct TasksView: View {
     
     var body: some View {
         ZStack {
-            fundoTasks
-                .ignoresSafeArea()
+            fundoTasks.ignoresSafeArea()
             
             VStack {
                 
@@ -169,7 +169,13 @@ struct TasksView: View {
                         .foregroundColor(.blue)
                 }
                 .sheet(isPresented: $mostrarCriarTaskModalView) {
-                    CriarTaskModalView();
+                    CriarTaskModalView(task: TaskModel.vazia(
+                        casaID: appState.casaID,
+                        userID: appState.userID,
+                        user: appState.usuario
+                    ))
+                    .environmentObject(appState)
+                    .environmentObject(houseViewModel)
                 }
                 .sheet(isPresented: $mostrarDetalheTaskModalView) {
                     if let tarefa = tarefaSelecionada {
@@ -219,43 +225,62 @@ struct TaskListView_Previews: PreviewProvider {
     static var previews: some View {
         // IDs mock
         let mockUserID = CKRecord.ID(recordName: "mock-user-id")
+        let mockUser2ID = CKRecord.ID(recordName: "mock-user2-id")
         let mockHouseID = CKRecord.ID(recordName: "mock-house-id")
 
-        // usuário mock
+        // usuários mock
         let mockUser = UserModel(id: mockUserID, name: "Maria Lucia", houseID: mockHouseID)
+        let mockUser2 = UserModel(id: mockUser2ID, name: "Geronimo", houseID: mockHouseID)
 
-        // task mock associando o user
-        let mockTask = TaskModel(
-            id: CKRecord.ID(recordName: "mock-task-id"),
-            userID: mockUserID,
-            casaID: mockHouseID,
-            icone: "trash.fill",
-            titulo: "Tirar o lixo",
-            descricao: "",
-            prazo: Date(),
-            repeticao: .semanalmente,
-            lembrete: .quinzeMinutos,
-            completo: false,
-            user: mockUser
-        )
+        let mockTasks = [
+            TaskModel(
+                id: CKRecord.ID(recordName: "mock-task-id"),
+                userID: mockUserID,
+                casaID: mockHouseID,
+                icone: "trash.fill",
+                titulo: "Tirar o lixo",
+                descricao: "",
+                prazo: Date(),
+                repeticao: .semanalmente,
+                lembrete: .quinzeMinutos,
+                completo: false,
+                user: mockUser
+            ),
+            TaskModel(
+                id: CKRecord.ID(recordName: "mock-task2-id"),
+                userID: mockUserID,
+                casaID: mockHouseID,
+                icone: "leaf.fill",
+                titulo: "Regar as plantas",
+                descricao: "",
+                prazo: Date(),
+                repeticao: .semanalmente,
+                lembrete: .quinzeMinutos,
+                completo: false,
+                user: mockUser
+            ),
+            TaskModel(
+                id: CKRecord.ID(recordName: "mock-task3-id"),
+                userID: mockUser2ID,
+                casaID: mockHouseID,
+                icone: "car.fill",
+                titulo: "Lavar Garagem",
+                descricao: "",
+                prazo: Date(),
+                repeticao: .nunca,
+                lembrete: .nenhum,
+                completo: false,
+                user: mockUser2
+            )
+        ]
         
-        // task mock associando o user
-        let mockTask2 = TaskModel(
-            id: CKRecord.ID(recordName: "mock-task2-id"),
-            userID: mockUserID,
-            casaID: mockHouseID,
-            icone: "leaf.fill",
-            titulo: "Regar as plantas",
-            descricao: "",
-            prazo: Date(),
-            repeticao: .semanalmente,
-            lembrete: .quinzeMinutos,
-            completo: false,
-            user: mockUser
-        )
+        let viewModel = TasksViewModel()
+        let appState = AppState()
+        appState.userID = mockUserID
+        appState.casaID = mockHouseID
+        appState.usuario = mockUser
         
-        let viewModel = TasksViewModel(tarefas: [mockTask, mockTask2])
-        
-        TasksView(viewModel: viewModel, casaID: mockHouseID, userID: mockUserID)
+        return TasksView(viewModel: viewModel)
+            .environmentObject(appState)
     }
 }
