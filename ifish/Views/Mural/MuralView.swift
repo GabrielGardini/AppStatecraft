@@ -25,27 +25,25 @@ struct MuralView: View {
 
                 Spacer().frame(height: 10)
 
-                ForEach(messageViewModel.mensagens, id: \.id) {
-                    aviso in
-                    AvisoView(aviso: aviso)
+                ForEach(messageViewModel.mensagens, id: \.id) { aviso in
+                    AvisoView(messageViewModel: messageViewModel, aviso: aviso)
                         .frame(maxWidth: .infinity)
                         .cornerRadius(10)
                         .padding(.horizontal)
-
                     Spacer().frame(height: 10)
                 }
             }
             .frame(maxHeight: .infinity)
             .navigationTitle("Mural")
             .sheet(isPresented: $mostrarModalNovoAviso) {
-                NovoAvisoModalView()
+                NovoAvisoModalView()        .environmentObject(messageViewModel)
             }
         }
         .navigationBarBackButtonHidden(true)
         .task {
             await messageViewModel.houseProfileViewModel?.verificarSeUsuarioJaTemCasa()
             await messageViewModel.buscarMensagens()
-            print(appState.casaID)
+//            print(appState.casaID)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -62,8 +60,11 @@ struct MuralView: View {
 }
 
 struct AvisoView: View {
+    @ObservedObject var messageViewModel: MessageViewModel
+
     let aviso: MessageModel
     @State private var mostrarModalEditarAviso = false
+    @State private var nomeDoUsuario: String = "Carregando..."
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -76,8 +77,9 @@ struct AvisoView: View {
                 Text("•")
                     .font(.headline)
 
-                //Text(aviso.userID.recordID.recordName)
-                    //.font(.subheadline)
+                Text(nomeDoUsuario)
+                    .font(.subheadline)
+//                    .foregroundColor(.gray)
 
                 Spacer()
 
@@ -108,8 +110,11 @@ struct AvisoView: View {
         .padding()
         .background(Color.white)
         .cornerRadius(10)
+        .task {
+            nomeDoUsuario = await messageViewModel.descobrirNomeDoUsuario(userID: aviso.userID)
+        }
         .sheet(isPresented: $mostrarModalEditarAviso) {
-            EditarAvisoModalView()
+            EditarAvisoModalView(aviso: aviso).environmentObject(messageViewModel)
         }
     }
 }
