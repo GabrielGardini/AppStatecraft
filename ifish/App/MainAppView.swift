@@ -16,6 +16,8 @@ let mockTask = TaskModel(
     titulo: "Tirar o lixo",
     descricao: "",
     prazo: Date(),
+    repeticao: .nunca,
+    lembrete: .nenhum,
     completo: false,
     user: mockUser
 )
@@ -29,12 +31,13 @@ let mockTask2 = TaskModel(
     titulo: "Regar as plantas",
     descricao: "",
     prazo: Date(),
+    repeticao: .nunca,
+    lembrete: .nenhum,
     completo: false,
     user: mockUser
 )
 
 let viewModel = TasksViewModel(tarefas: [mockTask, mockTask2])
-
 
 
 struct MainAppView: View {

@@ -10,19 +10,16 @@ import CloudKit
 
 struct TaskCard: View {
     @ObservedObject var task: TaskModel
+    var iconeAlterado: String? = nil
+    var corFundoIcone: Color? = nil
     
     var body: some View {
         HStack {
-            
             // icone da tarefa
-            ZStack {
-                Image(systemName: task.icone)
-                    .foregroundColor(.white)
-            }
-            .frame(width: 34, height: 34)
-            .background(.blue)
-            .cornerRadius(100)
-            .padding(5)
+            IconeEstilo(icone: iconeAlterado ?? task.icone,
+                        selecionado: true,
+                        corFundoIcone: corFundoIcone ?? Color("TasksMainColor")
+            )
             
             // titulo
             Text(task.titulo)
@@ -33,9 +30,9 @@ struct TaskCard: View {
                 .font(.subheadline)
                 .foregroundColor(.gray)
         }
-        .padding()
+        .padding(12)
         .background(Color.white)
-        .cornerRadius(15)
+        .cornerRadius(10)
         .shadow(color: Color.black.opacity(0.3), radius: 4, x: 0, y: 2)
     }
 }
@@ -58,6 +55,8 @@ struct TaskCard_Previews: PreviewProvider {
             titulo: "Regar as plantas",
             descricao: "Lembrar de regar todas as plantas da varanda",
             prazo: Date(),
+            repeticao: .semanalmente,
+            lembrete: .quinzeMinutos,
             completo: false,
             user: mockUser
         )
