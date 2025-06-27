@@ -4,7 +4,7 @@ import CloudKit
 @MainActor
 class MessageViewModel: ObservableObject {
     @Published var mensagens: [MessageModel] = []
-
+    @Published var nomesDeUsuarios: [CKRecord.ID: String] = [:]
     var houseProfileViewModel: HouseProfileViewModel?
     
     init() {
@@ -15,6 +15,38 @@ class MessageViewModel: ObservableObject {
         self.houseProfileViewModel = houseProfileViewModel
     }
 
+    
+    func descobrirNomeDoUsuario(userID: CKRecord.Reference) async -> String {
+            if let nome = nomesDeUsuarios[userID.recordID] {
+                return nome
+            }
+
+            do {
+                let identity = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<CKUserIdentity, Error>) in
+                    CKContainer.default().discoverUserIdentity(withUserRecordID: userID.recordID) { identity, error in
+                        if let identity = identity {
+                            continuation.resume(returning: identity)
+                        } else {
+                            continuation.resume(throwing: error ?? NSError(domain: "ErroDesconhecido", code: -1))
+                        }
+                    }
+                }
+
+                let nomeCompleto = [identity.nameComponents?.givenName, identity.nameComponents?.familyName]
+                    .compactMap { $0 }
+                    .joined(separator: " ")
+
+                let nomeFinal = nomeCompleto.isEmpty ? "Usuário sem nome" : nomeCompleto
+
+                self.nomesDeUsuarios[userID.recordID] = nomeFinal
+
+                return nomeFinal
+            } catch {
+                print("❌ Erro ao descobrir nome do usuário: \(error)")
+                return "Usuário desconhecido"
+            }
+        }
+    
     // Criar nova mensagem
     func criarMensagem(content: String, title: String, userID: CKRecord.Reference) async {
         guard let house = houseProfileViewModel?.houseModel else {
@@ -88,7 +120,14 @@ class MessageViewModel: ObservableObject {
     // Atualizar mensagem existente
     func editarMensagem(_ mensagem: MessageModel) async {
         do {
-            let updatedRecord = try await CKContainer.default().publicCloudDatabase.save(mensagem.toCKRecord())
+            let record = try await CKContainer.default().publicCloudDatabase.record(for: mensagem.id)
+
+            // Atualiza os campos
+            record["Title"] = mensagem.title as CKRecordValue
+            record["Content"] = mensagem.content as CKRecordValue
+            record["Timestamp"] = mensagem.timestamp as CKRecordValue
+
+            let updatedRecord = try await CKContainer.default().publicCloudDatabase.save(record)
             let updatedModel = MessageModel(record: updatedRecord)
 
             if let index = mensagens.firstIndex(where: { $0.id.recordName == mensagem.id.recordName }) {
@@ -100,6 +139,7 @@ class MessageViewModel: ObservableObject {
             print("❌ Erro ao editar mensagem: \(error)")
         }
     }
+
 
     // Utilitário de busca
     private func fetchRecords(matching query: CKQuery) async throws -> [CKRecord] {
