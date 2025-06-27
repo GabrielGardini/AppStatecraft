@@ -15,3 +15,4 @@ class TasksViewModel: ObservableObject {
         self.tarefas = tarefas
     }
 }
+

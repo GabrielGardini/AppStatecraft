@@ -35,6 +35,53 @@ class HouseProfileViewModel: ObservableObject {
         }
     }
     
+    func removerUsuarioPorID(_ id: CKRecord.ID) async {
+        do {
+            try await CKContainer.default().publicCloudDatabase.deleteRecord(withID: id)
+            print("✅ Usuário removido com sucesso.")
+
+            // Atualiza a lista após a remoção
+            await buscarUsuariosDaMinhaCasa()
+        } catch {
+            print("❌ Erro ao remover usuário: \(error.localizedDescription)")
+        }
+    }
+
+    func sairDaCasa() async {
+        guard let userRecordID = try? await CKContainer.default().userRecordID() else {
+            print("❌ Não foi possível obter o userRecordID")
+            return
+        }
+
+        // Buscar o registro correspondente na tabela "User"
+        let predicate = NSPredicate(format: "UserID == %@", userRecordID.recordName)
+        let query = CKQuery(recordType: "User", predicate: predicate)
+        let results = await fetchRecords(matching: query)
+
+        guard let registroUsuario = results.first else {
+            print("❌ Registro de usuário não encontrado")
+            return
+        }
+
+        do {
+            try await CKContainer.default().publicCloudDatabase.deleteRecord(withID: registroUsuario.recordID)
+            print("✅ Usuário removido da casa")
+
+            // Resetar o estado local
+            await MainActor.run {
+                self.houseModel = nil
+                self.usuarioJaVinculado = false
+                self.nomeCasaUsuario = ""
+                self.usuariosDaCasa = []
+            }
+            verificarConta()
+
+        } catch {
+            print("❌ Erro ao remover o usuário: \(error.localizedDescription)")
+        }
+    }
+
+    
     func buscarUsuariosDaMinhaCasa() async {
         guard let casaID = houseModel?.id else {
             print("❌ Nenhuma casa vinculada ao usuário atual.")

@@ -154,8 +154,10 @@ struct PerfilView: View {
                         .alert("Sair da casa?", isPresented: $showExitAlert) {
                             Button("Cancelar", role: .cancel) {}
                             Button("Sair", role: .destructive) {
-                                print("Usuário saiu da casa")
-                                // Lógica de saída da casa vai aqui
+                                Task {
+                                    await viewModel.sairDaCasa()
+                                     
+                                }
                             }
                         } message: {
                             Text("Tem certeza que deseja abandonar a casa? Você terá que ser convidado novamente para voltar à casa.")
