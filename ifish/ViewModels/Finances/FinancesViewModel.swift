@@ -80,22 +80,41 @@ class FinanceViewModel: ObservableObject {
     // MARK: - Editar despesa existente
     func editarDespesa(_ despesa: FinanceModel) async {
         do {
-            let updatedRecord = try await CKContainer.default().publicCloudDatabase.save(despesa.toCKRecord())
+            let record = try await CKContainer.default().publicCloudDatabase.record(for: despesa.id)
+            record["Title"] = despesa.title as CKRecordValue
+            record["Amount"] = despesa.amount as CKRecordValue
+            record["DeadLine"] = despesa.deadline as CKRecordValue
+            let updatedRecord = try await CKContainer.default().publicCloudDatabase.save(record)
             let updatedModel = FinanceModel(record: updatedRecord)
 
-            await MainActor.run {
-                var novasDespesas = despesas
-                if let index = novasDespesas.firstIndex(where: { $0.id.recordName == despesa.id.recordName }) {
-                    novasDespesas[index] = updatedModel
-                    despesas = novasDespesas
+            if let index = despesas.firstIndex(where: { $0.id.recordName == despesa.id.recordName }) {
+                    despesas[index] = updatedModel
                 }
-            }
 
             print("✏️ Despesa atualizada.")
         } catch {
             print("❌ Erro ao editar despesa: \(error)")
         }
     }
+    
+    
+   /* func editarMensagem(_ mensagem: MessageModel) async {
+        do {
+          let record = try await CKContainer.default().publicCloudDatabase.record(for: mensagem.id)      // Atualiza os campos
+          record["Title"] = mensagem.title as CKRecordValue
+          record["Content"] = mensagem.content as CKRecordValue
+          record["Timestamp"] = mensagem.timestamp as CKRecordValue      let updatedRecord = try await CKContainer.default().publicCloudDatabase.save(record)
+          let updatedModel = MessageModel(record: updatedRecord)      if let index = mensagens.firstIndex(where: { $0.id.recordName == mensagem.id.recordName }) {
+            mensagens[index] = updatedModel
+          }      print(":lápis_com_borracha: Mensagem atualizada.")
+        } catch {
+          print(":x_vermelho: Erro ao editar mensagem: \(error)")
+        }
+      }*/
+    
+    
+    
+    
 
     // MARK: - Utilitário de busca
     private func fetchRecords(matching query: CKQuery) async throws -> [CKRecord] {

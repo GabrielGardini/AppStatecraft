@@ -11,10 +11,13 @@ import CloudKit
 
 struct ModalEditarFincancaView: View {
     @State private var numberFormatter: NumberFormatter = {
-        var numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .decimal
-        return numberFormatter
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        return formatter
     }()
+
 
     @ObservedObject var financeViewModel: FinanceViewModel
     @Environment(\.dismiss) var fecharModalEditar
@@ -27,26 +30,50 @@ struct ModalEditarFincancaView: View {
     @State private var notificacoesFinanca: Bool = true
     
     
+
+    init(financeViewModel: FinanceViewModel, despesa: FinanceModel) {
+        self.financeViewModel = financeViewModel
+        self.despesa = despesa
+        _nomeFinanca = State(initialValue: despesa.title)
+        _valor = State(initialValue: despesa.amount)
+        _dataVencimento = State(initialValue: despesa.deadline)
+    }
+
+    
     var body: some View {
         NavigationView {
-            List {
-                Section {
-                    TextField("\(despesa.title)", text: $nomeFinanca)
-                    TextField("teste", text: $nomeFinanca)
-                    TextField("\(despesa.amount)", value: $valor, formatter: numberFormatter)
-                }
+            VStack{
+                List {
+                    Section {
+                        TextField("Título", text: $nomeFinanca)
+                        TextField("Valor", value: $valor, formatter: numberFormatter)
+                    }
 
-                Section {
-                    DatePicker("Vencimento", selection: $dataVencimento, displayedComponents: [.date]) //ver como mostrar a data da despesa
-                }
+                    Section {
+                        DatePicker("Vencimento", selection: $dataVencimento, displayedComponents: [.date]) //ver como mostrar a data da despesa
+                    }
 
-                Section {
-                    Toggle("Repetir mensalmente", isOn: $repetirMensalmente) //same
+                    Section {
+                        Toggle("Repetir mensalmente", isOn: $repetirMensalmente) //same
+                    }
+                    
+                    Section{
+                        Toggle("Notificação", isOn: $notificacoesFinanca)//same
+                    }
+                    
+                    HStack{
+                        Spacer()
+                        Button("Apagar despesa"){
+                            Task{
+                                await financeViewModel.apagarDespesa(despesa)
+                                fecharModalEditar()
+                            }
+                        }
+                        .foregroundColor(.red)
+                        Spacer()
+                    }
                 }
                 
-                Section{
-                    Toggle("Notificação", isOn: $notificacoesFinanca)//same
-                }
             }
             .navigationTitle("\(despesa.title)")
             .navigationBarTitleDisplayMode(.inline)
@@ -54,21 +81,29 @@ struct ModalEditarFincancaView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancelar") {
                         fecharModalEditar()
-                        print("\(despesa.title)")
                     }
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Salvar") {
                         Task{
-                            print("\(nomeFinanca)")
+                            despesa.title = nomeFinanca
+                            despesa.amount = valor
+                            despesa.deadline = dataVencimento
+                            
+                            print("\(despesa.title)")
+                            await financeViewModel.editarDespesa(despesa)
                             fecharModalEditar()}
                     }
                 }
             }
         }
         .navigationViewStyle(.stack)
+        .onAppear{
+            nomeFinanca = despesa.title
+            valor = despesa.amount
+            dataVencimento = despesa.deadline
+        }
     }
 }
-
 
