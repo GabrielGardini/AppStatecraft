@@ -20,7 +20,7 @@ class FinanceModel: Identifiable {
     convenience init(record: CKRecord) {
         let id = record.recordID
         let amount = record["Amount"] as? Double ?? 0.0
-        let deadline = record["Deadline"] as? Date ?? Date()
+        let deadline = record["DeadLine"] as? Date ?? Date()
         let houseID = record["HouseId"] as? CKRecord.Reference ?? CKRecord.Reference(recordID: CKRecord.ID(recordName: "ERRO"), action: .none)
         let paidBy = record["PaidBy"] as? [String] ?? []
         let title = record["Title"] as? String ?? ""
@@ -31,7 +31,7 @@ class FinanceModel: Identifiable {
     func toCKRecord() -> CKRecord {
         let record = CKRecord(recordType: "Expanse", recordID: id)
         record["Amount"] = amount as CKRecordValue
-        record["Deadline"] = deadline as CKRecordValue
+        record["DeadLine"] = deadline as CKRecordValue
         record["HouseId"] = houseID
         record["PaidBy"] = paidBy as CKRecordValue
         record["Title"] = title as CKRecordValue

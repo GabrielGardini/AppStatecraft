@@ -5,6 +5,7 @@ import SwiftUI
 @MainActor
 class FinanceViewModel: ObservableObject {
     @Published var despesas: [FinanceModel] = []
+    @Published var nomesDeUsuarios: [CKRecord.ID: String] = [:]
     
 
     private let houseProfileViewModel: HouseProfileViewModel
@@ -84,6 +85,7 @@ class FinanceViewModel: ObservableObject {
             record["Title"] = despesa.title as CKRecordValue
             record["Amount"] = despesa.amount as CKRecordValue
             record["DeadLine"] = despesa.deadline as CKRecordValue
+            record["PaidBy"] = despesa.paidBy as CKRecordValue
             let updatedRecord = try await CKContainer.default().publicCloudDatabase.save(record)
             let updatedModel = FinanceModel(record: updatedRecord)
 
@@ -96,23 +98,6 @@ class FinanceViewModel: ObservableObject {
             print("❌ Erro ao editar despesa: \(error)")
         }
     }
-    
-    
-   /* func editarMensagem(_ mensagem: MessageModel) async {
-        do {
-          let record = try await CKContainer.default().publicCloudDatabase.record(for: mensagem.id)      // Atualiza os campos
-          record["Title"] = mensagem.title as CKRecordValue
-          record["Content"] = mensagem.content as CKRecordValue
-          record["Timestamp"] = mensagem.timestamp as CKRecordValue      let updatedRecord = try await CKContainer.default().publicCloudDatabase.save(record)
-          let updatedModel = MessageModel(record: updatedRecord)      if let index = mensagens.firstIndex(where: { $0.id.recordName == mensagem.id.recordName }) {
-            mensagens[index] = updatedModel
-          }      print(":lápis_com_borracha: Mensagem atualizada.")
-        } catch {
-          print(":x_vermelho: Erro ao editar mensagem: \(error)")
-        }
-      }*/
-    
-    
     
     
 
@@ -151,6 +136,38 @@ class FinanceViewModel: ObservableObject {
         // Agora salva
         await editarDespesa(despesaAtualizada)*/
     }
+    
+    
+    func descobrirNomeDoUsuario(userID: CKRecord.Reference) async -> String {
+        if let nome = nomesDeUsuarios[userID.recordID] {
+            return nome
+        }
 
+        do {
+            let identity = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<CKUserIdentity, Error>) in
+                CKContainer.default().discoverUserIdentity(withUserRecordID: userID.recordID) { identity, error in
+                    if let identity = identity {
+                        continuation.resume(returning: identity)
+                    } else {
+                        continuation.resume(throwing: error ?? NSError(domain: "ErroDesconhecido", code: -1))
+                    }
+                }
+            }
+
+            let nomeCompleto = [identity.nameComponents?.givenName, identity.nameComponents?.familyName]
+                .compactMap { $0 }
+                .joined(separator: " ")
+
+            let nomeFinal = nomeCompleto.isEmpty ? "Usuário sem nome" : nomeCompleto
+
+            self.nomesDeUsuarios[userID.recordID] = nomeFinal
+
+            return nomeFinal
+        } catch {
+            print("❌ Erro ao descobrir nome do usuário: \(error)")
+            return "Usuário desconhecido"
+        }
+    }
 
 }
+

@@ -15,6 +15,14 @@ struct ModalInfoDespesasView: View {
     @Environment(\.dismiss) var fecharModalInfo
     var despesa: FinanceModel
     var valorIndividual: Double
+    @State var pagos: [String]
+
+    init(financeViewModel: FinanceViewModel, despesa: FinanceModel, valorIndividual: Double) {
+        self.despesa = despesa
+        self.valorIndividual = valorIndividual
+        self.financeViewModel = financeViewModel
+        _pagos = State(initialValue: despesa.paidBy)
+    }
     
     var body: some View {
         NavigationView{
@@ -32,7 +40,7 @@ struct ModalInfoDespesasView: View {
                         Text("R$ \(despesa.amount, specifier: "%.2f")")
                     }
                     HStack{
-                        Text("Total")
+                        Text("Valor individual")
                         Spacer()
                         Text("R$ \(valorIndividual, specifier: "%.2f")")
                     }
@@ -40,7 +48,7 @@ struct ModalInfoDespesasView: View {
                 }
                 Spacer()
                 Section{
-                    ForEach(despesa.paidBy, id: \.self){ pessoa in
+                    ForEach(pagos, id: \.self){ pessoa in
                         Text(pessoa)
                     }
                 }
@@ -48,7 +56,17 @@ struct ModalInfoDespesasView: View {
                     Spacer()
                     Button("Pago"){
                         Task{
-                           await financeViewModel.marcarComoPago(despesa: despesa, nomeUsuario: "Isabel")
+                            guard let userRecordID = try? await CKContainer.default().userRecordID() else {
+                                print("❌ Não foi possível obter o userRecordID")
+                                return
+                            }
+
+                            let userReference = CKRecord.Reference(recordID: userRecordID, action: .none)
+
+                            await despesa.paidBy.append(financeViewModel.descobrirNomeDoUsuario(userID: userReference))
+                            await financeViewModel.editarDespesa(despesa)
+                           //await financeViewModel.marcarComoPago(despesa: despesa, nomeUsuario: "Isabel")
+                            pagos = despesa.paidBy
                         }
                     }
                     .buttonStyle(.borderedProminent)
