@@ -12,6 +12,7 @@ struct TaskCard: View {
     @ObservedObject var task: TaskModel
     var iconeAlterado: String? = nil
     var corFundoIcone: Color? = nil
+    var nomeUsuario: String? = ""
     
     var body: some View {
         HStack {
@@ -26,7 +27,7 @@ struct TaskCard: View {
             Spacer()
             
             // nome do usuario associado
-            Text(task.user?.name ?? "Desconhecido")
+            Text(nomeUsuario ?? "Desconhecido")
                 .font(.subheadline)
                 .foregroundColor(.gray)
         }
@@ -43,9 +44,15 @@ struct TaskCard_Previews: PreviewProvider {
         let mockUserID = CKRecord.ID(recordName: "mock-user-id")
         let mockHouseID = CKRecord.ID(recordName: "mock-house-id")
 
-        // usuário mock
-        let mockUser = UserModel(id: mockUserID, name: "João da Silva", houseID: mockHouseID)
+        let mockICloudToken1 = CKRecord.ID(recordName: "_mock-icloud-token-1")
 
+        let mockUser = UserModel(
+            id: mockUserID,
+            name: "Joao da silva",
+            houseID: mockHouseID,
+            icloudToken: mockICloudToken1
+        )
+        
         // task mock associando o user
         let mockTask = TaskModel(
             id: CKRecord.ID(recordName: "mock-task-id"),
@@ -57,11 +64,10 @@ struct TaskCard_Previews: PreviewProvider {
             prazo: Date(),
             repeticao: .semanalmente,
             lembrete: .quinzeMinutos,
-            completo: false,
-            user: mockUser
+            completo: false
         )
         
-        return TaskCard(task: mockTask)
+        return TaskCard(task: mockTask, nomeUsuario: "teste")
             .previewLayout(.sizeThatFits)
             .padding()
     }

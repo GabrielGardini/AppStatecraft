@@ -10,35 +10,32 @@ import CloudKit
 
 struct CriarTaskModalView: View {
     @Environment(\.dismiss) var fecharCriarTaskModalView
-    @EnvironmentObject var houseViewModel: HouseProfileViewModel
     @EnvironmentObject var appState: AppState
+    @EnvironmentObject var houseViewModel: HouseProfileViewModel
+    @EnvironmentObject var viewModel: TasksViewModel
 
-    @StateObject var criarTaskViewModel: CriarTaskViewModel
-    
-    init(task: TaskModel) {
-        _criarTaskViewModel = StateObject(wrappedValue: CriarTaskViewModel(task: task))
-    }
+    @State var task: TaskModel
     
     var body: some View {
         NavigationView {
             Form {
                 Section {
-                    TextField("Título", text: $criarTaskViewModel.task.titulo)
+                    TextField("Título", text: $task.titulo)
                     // retangulo para navegar pra outra tela (modelos pre prontos >)
                 }
                 
                 Section {
-                    DatePicker("Prazo", selection: $criarTaskViewModel.task.prazo, displayedComponents: [.date, .hourAndMinute])
+                    DatePicker("Prazo", selection: $task.prazo, displayedComponents: [.date, .hourAndMinute])
                 }
                 
                 Section {
-                    Picker("Repetição", selection: $criarTaskViewModel.task.repeticao) {
+                    Picker("Repetição", selection: $task.repeticao) {
                         ForEach(Repeticao.allCases) { opcao in
                             Text(opcao.rawValue.capitalized)
                                 .tag(opcao)
                         }
                     }
-                    Picker("Lembrete", selection: $criarTaskViewModel.task.lembrete) {
+                    Picker("Lembrete", selection: $task.lembrete) {
                         ForEach(Lembrete.allCases) { opcao in
                             Text(opcao.rawValue.capitalized)
                                 .tag(opcao)
@@ -47,9 +44,16 @@ struct CriarTaskModalView: View {
                 }
                 
                 Section {
-                    Picker("Responsável", selection: $criarTaskViewModel.task.user) {
+                    let _ = {
+                        for usuario in houseViewModel.usuariosDaCasa {
+                            print("USUARIO DA CASA ID: \(usuario.icloudToken.recordName)")
+                        }
+                    }()
+                    
+                    Picker("Responsável", selection: $task.userID) {
                         ForEach(houseViewModel.usuariosDaCasa) { usuario in
-                            Text(usuario.name).tag(Optional(usuario.name))
+                            Text(usuario.name)
+                                .tag(usuario.icloudToken)
                         }
                     }
                 }
@@ -62,9 +66,9 @@ struct CriarTaskModalView: View {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 35))]) {
                         ForEach(IconesDisponiveis.todos, id: \.self) { icone in
                             Button(action: {
-                                criarTaskViewModel.task.icone = icone
+                                task.icone = icone
                             }) {
-                                IconeEstilo(icone: icone, selecionado: criarTaskViewModel.task.icone == icone)
+                                IconeEstilo(icone: icone, selecionado: task.icone == icone)
                             }
                             .padding(4)
                         }
@@ -73,13 +77,13 @@ struct CriarTaskModalView: View {
 
                 Section {
                     ZStack(alignment: .topLeading) {
-                        if criarTaskViewModel.task.descricao.isEmpty {
+                        if task.descricao.isEmpty {
                             Text("Descrição")
                                 .foregroundColor(.gray)
                                 .padding(.top, 8)
                         }
 
-                        TextEditor(text: $criarTaskViewModel.task.descricao)
+                        TextEditor(text: $task.descricao)
                             .frame(minHeight: 100)
                     }
                 }
@@ -94,6 +98,14 @@ struct CriarTaskModalView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Adicionar") {
+                        Task {
+                            if let houseModel = houseViewModel.houseModel {
+                                await viewModel.criarTarefa(task: task, houseModel: houseModel)
+                            } else {
+                                print("❌ Nenhuma casa vinculada.")
+                            }
+                            fecharCriarTaskModalView()
+                        }
                     }
                 }
             }
@@ -108,13 +120,20 @@ struct CriarTaskModalView: View {
 
 struct CriarTaskView_Previews: PreviewProvider {
     static var previews: some View {
+
         // IDs mock
         let mockUserID = CKRecord.ID(recordName: "mock-user-id")
         let mockHouseID = CKRecord.ID(recordName: "mock-house-id")
-
-        // usuário mock
-        let mockUser = UserModel(id: mockUserID, name: "Maria Lucia", houseID: mockHouseID)
-
+        let mockICloudToken1 = CKRecord.ID(recordName: "_mock-icloud-token-1")
+        
+        // usuários mock
+        let mockUser = UserModel(
+            id: mockUserID,
+            name: "Maria Lucia",
+            houseID: mockHouseID,
+            icloudToken: mockICloudToken1
+        )
+        
         let mockTasks = [
             TaskModel(
             id: CKRecord.ID(recordName: "mock-task2-id"),
@@ -126,18 +145,15 @@ struct CriarTaskView_Previews: PreviewProvider {
             prazo: Date(),
             repeticao: .semanalmente,
             lembrete: .quinzeMinutos,
-            completo: false,
-            user: mockUser
+            completo: false
             )
         ]
         
-        let viewModel = TasksViewModel()
         let appState = AppState()
         appState.userID = mockUserID
         appState.casaID = mockHouseID
-        appState.usuario = mockUser
         
-        return TasksView(viewModel: viewModel)
+        return TasksView()
             .environmentObject(appState)
     }
 }

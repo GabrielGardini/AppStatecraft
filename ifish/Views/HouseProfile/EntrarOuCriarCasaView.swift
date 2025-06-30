@@ -52,7 +52,7 @@ struct EntrarOuCriarCasaView: View {
                 }
 
                 // Navegação para a próxima tela se válido
-                NavigationLink(destination: MainAppView(), isActive: $navegarParaMain) {
+                NavigationLink(destination: MainAppView(houseViewModel: viewModel), isActive: $navegarParaMain) {
                     EmptyView()
                 }
 

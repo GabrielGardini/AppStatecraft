@@ -17,11 +17,26 @@ class HouseProfileViewModel: ObservableObject {
     func inicializarAppState(_ appState: AppState) async {
         await verificarConta()
         await verificarSeUsuarioJaTemCasa()
-        
+
+        do {
+            let userRecordID = try await CKContainer.default().userRecordID()
+            appState.userID = userRecordID
+            print("✅ AppState.userID atribuído com: \(userRecordID.recordName)")
+        } catch {
+            print("❌ Erro ao obter userRecordID: \(error)")
+        }
+
         if let usuario = self.usuarioAtual {
-            appState.usuario = usuario
-            appState.userID = usuario.id
             appState.casaID = usuario.houseID
+            print("✅ AppState.casaID atribuído com: \(usuario.houseID)")
+
+        } else if let casaID = self.houseModel?.id {
+            appState.casaID = casaID
+            print("✅ AppState.casaID atribuído com: \(casaID)")
+        }
+
+        if appState.userID == nil {
+            print("⚠️ AppState iniciado sem userID.")
         }
     }
 
@@ -66,16 +81,25 @@ class HouseProfileViewModel: ObservableObject {
         let usuarios = records.compactMap { record -> UserModel? in
             guard
                 let nome = record["FullName"] as? String,
-                let casaRef = record["UserHouseID"] as? CKRecord.Reference
+                let casaRef = record["UserHouseID"] as? CKRecord.Reference,
+                let icloudTokenString = record["UserID"] as? String
             else {
                 return nil
             }
 
-            return UserModel(id: record.recordID, name: nome, houseID: casaRef.recordID)
+            let icloudToken = CKRecord.ID(recordName: icloudTokenString)
+
+            return UserModel(
+                id: record.recordID,
+                name: nome,
+                houseID: casaRef.recordID,
+                icloudToken: icloudToken
+            )
         }
 
         await MainActor.run {
             self.usuariosDaCasa = usuarios
+            print(usuarios)
         }
 
         print("✅ Total de usuários vinculados: \(usuarios.count)")
@@ -196,6 +220,15 @@ class HouseProfileViewModel: ObservableObject {
                 }
                 continuation.resume(returning: records ?? [])
             }
+        }
+    }
+    
+    func fetchCurrentUserRecordID() async -> CKRecord.ID? {
+        do {
+            return try await CKContainer.default().userRecordID()
+        } catch {
+            print("❌ Erro ao buscar userRecordID: \(error)")
+            return nil
         }
     }
 }

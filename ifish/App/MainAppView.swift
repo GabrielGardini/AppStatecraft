@@ -3,10 +3,9 @@ import CloudKit
 
 struct MainAppView: View {
     @EnvironmentObject var appState: AppState
-    // Instância única do HouseProfileViewModel
-    @StateObject private var houseViewModel = HouseProfileViewModel()
-    @StateObject private var messageViewModel:MessageViewModel = MessageViewModel()
-    
+    @ObservedObject var houseViewModel: HouseProfileViewModel
+    @StateObject private var messageViewModel = MessageViewModel()
+
     var body: some View {
         TabView {
             NavigationView{

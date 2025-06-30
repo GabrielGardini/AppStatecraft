@@ -19,10 +19,10 @@ struct AppStartView: View {
                 }
         } else {
             if viewModel.usuarioJaVinculado {
-                MainAppView()
+                MainAppView(houseViewModel: viewModel)
                     .environmentObject(appState)
             } else {
-                NavigationView{
+                NavigationView {
                     LoginView(viewModel: viewModel)
                 }
             }
