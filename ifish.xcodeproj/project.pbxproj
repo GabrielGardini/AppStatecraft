@@ -19,9 +19,11 @@
 		4E8C088B2E02E73B00655A67 /* PerfilView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C088A2E02E73B00655A67 /* PerfilView.swift */; };
 		4E8C088D2E02E82900655A67 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C088C2E02E82900655A67 /* AppState.swift */; };
 		4EC26C542E018CC300C99805 /* TaskCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC26C532E018CC300C99805 /* TaskCardView.swift */; };
+		4EE3DEBA2E0983170061172B /* FormatDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE3DEB92E0983170061172B /* FormatDateExtension.swift */; };
+		A99FD0D72E0D720C002DA40B /* ModalInfoDespesasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99FD0D62E0D720C002DA40B /* ModalInfoDespesasView.swift */; };
+		A99FD0D92E0D96C2002DA40B /* ModalEditarFinancaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99FD0D82E0D96C2002DA40B /* ModalEditarFinancaView.swift */; };
 		4ECAD55F2E0C28D1000F104C /* IconesDisponiveis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECAD55E2E0C28D1000F104C /* IconesDisponiveis.swift */; };
 		4ECAD5612E0C30E3000F104C /* IconeEstilo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECAD5602E0C30E3000F104C /* IconeEstilo.swift */; };
-		4EE3DEBA2E0983170061172B /* FormatDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE3DEB92E0983170061172B /* FormatDateExtension.swift */; };
 		A9DC66BD2E0ACCF300D50DED /* ModalNovaFinancaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC66BC2E0ACCF300D50DED /* ModalNovaFinancaView.swift */; };
 		E66FF4C72E09918100C0C95B /* NovoAvisoModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66FF4C62E09918100C0C95B /* NovoAvisoModalView.swift */; };
 		E6BFC2C52E0AEC610015B671 /* EditarAvisoModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BFC2C42E0AEC610015B671 /* EditarAvisoModalView.swift */; };
@@ -81,9 +83,11 @@
 		4E8C088A2E02E73B00655A67 /* PerfilView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfilView.swift; sourceTree = "<group>"; };
 		4E8C088C2E02E82900655A67 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		4EC26C532E018CC300C99805 /* TaskCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCardView.swift; sourceTree = "<group>"; };
+		4EE3DEB92E0983170061172B /* FormatDateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatDateExtension.swift; sourceTree = "<group>"; };
+		A99FD0D62E0D720C002DA40B /* ModalInfoDespesasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalInfoDespesasView.swift; sourceTree = "<group>"; };
+		A99FD0D82E0D96C2002DA40B /* ModalEditarFinancaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalEditarFinancaView.swift; sourceTree = "<group>"; };
 		4ECAD55E2E0C28D1000F104C /* IconesDisponiveis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconesDisponiveis.swift; sourceTree = "<group>"; };
 		4ECAD5602E0C30E3000F104C /* IconeEstilo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconeEstilo.swift; sourceTree = "<group>"; };
-		4EE3DEB92E0983170061172B /* FormatDateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatDateExtension.swift; sourceTree = "<group>"; };
 		A9DC66BC2E0ACCF300D50DED /* ModalNovaFinancaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalNovaFinancaView.swift; sourceTree = "<group>"; };
 		E66FF4C62E09918100C0C95B /* NovoAvisoModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovoAvisoModalView.swift; sourceTree = "<group>"; };
 		E6BFC2C42E0AEC610015B671 /* EditarAvisoModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditarAvisoModalView.swift; sourceTree = "<group>"; };
@@ -356,6 +360,8 @@
 			children = (
 				E75ECE662E00629600E1A579 /* FinancesView.swift */,
 				A9DC66BC2E0ACCF300D50DED /* ModalNovaFinancaView.swift */,
+				A99FD0D62E0D720C002DA40B /* ModalInfoDespesasView.swift */,
+				A99FD0D82E0D96C2002DA40B /* ModalEditarFinancaView.swift */,
 			);
 			path = Finances;
 			sourceTree = "<group>";
@@ -524,6 +530,7 @@
 				4ECAD55F2E0C28D1000F104C /* IconesDisponiveis.swift in Sources */,
 				A9DC66BD2E0ACCF300D50DED /* ModalNovaFinancaView.swift in Sources */,
 				E75ECE5F2E0061C300E1A579 /* FinancesViewModel.swift in Sources */,
+				A99FD0D72E0D720C002DA40B /* ModalInfoDespesasView.swift in Sources */,
 				4E639E832DF867DB0034E362 /* TaskModel.swift in Sources */,
 				4E639E892DF868190034E362 /* MuralComunicationModal.swift in Sources */,
 				4E8C088D2E02E82900655A67 /* AppState.swift in Sources */,
@@ -556,6 +563,7 @@
 				E75ECE5C2E0061AC00E1A579 /* TasksViewModel.swift in Sources */,
 				E75ECE472E00461800E1A579 /* HouseProfileViewModel.swift in Sources */,
 				E75ECE742E01A8FF00E1A579 /* AppStartView.swift in Sources */,
+				A99FD0D92E0D96C2002DA40B /* ModalEditarFinancaView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

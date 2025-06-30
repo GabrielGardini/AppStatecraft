@@ -1,14 +1,19 @@
 import Foundation
 import CloudKit
+import SwiftUI
 
 @MainActor
 class FinanceViewModel: ObservableObject {
     @Published var despesas: [FinanceModel] = []
+    @Published var nomesDeUsuarios: [CKRecord.ID: String] = [:]
+    
 
     private let houseProfileViewModel: HouseProfileViewModel
-
-    init(houseProfileViewModel: HouseProfileViewModel) {
+    private let appState: AppState
+    
+    init(houseProfileViewModel: HouseProfileViewModel, appState: AppState) {
         self.houseProfileViewModel = houseProfileViewModel
+        self.appState = appState
     }
 
     // MARK: - Criar nova despesa
@@ -76,22 +81,25 @@ class FinanceViewModel: ObservableObject {
     // MARK: - Editar despesa existente
     func editarDespesa(_ despesa: FinanceModel) async {
         do {
-            let updatedRecord = try await CKContainer.default().publicCloudDatabase.save(despesa.toCKRecord())
+            let record = try await CKContainer.default().publicCloudDatabase.record(for: despesa.id)
+            record["Title"] = despesa.title as CKRecordValue
+            record["Amount"] = despesa.amount as CKRecordValue
+            record["DeadLine"] = despesa.deadline as CKRecordValue
+            record["PaidBy"] = despesa.paidBy as CKRecordValue
+            let updatedRecord = try await CKContainer.default().publicCloudDatabase.save(record)
             let updatedModel = FinanceModel(record: updatedRecord)
 
-            await MainActor.run {
-                var novasDespesas = despesas
-                if let index = novasDespesas.firstIndex(where: { $0.id.recordName == despesa.id.recordName }) {
-                    novasDespesas[index] = updatedModel
-                    despesas = novasDespesas
+            if let index = despesas.firstIndex(where: { $0.id.recordName == despesa.id.recordName }) {
+                    despesas[index] = updatedModel
                 }
-            }
 
             print("✏️ Despesa atualizada.")
         } catch {
             print("❌ Erro ao editar despesa: \(error)")
         }
     }
+    
+    
 
     // MARK: - Utilitário de busca
     private func fetchRecords(matching query: CKQuery) async throws -> [CKRecord] {
@@ -105,4 +113,61 @@ class FinanceViewModel: ObservableObject {
             }
         }
     }
+    
+    func marcarComoPago(despesa: FinanceModel, nomeUsuario: String) async {
+        print("\(nomeUsuario) pagou")
+        /*guard let index = despesas.firstIndex(where: { $0.id == despesa.id }) else {
+            print("❌ Despesa não encontrada")
+            return
+        }
+
+        var despesaAtualizada = despesas[index]
+
+        if despesaAtualizada.paidBy.contains(nomeUsuario) {
+            print("ℹ️ Usuário já marcou como pago")
+            return
+        }
+
+        despesaAtualizada.paidBy.append(nomeUsuario)
+
+        // Atualiza no array (isso sim pode fazer com segurança no MainActor)
+        despesas[index] = despesaAtualizada
+
+        // Agora salva
+        await editarDespesa(despesaAtualizada)*/
+    }
+    
+    
+    func descobrirNomeDoUsuario(userID: CKRecord.Reference) async -> String {
+        if let nome = nomesDeUsuarios[userID.recordID] {
+            return nome
+        }
+
+        do {
+            let identity = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<CKUserIdentity, Error>) in
+                CKContainer.default().discoverUserIdentity(withUserRecordID: userID.recordID) { identity, error in
+                    if let identity = identity {
+                        continuation.resume(returning: identity)
+                    } else {
+                        continuation.resume(throwing: error ?? NSError(domain: "ErroDesconhecido", code: -1))
+                    }
+                }
+            }
+
+            let nomeCompleto = [identity.nameComponents?.givenName, identity.nameComponents?.familyName]
+                .compactMap { $0 }
+                .joined(separator: " ")
+
+            let nomeFinal = nomeCompleto.isEmpty ? "Usuário sem nome" : nomeCompleto
+
+            self.nomesDeUsuarios[userID.recordID] = nomeFinal
+
+            return nomeFinal
+        } catch {
+            print("❌ Erro ao descobrir nome do usuário: \(error)")
+            return "Usuário desconhecido"
+        }
+    }
+
 }
+
