@@ -16,6 +16,7 @@ struct FinancesView: View {
     @StateObject var appState = AppState()
     @StateObject var financeViewModel: FinanceViewModel
     @State private var despesaSelecionada: FinanceModel? = nil
+    @State var nomeUsuario: String = ""
     
     @State private var teste = 0
     
@@ -24,6 +25,16 @@ struct FinancesView: View {
         let appState = AppState()
         _viewModel = StateObject(wrappedValue: vm)
         _financeViewModel = StateObject(wrappedValue: FinanceViewModel(houseProfileViewModel: vm, appState: appState))
+    }
+    
+    func setNomeUsuario() async {
+        guard let userRecordID = try? await CKContainer.default().userRecordID() else {
+            print("❌ Não foi possível obter o userRecordID")
+            return
+        }
+
+        let userReference = CKRecord.Reference(recordID: userRecordID, action: .none)
+        await nomeUsuario = financeViewModel.descobrirNomeDoUsuario(userID: userReference)
     }
     
     var despesasFiltradas: [FinanceModel] {
@@ -57,7 +68,7 @@ struct FinancesView: View {
                 
                 
                 List(despesasFiltradas, id: \.id) { despesa in
-                    DespesaEspecifica(despesa: despesa, viewModel: viewModel)
+                    DespesaEspecifica(despesa: despesa, viewModel: viewModel, nomeUsuario: nomeUsuario)
                         .padding()
                         .background(Color.white)
                         .cornerRadius(10)
@@ -85,7 +96,7 @@ struct FinancesView: View {
                         ModalNovaFinancaView(financeViewModel: financeViewModel)
                     }
                     .sheet(item: $despesaSelecionada) { despesa in
-                        ModalInfoDespesasView(financeViewModel: financeViewModel, despesa: despesa, valorIndividual: DespesaEspecifica(despesa: despesa, viewModel: viewModel).valorIndividualConta)
+                        ModalInfoDespesasView(financeViewModel: financeViewModel, despesa: despesa, valorIndividual: DespesaEspecifica(despesa: despesa, viewModel: viewModel, nomeUsuario: nomeUsuario).valorIndividualConta)
                             .onDisappear {
                                 despesaSelecionada = nil
                             }
@@ -95,6 +106,7 @@ struct FinancesView: View {
         .onAppear {
             Task {
                 await viewModel.verificarConta()
+                await setNomeUsuario()
             }
         }
         .onReceive(viewModel.$houseModel) { novoModelo in
@@ -113,6 +125,7 @@ struct FinancesView: View {
 struct DespesaEspecifica: View {
     var despesa: FinanceModel
     @ObservedObject var viewModel: HouseProfileViewModel
+    var nomeUsuario:String
     
     var numeroMoradores: Int {
         viewModel.usuariosDaCasa.count
@@ -122,9 +135,21 @@ struct DespesaEspecifica: View {
         return despesa.amount / Double(numeroMoradores)
     }
     
+    
+    var nomeImagem: some View {
+        if despesa.paidBy.contains(nomeUsuario) {
+            return Image(systemName: "checkmark.circle.fill")
+                .foregroundColor(.green)
+        } else {
+            return Image(systemName: "xmark.circle.fill")
+                .foregroundColor(.red)
+        }
+    }
+
+    
     var body: some View {
         HStack{
-            Image(systemName: "checkmark.circle.fill")
+            nomeImagem
             VStack(alignment: .leading){
                 Text(despesa.title)
                     .font(.system(size: 17))
