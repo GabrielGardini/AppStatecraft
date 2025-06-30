@@ -16,12 +16,39 @@ struct ModalInfoDespesasView: View {
     var despesa: FinanceModel
     var valorIndividual: Double
     @State var pagos: [String]
+    @State var jaPagou = false
+    @State var nomeUsuario: String = ""
 
     init(financeViewModel: FinanceViewModel, despesa: FinanceModel, valorIndividual: Double) {
         self.despesa = despesa
         self.valorIndividual = valorIndividual
         self.financeViewModel = financeViewModel
         _pagos = State(initialValue: despesa.paidBy)
+    }
+    
+    func usuarioPagou() async{
+        guard let userRecordID = try? await CKContainer.default().userRecordID() else {
+            print("❌ Não foi possível obter o userRecordID")
+            return
+        }
+
+        let userReference = CKRecord.Reference(recordID: userRecordID, action: .none)
+
+        if(despesa.paidBy.contains(await financeViewModel.descobrirNomeDoUsuario(userID: userReference))){
+            self.jaPagou = true
+        } else {
+            self.jaPagou = false
+        }
+    }
+    
+    func setNomeUsuario() async {
+        guard let userRecordID = try? await CKContainer.default().userRecordID() else {
+            print("❌ Não foi possível obter o userRecordID")
+            return
+        }
+
+        let userReference = CKRecord.Reference(recordID: userRecordID, action: .none)
+        await nomeUsuario = financeViewModel.descobrirNomeDoUsuario(userID: userReference)
     }
     
     var body: some View {
@@ -46,30 +73,44 @@ struct ModalInfoDespesasView: View {
                     }
                     //não tem ocorrencia no banco, nem descrição
                 }
+                .task{
+                   await usuarioPagou()
+                    await setNomeUsuario()
+                    
+                }
                 Spacer()
                 Section{
-                    ForEach(pagos, id: \.self){ pessoa in
-                        Text(pessoa)
+                    if(financeViewModel.houseProfileViewModel.usuariosDaCasa.isEmpty){
+                        Text("não deu certo")
+                    }
+                    ForEach(financeViewModel.houseProfileViewModel.usuariosDaCasa, id: \.self) { pessoa in
+                        InfoPessoasPagaram(pessoa: pessoa.name, despesa: despesa)
                     }
                 }
+                Spacer()
                 HStack{
                     Spacer()
-                    Button("Pago"){
-                        Task{
-                            guard let userRecordID = try? await CKContainer.default().userRecordID() else {
-                                print("❌ Não foi possível obter o userRecordID")
-                                return
+                    if(jaPagou == false){
+                        Button("Marcar como pago"){
+                            Task{
+                                despesa.paidBy.append(nomeUsuario)
+                                await financeViewModel.editarDespesa(despesa)
+                                pagos = despesa.paidBy
+                                jaPagou = true
                             }
-
-                            let userReference = CKRecord.Reference(recordID: userRecordID, action: .none)
-
-                            await despesa.paidBy.append(financeViewModel.descobrirNomeDoUsuario(userID: userReference))
-                            await financeViewModel.editarDespesa(despesa)
-                           //await financeViewModel.marcarComoPago(despesa: despesa, nomeUsuario: "Isabel")
-                            pagos = despesa.paidBy
                         }
+                        .buttonStyle(.borderedProminent)
+                    } else {
+                        Button("Desmarcar como pago"){
+                            Task{
+                                jaPagou = false
+                                despesa.paidBy.removeAll { $0 == nomeUsuario }
+                                await financeViewModel.editarDespesa(despesa)
+                                pagos = despesa.paidBy
+                            }
+                        }
+                        .buttonStyle(.borderedProminent)
                     }
-                    .buttonStyle(.borderedProminent)
                     Spacer()
                 }
             }
@@ -95,3 +136,24 @@ struct ModalInfoDespesasView: View {
     }
 }
 
+struct InfoPessoasPagaram: View {
+    var pessoa: String
+    var despesa: FinanceModel
+
+    var pago: Bool {
+        despesa.paidBy.contains(pessoa)
+    }
+
+    var body: some View {
+        HStack {
+            Text(pessoa)
+            Spacer()
+            if pago {
+                Image(systemName: "checkmark.circle.fill").foregroundColor(.green)
+            } else {
+                Image(systemName: "xmark.circle.fill").foregroundColor(.red)
+            }
+        }
+        .padding()
+    }
+}

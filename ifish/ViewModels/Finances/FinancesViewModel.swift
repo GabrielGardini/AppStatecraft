@@ -6,16 +6,22 @@ import SwiftUI
 class FinanceViewModel: ObservableObject {
     @Published var despesas: [FinanceModel] = []
     @Published var nomesDeUsuarios: [CKRecord.ID: String] = [:]
+    @Published var nomesUsuariosCasa: [String] = []
     
 
-    private let houseProfileViewModel: HouseProfileViewModel
+    public let houseProfileViewModel: HouseProfileViewModel
     private let appState: AppState
     
     init(houseProfileViewModel: HouseProfileViewModel, appState: AppState) {
         self.houseProfileViewModel = houseProfileViewModel
         self.appState = appState
+        atualizarNomesUsuariosCasa()
     }
 
+    func atualizarNomesUsuariosCasa() {
+        nomesUsuariosCasa = houseProfileViewModel.usuariosDaCasa.map { $0.name }
+    }
+    
     // MARK: - Criar nova despesa
     func criarDespesa(amount: Double, deadline: Date, paidBy: [String], title: String) async {
         guard let houseModel = houseProfileViewModel.houseModel else {
