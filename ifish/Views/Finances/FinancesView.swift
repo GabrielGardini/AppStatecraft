@@ -8,15 +8,17 @@ let fundoFinances = LinearGradient(
 )
 
 struct FinancesView: View {
+    @State private var selecao = "Pendentes"
+    let opcoes = ["Pendentes", "Pagas por todos"]
     @State private var mostrarModalNovaFinanca = false
     @State private var mostrarModalInfo = false
     @StateObject var viewModel = HouseProfileViewModel()
     @StateObject var appState = AppState()
     @StateObject var financeViewModel: FinanceViewModel
     @State private var despesaSelecionada: FinanceModel? = nil
-
+    
     @State private var teste = 0
-
+    
     init() {
         let vm = HouseProfileViewModel()
         let appState = AppState()
@@ -24,46 +26,69 @@ struct FinancesView: View {
         _financeViewModel = StateObject(wrappedValue: FinanceViewModel(houseProfileViewModel: vm, appState: appState))
     }
     
-
+    var despesasFiltradas: [FinanceModel] {
+        let totalPessoas = viewModel.usuariosDaCasa.count
+        guard totalPessoas > 0 else { return [] }
+        
+        switch selecao {
+        case "Pendentes":
+            return financeViewModel.despesas.filter { $0.paidBy.count < totalPessoas }
+        case "Pagas por todos":
+            return financeViewModel.despesas.filter { $0.paidBy.count >= totalPessoas }
+        default:
+            return financeViewModel.despesas
+        }
+    }
+    
+    
     var body: some View {
         ZStack {
             fundoFinances
                 .ignoresSafeArea()
-
-            List(financeViewModel.despesas, id: \.id) { despesa in
-                DespesaEspecifica(despesa: despesa, viewModel: viewModel)
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(10)
-                    .shadow(color: .gray.opacity(0.2), radius: 3)
-                    .listRowInsets(EdgeInsets())
-                    .padding(.vertical, 4)
-                    .onTapGesture{
-                        mostrarModalInfo = true
-                        despesaSelecionada = despesa
-                    }
-
-            }
-            .listStyle(PlainListStyle())
-            .background(Color.clear)
-            .padding(.horizontal, 16)
-            .navigationTitle("Despesas")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        mostrarModalNovaFinanca = true
-                    }) {
-                        Image(systemName: "plus")
+            VStack{
+                Picker("",selection: $selecao){
+                    ForEach(opcoes, id: \.self) { opcao in
+                        Text(opcao)
                     }
                 }
-            }
-            .sheet(isPresented: $mostrarModalNovaFinanca) {
-                ModalNovaFinancaView(financeViewModel: financeViewModel)
-            }
-            .sheet(item: $despesaSelecionada) { despesa in
-                ModalInfoDespesasView(financeViewModel: financeViewModel, despesa: despesa, valorIndividual: DespesaEspecifica(despesa: despesa, viewModel: viewModel).valorIndividualConta)
-                    .onDisappear {
-                        despesaSelecionada = nil
+                .pickerStyle(.segmented)
+                .padding()
+                
+                
+                
+                List(despesasFiltradas, id: \.id) { despesa in
+                    DespesaEspecifica(despesa: despesa, viewModel: viewModel)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .shadow(color: .gray.opacity(0.2), radius: 3)
+                        .listRowInsets(EdgeInsets())
+                        .padding(.vertical, 4)
+                        .onTapGesture {
+                            mostrarModalInfo = true
+                            despesaSelecionada = despesa
+                        }
+                }            .listStyle(PlainListStyle())
+                    .background(Color.clear)
+                    .padding(.horizontal, 16)
+                    .navigationTitle("Despesas")
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button(action: {
+                                mostrarModalNovaFinanca = true
+                            }) {
+                                Image(systemName: "plus")
+                            }
+                        }
+                    }
+                    .sheet(isPresented: $mostrarModalNovaFinanca) {
+                        ModalNovaFinancaView(financeViewModel: financeViewModel)
+                    }
+                    .sheet(item: $despesaSelecionada) { despesa in
+                        ModalInfoDespesasView(financeViewModel: financeViewModel, despesa: despesa, valorIndividual: DespesaEspecifica(despesa: despesa, viewModel: viewModel).valorIndividualConta)
+                            .onDisappear {
+                                despesaSelecionada = nil
+                            }
                     }
             }
         }
@@ -88,11 +113,11 @@ struct FinancesView: View {
 struct DespesaEspecifica: View {
     var despesa: FinanceModel
     @ObservedObject var viewModel: HouseProfileViewModel
-
+    
     var numeroMoradores: Int {
         viewModel.usuariosDaCasa.count
     }
-
+    
     var valorIndividualConta: Double {
         return despesa.amount / Double(numeroMoradores)
     }
@@ -106,7 +131,7 @@ struct DespesaEspecifica: View {
                 Text("Vencimento: \(despesa.deadline.formatted(date: .numeric, time: .omitted))")
                     .font(.system(size: 12))
                     .foregroundColor(.gray)
-
+                
             }
             Spacer()
             VStack{
@@ -115,12 +140,12 @@ struct DespesaEspecifica: View {
                 Text("Total: R$ \(despesa.amount, specifier: "%.2f")")
                     .font(.system(size: 12))
                     .foregroundColor(.gray)
+            }
+            .padding(8)
+            .background(Color.white.opacity(0.2))
+            .cornerRadius(10)
         }
-        .padding(8)
-        .background(Color.white.opacity(0.2))
-        .cornerRadius(10)
     }
-}
 }
 
 
