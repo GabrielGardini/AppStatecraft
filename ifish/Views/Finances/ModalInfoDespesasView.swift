@@ -84,7 +84,7 @@ struct ModalInfoDespesasView: View {
                         Text("não deu certo")
                     }
                     ForEach(financeViewModel.houseProfileViewModel.usuariosDaCasa, id: \.self) { pessoa in
-                        InfoPessoasPagaram(pessoa: pessoa.name, despesa: despesa)
+                        InfoPessoasPagaram(pessoa: pessoa.name, pagos: pagos)
                     }
                 }
                 Spacer()
@@ -138,10 +138,10 @@ struct ModalInfoDespesasView: View {
 
 struct InfoPessoasPagaram: View {
     var pessoa: String
-    var despesa: FinanceModel
+    var pagos: [String]
 
     var pago: Bool {
-        despesa.paidBy.contains(pessoa)
+        pagos.contains(pessoa)
     }
 
     var body: some View {
@@ -157,3 +157,4 @@ struct InfoPessoasPagaram: View {
         .padding()
     }
 }
+
