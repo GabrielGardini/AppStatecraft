@@ -14,13 +14,18 @@ struct CriarTaskModalView: View {
     @EnvironmentObject var houseViewModel: HouseProfileViewModel
     @EnvironmentObject var viewModel: TasksViewModel
 
-    @State var task: TaskModel
-    
+    @ObservedObject var task: TaskModel
+    @State private var erroTituloVazio = false
+
     var body: some View {
         NavigationView {
             Form {
                 Section {
                     TextField("Título", text: $task.titulo)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 4)
+                                .stroke(erroTituloVazio ? Color.red : Color.clear, lineWidth: 1)
+                        )
                     // retangulo para navegar pra outra tela (modelos pre prontos >)
                 }
                 
@@ -63,17 +68,22 @@ struct CriarTaskModalView: View {
                         .labelStyle(.titleOnly)
                         .foregroundColor(.gray)
                     
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 35))]) {
-                        ForEach(IconesDisponiveis.todos, id: \.self) { icone in
-                            Button(action: {
-                                task.icone = icone
-                            }) {
-                                IconeEstilo(icone: icone, selecionado: task.icone == icone)
+                    ScrollView(.vertical) {
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 35))]) {
+                            ForEach(IconesDisponiveis.todos, id: \.self) { icone in
+                                Button(action: {
+                                    task.icone = icone
+                                    print("\(task.icone)")
+                                }) {
+                                    IconeEstilo(icone: icone, selecionado: task.icone == icone)
+                                }
+                                .padding(4)
                             }
-                            .padding(4)
                         }
                     }
+                    .frame(height: 130)
                 }
+
 
                 Section {
                     ZStack(alignment: .topLeading) {
@@ -99,6 +109,14 @@ struct CriarTaskModalView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Adicionar") {
                         Task {
+                            let tituloValido = !task.titulo.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                            if !tituloValido {
+                                erroTituloVazio = true
+                                return
+                            }
+
+                            erroTituloVazio = false
+
                             if let houseModel = houseViewModel.houseModel {
                                 await viewModel.criarTarefa(task: task, houseModel: houseModel)
                             } else {
@@ -115,7 +133,6 @@ struct CriarTaskModalView: View {
         }
         .navigationViewStyle(.stack)
     }
-    
 }
 
 struct CriarTaskView_Previews: PreviewProvider {

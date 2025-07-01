@@ -18,15 +18,36 @@ struct TasksView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var houseViewModel: HouseProfileViewModel
     @StateObject var viewModel = TasksViewModel()
-    
+
     @State private var mostrarCriarTaskModalView: Bool = false
     @State private var mostrarDetalheTaskModalView: Bool = false
     @State private var tarefaSelecionada: TaskModel? = nil
-    
+    @StateObject private var novaTask = TaskModel.vazia(
+        casaID: CKRecord.ID(recordName: "placeholder-casa"),
+        userID: CKRecord.ID(recordName: "placeholder-user")
+    )
+
     @State private var escolha = "Minhas tarefas"
     private let filtroPicker = ["Minhas tarefas", "Todas"]
     @State private var filtroData = Date()     // a tela inicia com o filtro no mes e ano atual
     
+    private func resetarNovaTask() {
+        novaTask.titulo = ""
+        novaTask.descricao = ""
+        novaTask.prazo = Date()
+        novaTask.repeticao = .nunca
+        novaTask.lembrete = .nenhum
+        novaTask.icone = ""
+
+        if let casaID = appState.casaID {
+            novaTask.casaID = casaID
+        }
+        if let userID = appState.userID {
+            novaTask.userID = userID
+        }
+    }
+
+
     var tarefasFiltradas: [TaskModel] {
         guard let userID = appState.userID else { return [] }
         let calendar = Calendar.current
@@ -172,15 +193,17 @@ struct TasksView: View {
                     Text(Image(systemName: "plus"))
                         .foregroundColor(.blue)
                 }
-                .sheet(isPresented: $mostrarCriarTaskModalView) {
-                    CriarTaskModalView(task: TaskModel.vazia(casaID: appState.casaID, userID: appState.userID))
+                .sheet(isPresented: $mostrarCriarTaskModalView, onDismiss: {
+                    resetarNovaTask()
+                }) {
+                    CriarTaskModalView(task: novaTask)
                         .environmentObject(appState)
                         .environmentObject(houseViewModel)
                         .environmentObject(viewModel)
                 }
                 .sheet(isPresented: $mostrarDetalheTaskModalView) {
                     if let tarefa = tarefaSelecionada {
-                        DetalheTaskModalView(tarefa: tarefa)
+                        DetalheTaskModalView(tasksViewModel: viewModel, tarefa: tarefa)
                     }
                 }
             }
@@ -193,6 +216,11 @@ struct TasksView: View {
                 }
 
                 await viewModel.buscarTarefasDaCasa(houseModel: house)
+                
+                if let casaID = appState.casaID, let userID = appState.userID {
+                    novaTask.casaID = casaID
+                    novaTask.userID = userID
+                }
             }
         }
 
@@ -234,6 +262,7 @@ struct TaskSectionView: View {
         }
     }
 }
+
 
 
 struct TaskListView_Previews: PreviewProvider {
