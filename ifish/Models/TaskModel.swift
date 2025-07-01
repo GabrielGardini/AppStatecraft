@@ -58,7 +58,7 @@ enum Repeticao: String, CaseIterable, Identifiable {
 class TaskModel: ObservableObject, Identifiable {
     let id: CKRecord.ID
     @Published var userID: CKRecord.ID
-    let casaID: CKRecord.ID
+    @Published var casaID: CKRecord.ID
     
     @Published var icone: String
     @Published var titulo: String
