@@ -19,10 +19,12 @@ class UserModel: ObservableObject, Identifiable, Hashable {
     let id: CKRecord.ID
     var name: String
     let houseID: CKRecord.ID
+    let icloudToken: CKRecord.ID
     
-    init(id: CKRecord.ID, name: String, houseID: CKRecord.ID) {
+    init(id: CKRecord.ID, name: String, houseID: CKRecord.ID, icloudToken: CKRecord.ID) {
         self.id = id
         self.name = name
         self.houseID = houseID
+        self.icloudToken = icloudToken
     }
 }

@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct ifishApp: App {
+    @StateObject private var appState = AppState()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AppStartView()
+                .background(Color("BackgroundColor").ignoresSafeArea())
+                .environmentObject(appState)
         }
     }
 }
