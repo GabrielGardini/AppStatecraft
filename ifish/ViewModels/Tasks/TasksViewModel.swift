@@ -98,6 +98,42 @@ class TasksViewModel: ObservableObject {
             }
         }
 
-    
+    // MARK: - Apagar tarefa
+    func apagarTarefa(_ tarefa: TaskModel) async {
+        do {
+            try await CKContainer.default().publicCloudDatabase.deleteRecord(withID: tarefa.id)
+            await MainActor.run {
+                var novasTarefas = tarefas
+                novasTarefas.removeAll { $0.id.recordName == tarefa.id.recordName }
+                tarefas = novasTarefas
+            }
+            print("🗑️ Tarefa removida.")
+        } catch {
+            print("❌ Erro ao apagar tarefa: \(error)")
+        }
+    }
+
+    // MARK: - Editar tarefa existente
+    func editarTarefa(_ tarefa: TaskModel) async {
+        do {
+            let updatedRecord = try await CKContainer.default().publicCloudDatabase.save(tarefa.toCKRecord())
+            let updatedModel = TaskModel(record: updatedRecord)
+
+            if let updatedModel = TaskModel(record: updatedRecord) {
+                await MainActor.run {
+                    var novasTarefas = tarefas
+                    if let index = novasTarefas.firstIndex(where: { $0.id.recordName == tarefa.id.recordName }) {
+                        novasTarefas[index] = updatedModel
+                        tarefas = novasTarefas
+                    }
+                }
+                print("✏️ Tarefa atualizada.")
+            } else {
+                print("❌ Erro ao converter CKRecord para TaskModel.")
+            }
+        } catch {
+            print("❌ Erro ao editar tarefa: \(error)")
+        }
+    }
 }
 
