@@ -44,7 +44,13 @@ struct MainAppView: View {
     @EnvironmentObject var appState: AppState
     // Instância única do HouseProfileViewModel
     @StateObject private var houseProfileViewModel = HouseProfileViewModel()
-    @StateObject private var messageViewModel:MessageViewModel = MessageViewModel()
+    @StateObject private var messageViewModel:MessageViewModel
+    
+    init() {
+            let houseVM = HouseProfileViewModel()
+            _houseProfileViewModel = StateObject(wrappedValue: houseVM)
+            _messageViewModel = StateObject(wrappedValue: MessageViewModel(houseProfileViewModel: houseVM))
+        }
     
     var body: some View {
         TabView {
@@ -78,6 +84,7 @@ struct MainAppView: View {
         .onAppear {
             messageViewModel.houseProfileViewModel = houseProfileViewModel
             messageViewModel.avisoPermicaoNotificacoes()
+            messageViewModel.configurarSubscriptionDeAvisos()
         }
     }
 }
