@@ -38,7 +38,8 @@ struct MainAppView: View {
         }
         .environmentObject(appState)
         .onAppear {
-            messageViewModel.houseProfileViewModel = houseViewModel
+            messageViewModel.houseProfileViewModel = houseProfileViewModel
+            messageViewModel.avisoPermicaoNotificacoes()
         }
     }
 }

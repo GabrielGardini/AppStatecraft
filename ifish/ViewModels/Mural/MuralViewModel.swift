@@ -1,5 +1,6 @@
 import Foundation
 import CloudKit
+import UserNotifications
 
 @MainActor
 class MessageViewModel: ObservableObject {
@@ -48,7 +49,7 @@ class MessageViewModel: ObservableObject {
         }
     
     // Criar nova mensagem
-    func criarMensagem(content: String, title: String, userID: CKRecord.Reference) async {
+    func criarMensagem(content: String, title: String, dataAviso: Date, userID: CKRecord.Reference, notificationMural: Bool) async {
         guard let house = houseProfileViewModel?.houseModel else {
             print("❌ Nenhuma casa vinculada.")
             return
@@ -59,9 +60,10 @@ class MessageViewModel: ObservableObject {
             id: recordID,
             content: content,
             houseID: CKRecord.Reference(recordID: house.id, action: .none),
-            timestamp: Date(),
+            timestamp:dataAviso,
             title: title,
-            userID: userID
+            userID: userID,
+            notificationMural: notificationMural
         )
 
         do {
@@ -70,6 +72,9 @@ class MessageViewModel: ObservableObject {
 
             await MainActor.run {
                 mensagens.append(model)
+            }
+            if novaMensagem.notificationMural{
+                agendarNotificacaoLocal(id: recordID.recordName, titulo: title, corpo: content, data: dataAviso)
             }
 
             print("✅ Mensagem criada com sucesso.")
@@ -112,6 +117,9 @@ class MessageViewModel: ObservableObject {
             try await CKContainer.default().publicCloudDatabase.deleteRecord(withID: mensagem.id)
             mensagens.removeAll { $0.id == mensagem.id }
             print("🗑️ Mensagem removida.")
+            
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [mensagem.id.recordName])
+
         } catch {
             print("❌ Erro ao deletar mensagem: \(error)")
         }
@@ -126,6 +134,7 @@ class MessageViewModel: ObservableObject {
             record["Title"] = mensagem.title as CKRecordValue
             record["Content"] = mensagem.content as CKRecordValue
             record["Timestamp"] = mensagem.timestamp as CKRecordValue
+            record["Notification"] = mensagem.notificationMural ? 1:0
 
             let updatedRecord = try await CKContainer.default().publicCloudDatabase.save(record)
             let updatedModel = MessageModel(record: updatedRecord)
@@ -133,12 +142,49 @@ class MessageViewModel: ObservableObject {
             if let index = mensagens.firstIndex(where: { $0.id.recordName == mensagem.id.recordName }) {
                 mensagens[index] = updatedModel
             }
+            
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [mensagem.id.recordName])
+            if mensagem.notificationMural {
+                agendarNotificacaoLocal(id: mensagem.id.recordName, titulo: mensagem.title, corpo: mensagem.content, data: mensagem.timestamp)
+            }
+
 
             print("✏️ Mensagem atualizada.")
         } catch {
             print("❌ Erro ao editar mensagem: \(error)")
         }
     }
+    
+    func avisoPermicaoNotificacoes(){
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if let error = error{
+                print("erro ao pedir")
+            } else {
+                print("permitiu")
+            }
+        }
+    }
+    
+    func agendarNotificacaoLocal(id: String, titulo: String, corpo: String, data: Date) {
+        let conteudo = UNMutableNotificationContent()
+        conteudo.title = titulo
+        conteudo.body = corpo
+        conteudo.sound = .default
+
+        let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: data)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
+
+        let requisicao = UNNotificationRequest(identifier: id, content: conteudo, trigger: trigger)
+
+        UNUserNotificationCenter.current().add(requisicao) { error in
+            if let error = error {
+                print("❌ Erro ao agendar notificação: \(error)")
+            } else {
+                print("🔔 Notificação agendada para \(data)")
+            }
+        }
+    }
+
 
 
     // Utilitário de busca
