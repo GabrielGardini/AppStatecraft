@@ -88,7 +88,7 @@ class TaskModel: ObservableObject, Identifiable {
             id: CKRecord.ID(recordName: UUID().uuidString),
             userID: userID ?? CKRecord.ID(recordName: "default_user"),
             casaID: casaID ?? CKRecord.ID(recordName: "default_house"),
-            icone: "trash.fill",
+            icone: "",
             titulo: "",
             descricao: "",
             prazo: Date(),
