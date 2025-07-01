@@ -60,7 +60,9 @@ struct NovoAvisoModalView: View {
                             await messageViewModel.criarMensagem(
                                 content: descricaoAviso,
                                 title: nomeAviso,
-                                userID: userReference
+                                dataAviso:dataAviso,
+                                userID: userReference,
+                                notificationMural: notificacoesAviso
                             )
 
                             fecharModalNovoAviso()

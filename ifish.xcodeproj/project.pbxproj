@@ -377,7 +377,6 @@
 				4EC26C532E018CC300C99805 /* TaskCardView.swift */,
 				4E8C08882E02E18E00655A67 /* EditarTaskView.swift */,
 				4E7E231E2E09907300F8E86E /* CriarTaskView.swift */,
-				4ECAD5602E0C30E3000F104C /* IconeEstilo.swift */,
 				4E36C2DD2E0D793900276EA7 /* DetalheTaskModalView.swift */,
 			);
 			path = Tasks;
@@ -386,6 +385,7 @@
 		E7AA58022E02EAB40099EBF3 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				4ECAD5602E0C30E3000F104C /* IconeEstilo.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";

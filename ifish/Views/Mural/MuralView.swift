@@ -79,7 +79,6 @@ struct AvisoView: View {
 
                 Text(nomeDoUsuario)
                     .font(.subheadline)
-//                    .foregroundColor(.gray)
 
                 Spacer()
 
@@ -99,8 +98,13 @@ struct AvisoView: View {
 
             Spacer().frame(height: 4)
 
+            
             Text(aviso.title)
                 .font(.headline)
+            
+            Text(formatarData(aviso.timestamp))
+                .font(.subheadline)
+                .foregroundColor(.gray)
 
             Spacer().frame(height: 4)
 
@@ -116,5 +120,10 @@ struct AvisoView: View {
         .sheet(isPresented: $mostrarModalEditarAviso) {
             EditarAvisoModalView(aviso: aviso).environmentObject(messageViewModel)
         }
+    }
+    func formatarData(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy"
+        return formatter.string(from: date)
     }
 }
