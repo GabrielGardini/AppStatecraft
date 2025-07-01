@@ -31,15 +31,31 @@ struct FinancesView: View {
             print("❌ Não foi possível obter o userRecordID")
             return
         }
-
+        
         let userReference = CKRecord.Reference(recordID: userRecordID, action: .none)
         await nomeUsuario = financeViewModel.descobrirNomeDoUsuario(userID: userReference)
     }
     
+    @ViewBuilder
+    func itemLista(_ despesa: FinanceModel) -> some View {
+        DespesaEspecifica(despesa: despesa, viewModel: viewModel, nomeUsuario: nomeUsuario)
+            .padding()
+            .background(Color.white)
+            .cornerRadius(10)
+            .shadow(color: .gray.opacity(0.2), radius: 3)
+            .listRowInsets(EdgeInsets())
+            .padding(.vertical, 4)
+            .onTapGesture {
+                mostrarModalInfo = true
+                despesaSelecionada = despesa
+            }
+    }
+    
+    
     var despesasFiltradas: [FinanceModel] {
         let totalPessoas = viewModel.usuariosDaCasa.count
         guard totalPessoas > 0 else { return [] }
-
+        
         
         switch selecao {
         case "Pendentes":
@@ -48,6 +64,26 @@ struct FinancesView: View {
             return financeViewModel.despesas.filter { $0.paidBy.count >= totalPessoas}
         default:
             return financeViewModel.despesas
+        }
+    }
+    
+    var despesasAtrasadas: [FinanceModel] {
+        let hoje = Calendar.current.startOfDay(for: Date())
+        return financeViewModel.despesas.filter {
+            !$0.paidBy.contains(nomeUsuario) && $0.deadline < hoje
+        }
+    }
+    
+    var despesasPendentes: [FinanceModel]{
+        let hoje = Calendar.current.startOfDay(for: Date())
+        return financeViewModel.despesas.filter {
+            !$0.paidBy.contains(nomeUsuario) && $0.deadline >= hoje
+        }
+    }
+    
+    var despesasPagasPorVoce: [FinanceModel]{
+        return financeViewModel.despesas.filter {
+            $0.paidBy.contains(nomeUsuario)
         }
     }
     
@@ -64,43 +100,76 @@ struct FinancesView: View {
                 }
                 .pickerStyle(.segmented)
                 .padding()
-                
-                
-                
-                List(despesasFiltradas, id: \.id) { despesa in
-                    DespesaEspecifica(despesa: despesa, viewModel: viewModel, nomeUsuario: nomeUsuario)
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .shadow(color: .gray.opacity(0.2), radius: 3)
-                        .listRowInsets(EdgeInsets())
-                        .padding(.vertical, 4)
-                        .onTapGesture {
-                            mostrarModalInfo = true
-                            despesaSelecionada = despesa
-                        }
-                }            .listStyle(PlainListStyle())
-                    .background(Color.clear)
-                    .padding(.horizontal, 16)
-                    .navigationTitle("Despesas")
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button(action: {
-                                mostrarModalNovaFinanca = true
-                            }) {
-                                Image(systemName: "plus")
+                ScrollView{
+                    LazyVStack (alignment: .leading, spacing: 16){
+                        switch selecao {
+                        case "Pendentes":
+                            if !despesasAtrasadas.isEmpty {
+                                VStack(alignment: .leading, spacing: 0){
+                                    Text("Atrasadas")
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+                                    ForEach(despesasAtrasadas, id: \.id) { despesa in
+                                        itemLista(despesa)
+                                    }
+                                }
                             }
+                            
+                            if !despesasPendentes.isEmpty {
+                                VStack(alignment: .leading, spacing: 0){
+                                    Text("Pendentes")
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+                                    ForEach(despesasPendentes, id: \.id) { despesa in
+                                        itemLista(despesa)
+                                    }
+                                }
+                            }
+                            
+                            if !despesasPagasPorVoce.isEmpty {
+                                VStack(alignment: .leading, spacing: 0){
+                                    Text("Pagas por você")
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+                                    ForEach(despesasPagasPorVoce, id: \.id) { despesa in
+                                        itemLista(despesa)
+                                    }
+                                }
+                            }
+                            
+                        case "Pagas por todos":
+                            ForEach(financeViewModel.despesas.filter { $0.paidBy.count >= viewModel.usuariosDaCasa.count }, id: \.id) { despesa in
+                                itemLista(despesa)
+                            }
+                            
+                        default:
+                            EmptyView()
                         }
                     }
-                    .sheet(isPresented: $mostrarModalNovaFinanca) {
-                        ModalNovaFinancaView(financeViewModel: financeViewModel)
+                }
+                .listStyle(.insetGrouped)
+                //.listStyle(PlainListStyle())
+                .background(Color.clear)
+                .padding(.horizontal, 16)
+                .navigationTitle("Despesas")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            mostrarModalNovaFinanca = true
+                        }) {
+                            Image(systemName: "plus")
+                        }
                     }
-                    .sheet(item: $despesaSelecionada) { despesa in
-                        ModalInfoDespesasView(financeViewModel: financeViewModel, despesa: despesa, valorIndividual: DespesaEspecifica(despesa: despesa, viewModel: viewModel, nomeUsuario: nomeUsuario).valorIndividualConta)
-                            .onDisappear {
-                                despesaSelecionada = nil
-                            }
-                    }
+                }
+                .sheet(isPresented: $mostrarModalNovaFinanca) {
+                    ModalNovaFinancaView(financeViewModel: financeViewModel)
+                }
+                .sheet(item: $despesaSelecionada) { despesa in
+                    ModalInfoDespesasView(financeViewModel: financeViewModel, despesa: despesa, valorIndividual: DespesaEspecifica(despesa: despesa, viewModel: viewModel, nomeUsuario: nomeUsuario).valorIndividualConta)
+                        .onDisappear {
+                            despesaSelecionada = nil
+                        }
+                }
             }
         }
         .onAppear {
@@ -147,14 +216,14 @@ struct DespesaEspecifica: View {
     }
     
     var corTexto: Color{
-        if despesa.deadline < Date(){
+        if despesa.deadline < Date() && !despesa.paidBy.contains(nomeUsuario){
             return .red
         }
         else{
             return .black
         }
     }
-
+    
     
     var body: some View {
         HStack{
@@ -182,6 +251,7 @@ struct DespesaEspecifica: View {
         }
     }
 }
+
 
 
 func formatarData(_ data: Date) -> String{
