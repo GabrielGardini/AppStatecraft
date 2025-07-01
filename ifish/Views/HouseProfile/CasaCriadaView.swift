@@ -59,7 +59,7 @@ struct CasaCriadaView: View {
             }
             .padding(.horizontal)
 
-            NavigationLink(destination: MainAppView(), isActive: $navegarParaApp) {
+            NavigationLink(destination: MainAppView(houseViewModel: viewModel), isActive: $navegarParaApp) {
                 EmptyView()
             }
 
