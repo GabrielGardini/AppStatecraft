@@ -16,6 +16,7 @@ struct CriarTaskModalView: View {
 
     @ObservedObject var task: TaskModel
     @State private var erroTituloVazio = false
+    @State private var erroIconeVazio = false
 
     var body: some View {
         NavigationView {
@@ -66,7 +67,7 @@ struct CriarTaskModalView: View {
                 Section {
                     Label("Ícones", systemImage: "")
                         .labelStyle(.titleOnly)
-                        .foregroundColor(.gray)
+                        .foregroundColor(erroIconeVazio ? .red : .gray)
                     
                     ScrollView(.vertical) {
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: 35))]) {
@@ -110,13 +111,15 @@ struct CriarTaskModalView: View {
                     Button("Adicionar") {
                         Task {
                             let tituloValido = !task.titulo.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                            if !tituloValido {
-                                erroTituloVazio = true
+                            let iconeValido = !task.icone.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+
+                            erroTituloVazio = !tituloValido
+                            erroIconeVazio = !iconeValido
+
+                            if !tituloValido || !iconeValido {
                                 return
                             }
-
-                            erroTituloVazio = false
-
+                            
                             if let houseModel = houseViewModel.houseModel {
                                 await viewModel.criarTarefa(task: task, houseModel: houseModel)
                             } else {
