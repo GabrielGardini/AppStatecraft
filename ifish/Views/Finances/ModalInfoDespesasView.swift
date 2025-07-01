@@ -62,14 +62,14 @@ struct ModalInfoDespesasView: View {
                 Spacer()
                 Section{
                     HStack{
-                        Text("Total")
-                        Spacer()
-                        Text("R$ \(despesa.amount, specifier: "%.2f")")
-                    }
-                    HStack{
                         Text("Valor individual")
                         Spacer()
                         Text("R$ \(valorIndividual, specifier: "%.2f")")
+                    }
+                    HStack{
+                        Text("Total")
+                        Spacer()
+                        Text("R$ \(despesa.amount, specifier: "%.2f")")
                     }
                     //não tem ocorrencia no banco, nem descrição
                 }

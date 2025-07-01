@@ -17,8 +17,7 @@ struct FinancesView: View {
     @StateObject var financeViewModel: FinanceViewModel
     @State private var despesaSelecionada: FinanceModel? = nil
     @State var nomeUsuario: String = ""
-    
-    @State private var teste = 0
+    @State private var filtroDataDespesa = Date()
     
     init() {
         let vm = HouseProfileViewModel()
@@ -40,12 +39,13 @@ struct FinancesView: View {
     var despesasFiltradas: [FinanceModel] {
         let totalPessoas = viewModel.usuariosDaCasa.count
         guard totalPessoas > 0 else { return [] }
+
         
         switch selecao {
         case "Pendentes":
-            return financeViewModel.despesas.filter { $0.paidBy.count < totalPessoas }
+            return financeViewModel.despesas.filter { $0.paidBy.count < totalPessoas}
         case "Pagas por todos":
-            return financeViewModel.despesas.filter { $0.paidBy.count >= totalPessoas }
+            return financeViewModel.despesas.filter { $0.paidBy.count >= totalPessoas}
         default:
             return financeViewModel.despesas
         }
@@ -145,6 +145,15 @@ struct DespesaEspecifica: View {
                 .foregroundColor(.red)
         }
     }
+    
+    var corTexto: Color{
+        if despesa.deadline < Date(){
+            return .red
+        }
+        else{
+            return .black
+        }
+    }
 
     
     var body: some View {
@@ -153,6 +162,7 @@ struct DespesaEspecifica: View {
             VStack(alignment: .leading){
                 Text(despesa.title)
                     .font(.system(size: 17))
+                    .foregroundColor(corTexto)
                 Text("Vencimento: \(despesa.deadline.formatted(date: .numeric, time: .omitted))")
                     .font(.system(size: 12))
                     .foregroundColor(.gray)
