@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct EntrarCasaView: View {
-    @ObservedObject var viewModel: HouseProfileViewModel
+    @EnvironmentObject var appState: AppState
+    @EnvironmentObject var houseViewModel: HouseProfileViewModel
+
     @State private var navegarParaProxima = false
 
     var body: some View {
@@ -9,18 +11,22 @@ struct EntrarCasaView: View {
             Text("Digite um código de convite")
                 .font(.title2)
 
-            TextField("Código", text: $viewModel.codigoConviteInput)
+            TextField("Código", text: $houseViewModel.codigoConviteInput)
                 .textFieldStyle(.roundedBorder)
 
             Button("Entrar na casa") {
                 Task {
-                    await viewModel.entrarComCodigoConvite()
+                    await houseViewModel.entrarComCodigoConvite()
                     navegarParaProxima = true
                 }
             }
             .buttonStyle(.borderedProminent)
 
-            NavigationLink(destination: CasaCriadaView(viewModel: viewModel), isActive: $navegarParaProxima) {
+            NavigationLink(
+                destination: CasaCriadaView()
+                            .environmentObject(appState)
+                            .environmentObject(houseViewModel),
+                isActive: $navegarParaProxima) {
                 EmptyView()
             }
         }
