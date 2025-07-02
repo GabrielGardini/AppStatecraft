@@ -117,7 +117,8 @@ struct FinancesView: View {
                                         .font(.subheadline)
                                         .foregroundColor(.gray)
                                     ForEach(despesasAtrasadas, id: \.id) { despesa in
-                                        itemLista(despesa)
+                                        itemLista(despesa).shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 4)
+
                                     }
                                 }
                             }
@@ -128,7 +129,7 @@ struct FinancesView: View {
                                         .font(.subheadline)
                                         .foregroundColor(.gray)
                                     ForEach(despesasPendentes, id: \.id) { despesa in
-                                        itemLista(despesa)
+                                        itemLista(despesa).shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 4)
                                     }
                                 }
                             }
@@ -139,7 +140,7 @@ struct FinancesView: View {
                                         .font(.subheadline)
                                         .foregroundColor(.gray)
                                     ForEach(despesasPagasPorVoce, id: \.id) { despesa in
-                                        itemLista(despesa)
+                                        itemLista(despesa).shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 4)
                                     }
                                 }
                             }
@@ -181,7 +182,7 @@ struct FinancesView: View {
                             ForEach(despesasPagasPorTodos.filter {
                                 $0.deadline.mesEAno == filtroDataDespesa.mesEAno
                             }, id: \.id) { despesa in
-                                itemLista(despesa)
+                                itemLista(despesa).shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 4)
                             }
                         default:
                             EmptyView()
@@ -191,7 +192,7 @@ struct FinancesView: View {
                 .listStyle(.insetGrouped)
                 //.listStyle(PlainListStyle())
                 .background(Color.clear)
-                .padding(.horizontal, 16)
+                .padding(.horizontal, 24)
                 .navigationTitle("Despesas")
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
