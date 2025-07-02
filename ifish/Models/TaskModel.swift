@@ -98,6 +98,38 @@ class TaskModel: ObservableObject, Identifiable {
         )
     }
     
+    func criarProximaTarefaRecorrente() -> TaskModel? {
+        var novaData: Date?
+
+        switch repeticao {
+        case .diariamente:
+            novaData = Calendar.current.date(byAdding: .day, value: 1, to: prazo)
+        case .semanalmente:
+            novaData = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: prazo)
+        case .mensalmente:
+            novaData = Calendar.current.date(byAdding: .month, value: 1, to: prazo)
+        case .nunca:
+            return nil
+        }
+
+        guard let novoPrazo = novaData else { return nil }
+
+        let novaTask = TaskModel(
+            id: CKRecord.ID(recordName: UUID().uuidString),
+            userID: userID,
+            casaID: casaID,
+            icone: icone,
+            titulo: titulo,
+            descricao: descricao,
+            prazo: novoPrazo,
+            repeticao: repeticao,
+            lembrete: lembrete,
+            completo: false
+        )
+
+        return novaTask
+    }
+
     convenience init?(record: CKRecord) {
         guard
             let userRef = record["UserID"] as? CKRecord.Reference,
