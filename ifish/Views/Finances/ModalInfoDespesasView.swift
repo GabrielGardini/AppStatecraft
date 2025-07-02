@@ -56,20 +56,27 @@ struct ModalInfoDespesasView: View {
             VStack(alignment: .leading){
                 Text(despesa.title)
                     .font(.system(size: 24))
+                    .padding(.vertical, 5)
                 Text("Prazo")
                     .font(.system(size: 20))
+                    .bold()
                 Text(despesa.deadline.formatted(date: .numeric, time: .omitted))
                 Spacer()
                 Section{
                     HStack{
-                        Text("Total")
-                        Spacer()
-                        Text("R$ \(despesa.amount, specifier: "%.2f")")
-                    }
-                    HStack{
                         Text("Valor individual")
                         Spacer()
                         Text("R$ \(valorIndividual, specifier: "%.2f")")
+                            .foregroundColor(.gray)
+                    }
+                    Divider()
+                        .frame(height: 0.5)
+                        .foregroundColor(.gray)
+                    HStack{
+                        Text("Total")
+                        Spacer()
+                        Text("R$ \(despesa.amount, specifier: "%.2f")")
+                            .foregroundColor(.gray)
                     }
                     //não tem ocorrencia no banco, nem descrição
                 }
@@ -80,12 +87,9 @@ struct ModalInfoDespesasView: View {
                 }
                 Spacer()
                 Section{
-                    if(financeViewModel.houseProfileViewModel.usuariosDaCasa.isEmpty){
-                        Text("não deu certo")
-                    }
-                    ForEach(financeViewModel.houseProfileViewModel.usuariosDaCasa, id: \.self) { pessoa in
-                        InfoPessoasPagaram(pessoa: pessoa.name, pagos: pagos)
-                    }
+                        ForEach(financeViewModel.houseProfileViewModel.usuariosDaCasa, id: \.self) { pessoa in
+                            InfoPessoasPagaram(pessoa: pessoa.name, pagos: pagos)
+                        }
                 }
                 Spacer()
                 HStack{
@@ -145,16 +149,16 @@ struct InfoPessoasPagaram: View {
     }
 
     var body: some View {
-        HStack {
-            Text(pessoa)
-            Spacer()
-            if pago {
-                Image(systemName: "checkmark.circle.fill").foregroundColor(.green)
-            } else {
-                Image(systemName: "xmark.circle.fill").foregroundColor(.red)
+            HStack {
+                Text(pessoa)
+                Spacer()
+                if pago {
+                    Image(systemName: "checkmark.circle.fill").foregroundColor(.green)
+                } else {
+                    Image(systemName: "xmark.circle.fill").foregroundColor(.red)
+                }
             }
-        }
-        .padding()
+            .padding(3)
     }
 }
 

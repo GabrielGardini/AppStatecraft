@@ -55,7 +55,7 @@ struct ModalNovaFinancaView: View {
                         Task{
                         await financeViewModel.criarDespesa(amount: valor, deadline: dataVencimento, paidBy: [], title: nomeFinanca)
                             fecharModalNovaFinanca()}
-                    }
+                    } .disabled(nomeFinanca == "" || valor == 0.0)
                 }
             }
         }
