@@ -1,21 +1,50 @@
 import Foundation
 import CloudKit
 import UserNotifications
+import UIKit
 
 @MainActor
 class MessageViewModel: ObservableObject {
     @Published var mensagens: [MessageModel] = []
     @Published var nomesDeUsuarios: [CKRecord.ID: String] = [:]
-    var houseProfileViewModel: HouseProfileViewModel?
-    
-    init() {
-        
-    }
+    @Published var houseProfileViewModel: HouseProfileViewModel?
 
-    init(houseProfileViewModel: HouseProfileViewModel) {
+    init(houseProfileViewModel: HouseProfileViewModel? = nil) {
         self.houseProfileViewModel = houseProfileViewModel
     }
 
+    func configurarSubscriptionDeAvisos() {
+        let predicate = NSPredicate(value: true) // Para receber notificações de todos os novos avisos
+        let subscription = CKQuerySubscription(
+            recordType: "Message",
+            predicate: predicate,
+            subscriptionID: "novaMensagemSubscription",
+            options: .firesOnRecordCreation
+        )
+
+        let notificationInfo = CKSubscription.NotificationInfo()
+        notificationInfo.titleLocalizationKey = "%1$@" // Placeholder para o campo Title
+        notificationInfo.titleLocalizationArgs = ["Title"]
+
+        notificationInfo.alertLocalizationKey = "%1$@" // Placeholder para o campo Content
+        notificationInfo.alertLocalizationArgs = ["Content"]
+
+        notificationInfo.shouldBadge = true
+        notificationInfo.soundName = "default"
+
+        subscription.notificationInfo = notificationInfo
+
+        CKContainer.default().publicCloudDatabase.save(subscription) { (_, error) in
+            if let error = error {
+                print("❌ Erro ao criar subscription: \(error)")
+            } else {
+                print("✅ Subscription de avisos criada com sucesso.")
+            }
+        }
+    }
+
+
+    
     
     func descobrirNomeDoUsuario(userID: CKRecord.Reference) async -> String {
             if let nome = nomesDeUsuarios[userID.recordID] {
@@ -157,6 +186,11 @@ class MessageViewModel: ObservableObject {
     
     func avisoPermicaoNotificacoes(){
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if granted {
+                DispatchQueue.main.async{
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
+            }
             if let error = error{
                 print("erro ao pedir")
             } else {

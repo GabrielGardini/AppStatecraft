@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct EntrarOuCriarCasaView: View {
-    @ObservedObject var viewModel: HouseProfileViewModel
+    @EnvironmentObject var appState: AppState
+    @EnvironmentObject var houseViewModel: HouseProfileViewModel
+
     @State private var navegarParaMain = false
     @State private var mostrarErro = false
 
@@ -17,14 +19,14 @@ struct EntrarOuCriarCasaView: View {
 
                 // Campo de código com botão de limpar
                 HStack {
-                    TextField("Digite o código", text: $viewModel.codigoConviteInput)
+                    TextField("Digite o código", text: $houseViewModel.codigoConviteInput)
                         .padding(12)
                         .background(Color(.systemGray6))
                         .cornerRadius(12)
 
-                    if !viewModel.codigoConviteInput.isEmpty {
+                    if !houseViewModel.codigoConviteInput.isEmpty {
                         Button(action: {
-                            viewModel.codigoConviteInput = ""
+                            houseViewModel.codigoConviteInput = ""
                         }) {
                             Image(systemName: "xmark.circle.fill")
                                 .foregroundColor(.gray)
@@ -35,7 +37,7 @@ struct EntrarOuCriarCasaView: View {
                 // Botão: Entrar na casa
                 Button(action: {
                     Task {
-                        let sucesso = await viewModel.entrarComCodigoConvite()
+                        let sucesso = await houseViewModel.entrarComCodigoConvite()
                         if sucesso {
                             navegarParaMain = true
                         } else {
@@ -52,7 +54,12 @@ struct EntrarOuCriarCasaView: View {
                 }
 
                 // Navegação para a próxima tela se válido
-                NavigationLink(destination: MainAppView(houseViewModel: viewModel), isActive: $navegarParaMain) {
+                NavigationLink(
+                    destination:
+                        MainAppView()
+                            .environmentObject(appState)
+                            .environmentObject(houseViewModel),
+                    isActive: $navegarParaMain) {
                     EmptyView()
                 }
 
@@ -68,7 +75,9 @@ struct EntrarOuCriarCasaView: View {
                 Text("Ainda não possui uma casa?")
 
                 NavigationLink {
-                    CriarCasaView(viewModel: viewModel)
+                    CriarCasaView()
+                        .environmentObject(appState)
+                        .environmentObject(houseViewModel)
                 } label: {
                     Text("Criar Casa")
                         .frame(maxWidth: .infinity)

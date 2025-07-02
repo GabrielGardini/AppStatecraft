@@ -3,43 +3,46 @@ import CloudKit
 
 struct MainAppView: View {
     @EnvironmentObject var appState: AppState
-    @ObservedObject var houseViewModel: HouseProfileViewModel
+    @EnvironmentObject var houseViewModel: HouseProfileViewModel
+
     @StateObject private var messageViewModel = MessageViewModel()
 
     var body: some View {
         TabView {
-            NavigationView{
+            NavigationView {
                 MuralView(messageViewModel: messageViewModel)
             }
             .tabItem {
                 Label("Mural", systemImage: "house")
             }
-            NavigationView{
+
+            NavigationView {
                 TasksView()
-                    .environmentObject(appState)
-                    .environmentObject(houseViewModel)
             }
             .tabItem {
                 Label("Tarefas", systemImage: "checkmark.circle")
             }
-            // Configurações
-            NavigationView{
+
+            NavigationView {
                 FinancesView()
             }
-            .tabItem{
+            .tabItem {
                 Label("Finanças", systemImage: "checkmark.circle")
             }
-            NavigationView{
+
+            NavigationView {
                 PerfilView()
             }
             .tabItem {
                 Label("Config", systemImage: "gear")
             }
         }
+        .environmentObject(houseViewModel)
         .environmentObject(appState)
         .onAppear {
             messageViewModel.houseProfileViewModel = houseViewModel
             messageViewModel.avisoPermicaoNotificacoes()
+            messageViewModel.configurarSubscriptionDeAvisos()
         }
     }
 }

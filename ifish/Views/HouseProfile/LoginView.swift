@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct LoginView: View {
-    @ObservedObject var viewModel: HouseProfileViewModel
+    @EnvironmentObject var appState: AppState
+    @EnvironmentObject var houseViewModel: HouseProfileViewModel
+
     @State private var navegarParaProximaEtapa = false
     
     var body: some View {
@@ -15,7 +17,7 @@ struct LoginView: View {
                 .bold()
             
             Button(action: {
-                viewModel.verificarConta()
+                houseViewModel.verificarConta()
                 navegarParaProximaEtapa = true
             }) {
                 Label("Entrar com iCloud", systemImage: "icloud")
@@ -27,7 +29,11 @@ struct LoginView: View {
             }
             .padding(.horizontal)
             
-            NavigationLink(destination: EntrarOuCriarCasaView(viewModel: viewModel), isActive: $navegarParaProximaEtapa) {
+            NavigationLink(
+                destination: EntrarOuCriarCasaView()
+                    .environmentObject(appState)
+                    .environmentObject(houseViewModel),
+                isActive: $navegarParaProximaEtapa) {
                 EmptyView()
             }
         }.frame(maxWidth: .infinity,

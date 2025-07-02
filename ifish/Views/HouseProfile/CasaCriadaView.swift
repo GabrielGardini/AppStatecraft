@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct CasaCriadaView: View {
-    @ObservedObject var viewModel: HouseProfileViewModel
+    @EnvironmentObject var appState: AppState
+    @EnvironmentObject var houseViewModel: HouseProfileViewModel
+
     @State private var navegarParaApp = false
 
     var body: some View {
@@ -24,7 +26,7 @@ struct CasaCriadaView: View {
                     .foregroundColor(.primary)
             }
 
-            if let codigo = viewModel.houseModel?.inviteCode {
+            if let codigo = houseViewModel.houseModel?.inviteCode {
                 HStack {
                     Text(codigo)
                         .font(.title3)
@@ -59,7 +61,11 @@ struct CasaCriadaView: View {
             }
             .padding(.horizontal)
 
-            NavigationLink(destination: MainAppView(houseViewModel: viewModel), isActive: $navegarParaApp) {
+            NavigationLink(
+                destination: MainAppView()
+                            .environmentObject(houseViewModel)
+                            .environmentObject(appState),
+                isActive: $navegarParaApp) {
                 EmptyView()
             }
 
