@@ -204,6 +204,7 @@ struct TasksView: View {
                 .sheet(isPresented: $mostrarDetalheTaskModalView) {
                     if let tarefa = tarefaSelecionada {
                         DetalheTaskModalView(tasksViewModel: viewModel, tarefa: tarefa)
+                            .environmentObject(houseViewModel)
                     }
                 }
             }
@@ -216,7 +217,8 @@ struct TasksView: View {
                 }
 
                 await viewModel.buscarTarefasDaCasa(houseModel: house)
-                
+                await houseViewModel.buscarUsuariosDaMinhaCasa()
+
                 if let casaID = appState.casaID, let userID = appState.userID {
                     novaTask.casaID = casaID
                     novaTask.userID = userID
@@ -251,7 +253,7 @@ struct TaskSectionView: View {
                         task: tarefa,
                         iconeAlterado: isConcluida ? "checkmark" : nil,
                         corFundoIcone: isConcluida ? Color.green.opacity(0.5) : nil,
-                        nomeUsuario: viewModel.nomesDeUsuarios[tarefa.userID] ?? ""
+                        nomeUsuario: viewModel.nomesDeUsuarios[tarefa.userID] ?? "Desconhecido"
                     )
                     .onTapGesture {
                         aoSelecionar(tarefa)

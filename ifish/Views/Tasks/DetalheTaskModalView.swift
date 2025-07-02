@@ -10,6 +10,7 @@ import CloudKit
 
 struct DetalheTaskModalView: View {
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var houseViewModel: HouseProfileViewModel
     @ObservedObject var tasksViewModel: TasksViewModel
     
     @State private var mostrarEditarTaskModalView: Bool = false
@@ -35,7 +36,7 @@ struct DetalheTaskModalView: View {
                             
                 HStack {
                     Text("Ocorrência")
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.primary)
                     Spacer()
                     Text(tarefa.repeticao.rawValue.capitalized)
                         .foregroundColor(.gray)
@@ -45,7 +46,7 @@ struct DetalheTaskModalView: View {
                 
                 HStack {
                     Text("Responsável")
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.primary)
                     Spacer()
                     Text(nomeResponsavel)
                         .foregroundColor(.gray)
@@ -58,12 +59,7 @@ struct DetalheTaskModalView: View {
                     .foregroundColor(tarefa.descricao.isEmpty ? .gray : .primary)
                     .frame(height: 100)
                     .padding(4)
-                    .background(Color(.systemGray6))
                     .cornerRadius(8)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.gray.opacity(0.4))
-                    )
 
                 Spacer()
 
@@ -104,7 +100,9 @@ struct DetalheTaskModalView: View {
                     
                     .sheet(isPresented: $mostrarEditarTaskModalView) {
                         if let tarefa = tarefa {
-                            EditarTaskView()
+                            EditarTaskModalView(task: tarefa)
+                                .environmentObject(houseViewModel)
+                                .environmentObject(tasksViewModel)
                         }
                     }
                 }
