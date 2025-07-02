@@ -11,13 +11,14 @@ import CloudKit
 struct DetalheTaskModalView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var houseViewModel: HouseProfileViewModel
-    @ObservedObject var tasksViewModel: TasksViewModel
+    @EnvironmentObject var tasksViewModel: TasksViewModel
     
-    @State private var mostrarEditarTaskModalView: Bool = false
+    @State private var mostrarEditarTaskModalView = false
     @ObservedObject var tarefa: TaskModel
-    
-    var nomeResponsavel: String = "Desconhecido"
-    
+
+    // callback para fechar DetalheTaskModalView
+    var onApagarTarefa: (() -> Void)? = nil
+
     var body: some View {
         NavigationView {
             VStack(alignment: .leading, spacing: 12) {
@@ -48,7 +49,7 @@ struct DetalheTaskModalView: View {
                     Text("Responsável")
                         .foregroundColor(.primary)
                     Spacer()
-                    Text(nomeResponsavel)
+                    Text(houseViewModel.nomeDoUsuario(id: tarefa.userID))
                         .foregroundColor(.gray)
                 }
                 .padding(.bottom)
@@ -100,9 +101,15 @@ struct DetalheTaskModalView: View {
                     
                     .sheet(isPresented: $mostrarEditarTaskModalView) {
                         if let tarefa = tarefa {
-                            EditarTaskModalView(task: tarefa)
-                                .environmentObject(houseViewModel)
-                                .environmentObject(tasksViewModel)
+                            EditarTaskModalView(
+                                task: tarefa,
+                                onApagar: {
+                                    // Fecha o DetalheTaskModalView ao apagar
+                                    dismiss()
+                                }
+                            )
+                            .environmentObject(houseViewModel)
+                            .environmentObject(tasksViewModel)
                         }
                     }
                 }
@@ -193,7 +200,7 @@ struct DetalheTaskModalView_Preview: PreviewProvider {
             appState.userID = mockUserID
             appState.casaID = mockHouseID
             
-            return DetalheTaskModalView(tasksViewModel: viewModel, tarefa: mockTasks.first ?? TaskModel.vazia(casaID: appState.casaID, userID: appState.userID))
+            return DetalheTaskModalView(tarefa: mockTasks.first ?? TaskModel.vazia(casaID: appState.casaID, userID: appState.userID))
             
         }
 }

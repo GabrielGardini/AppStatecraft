@@ -50,12 +50,6 @@ struct CriarTaskModalView: View {
                 }
                 
                 Section {
-                    let _ = {
-                        for usuario in houseViewModel.usuariosDaCasa {
-                            print("USUARIO DA CASA ID: \(usuario.icloudToken.recordName)")
-                        }
-                    }()
-                    
                     Picker("Responsável", selection: $task.userID) {
                         ForEach(houseViewModel.usuariosDaCasa) { usuario in
                             Text(usuario.name)

@@ -40,6 +40,9 @@ class HouseProfileViewModel: ObservableObject {
         }
     }
 
+    func nomeDoUsuario(id: CKRecord.ID) -> String {
+        usuariosDaCasa.first(where: { $0.icloudToken == id })?.name ?? "Desconhecido"
+    }
 
     func verificarConta() {
         CKContainer.default().accountStatus { status, _ in
