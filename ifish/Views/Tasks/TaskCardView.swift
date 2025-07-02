@@ -12,7 +12,7 @@ struct TaskCard: View {
     @ObservedObject var task: TaskModel
     var iconeAlterado: String? = nil
     var corFundoIcone: Color? = nil
-    var nomeUsuario: String? = ""
+    var nomeUsuario: String? = nil
     
     var body: some View {
         HStack {

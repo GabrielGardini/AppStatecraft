@@ -1,22 +1,22 @@
 //
-//  CriarTaskView.swift
+//  EditarTaskView.swift
 //  ifish
 //
-//  Created by Larissa on 23/06/25.
+//  Created by Larissa on 18/06/25.
 //
 
 import SwiftUI
 import CloudKit
 
-struct CriarTaskModalView: View {
-    @Environment(\.dismiss) var fecharCriarTaskModalView
-    @EnvironmentObject var appState: AppState
+struct EditarTaskModalView: View {
+    @Environment(\.dismiss) var fecharEditarTaskModalView
     @EnvironmentObject var houseViewModel: HouseProfileViewModel
     @EnvironmentObject var viewModel: TasksViewModel
 
     @ObservedObject var task: TaskModel
     @State private var erroTituloVazio = false
     @State private var erroIconeVazio = false
+    @State private var mostrarAlertaApagar = false
 
     var body: some View {
         NavigationView {
@@ -27,13 +27,12 @@ struct CriarTaskModalView: View {
                             RoundedRectangle(cornerRadius: 4)
                                 .stroke(erroTituloVazio ? Color.red : Color.clear, lineWidth: 1)
                         )
-                    // retangulo para navegar pra outra tela (modelos pre prontos >)
                 }
-                
+
                 Section {
                     DatePicker("Prazo", selection: $task.prazo, displayedComponents: [.date, .hourAndMinute])
                 }
-                
+
                 Section {
                     Picker("Repetição", selection: $task.repeticao) {
                         ForEach(Repeticao.allCases) { opcao in
@@ -48,14 +47,8 @@ struct CriarTaskModalView: View {
                         }
                     }
                 }
-                
+
                 Section {
-                    let _ = {
-                        for usuario in houseViewModel.usuariosDaCasa {
-                            print("USUARIO DA CASA ID: \(usuario.icloudToken.recordName)")
-                        }
-                    }()
-                    
                     Picker("Responsável", selection: $task.userID) {
                         ForEach(houseViewModel.usuariosDaCasa) { usuario in
                             Text(usuario.name)
@@ -63,18 +56,17 @@ struct CriarTaskModalView: View {
                         }
                     }
                 }
-                
+
                 Section {
                     Label("Ícones", systemImage: "")
                         .labelStyle(.titleOnly)
                         .foregroundColor(erroIconeVazio ? .red : .gray)
-                    
+
                     ScrollView(.vertical) {
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: 35))]) {
                             ForEach(IconesDisponiveis.todos, id: \.self) { icone in
                                 Button(action: {
                                     task.icone = icone
-                                    print("\(task.icone)")
                                 }) {
                                     IconeEstilo(icone: icone, selecionado: task.icone == icone)
                                 }
@@ -84,7 +76,6 @@ struct CriarTaskModalView: View {
                     }
                     .frame(height: 130)
                 }
-
 
                 Section {
                     ZStack(alignment: .topLeading) {
@@ -98,17 +89,27 @@ struct CriarTaskModalView: View {
                             .frame(minHeight: 100)
                     }
                 }
+                
+                Section {
+                    Button(role: .destructive) {
+                        mostrarAlertaApagar = true
+                    } label: {
+                        Text("Apagar tarefa")
+                            .frame(maxWidth: .infinity, alignment: .center)
+                    }
+                }
+
             }
-            .navigationTitle("Nova tarefa")
+            .navigationTitle("Editar tarefa")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancelar") {
-                        fecharCriarTaskModalView()
+                        fecharEditarTaskModalView()
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Adicionar") {
+                    Button("Salvar") {
                         Task {
                             let tituloValido = !task.titulo.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                             let iconeValido = !task.icone.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -119,61 +120,31 @@ struct CriarTaskModalView: View {
                             if !tituloValido || !iconeValido {
                                 return
                             }
-                            
-                            if let houseModel = houseViewModel.houseModel {
-                                await viewModel.criarTarefa(task: task, houseModel: houseModel)
-                            } else {
-                                print("❌ Nenhuma casa vinculada.")
-                            }
-                            fecharCriarTaskModalView()
+
+                            await viewModel.editarTarefa(task)
+                            fecharEditarTaskModalView()
                         }
+                    }
+                    .alert("Tem certeza que deseja apagar esta tarefa?", isPresented: $mostrarAlertaApagar) {
+                        Button("Apagar", role: .destructive) {
+                            Task {
+                                await viewModel.apagarTarefa(task)
+                                fecharEditarTaskModalView()
+                            }
+                        }
+                        Button("Cancelar", role: .cancel) { }
+                    }
+                }
+    
+            }
+            .onAppear {
+                if houseViewModel.usuariosDaCasa.isEmpty {
+                    Task {
+                        await houseViewModel.buscarUsuariosDaMinhaCasa()
                     }
                 }
             }
-            .task {
-                await houseViewModel.buscarUsuariosDaMinhaCasa()
-            }
         }
         .navigationViewStyle(.stack)
-    }
-}
-
-struct CriarTaskView_Previews: PreviewProvider {
-    static var previews: some View {
-
-        // IDs mock
-        let mockUserID = CKRecord.ID(recordName: "mock-user-id")
-        let mockHouseID = CKRecord.ID(recordName: "mock-house-id")
-        let mockICloudToken1 = CKRecord.ID(recordName: "_mock-icloud-token-1")
-        
-        // usuários mock
-        let mockUser = UserModel(
-            id: mockUserID,
-            name: "Maria Lucia",
-            houseID: mockHouseID,
-            icloudToken: mockICloudToken1
-        )
-        
-        let mockTasks = [
-            TaskModel(
-            id: CKRecord.ID(recordName: "mock-task2-id"),
-            userID: mockUserID,
-            casaID: mockHouseID,
-            icone: "leaf.fill",
-            titulo: "Regar as plantas",
-            descricao: "",
-            prazo: Date(),
-            repeticao: .semanalmente,
-            lembrete: .quinzeMinutos,
-            completo: false
-            )
-        ]
-        
-        let appState = AppState()
-        appState.userID = mockUserID
-        appState.casaID = mockHouseID
-        
-        return TasksView()
-            .environmentObject(appState)
     }
 }
