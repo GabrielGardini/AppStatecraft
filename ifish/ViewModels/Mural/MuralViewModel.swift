@@ -7,9 +7,9 @@ import UIKit
 class MessageViewModel: ObservableObject {
     @Published var mensagens: [MessageModel] = []
     @Published var nomesDeUsuarios: [CKRecord.ID: String] = [:]
-    var houseProfileViewModel: HouseProfileViewModel?
+    @Published var houseProfileViewModel: HouseProfileViewModel?
 
-    init(houseProfileViewModel: HouseProfileViewModel) {
+    init(houseProfileViewModel: HouseProfileViewModel? = nil) {
         self.houseProfileViewModel = houseProfileViewModel
     }
 

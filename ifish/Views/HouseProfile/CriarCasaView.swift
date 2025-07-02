@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct CriarCasaView: View {
-    @ObservedObject var viewModel: HouseProfileViewModel
+    @EnvironmentObject var appState: AppState
+    @EnvironmentObject var houseViewModel: HouseProfileViewModel
+
     @State private var navegarParaConfirmacao = false
 
     var body: some View {
@@ -24,16 +26,16 @@ struct CriarCasaView: View {
                         .foregroundColor(.secondary)
                 }
 
-                TextField("Nome da casa", text: $viewModel.casaNomeInput)
+                TextField("Nome da casa", text: $houseViewModel.casaNomeInput)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
                     .overlay(
                         HStack {
                             Spacer()
-                            if !viewModel.casaNomeInput.isEmpty {
+                            if !houseViewModel.casaNomeInput.isEmpty {
                                 Button(action: {
-                                    viewModel.casaNomeInput = ""
+                                    houseViewModel.casaNomeInput = ""
                                 }) {
                                     Image(systemName: "xmark.circle.fill")
                                         .foregroundColor(.gray)
@@ -45,7 +47,7 @@ struct CriarCasaView: View {
 
                 Button(action: {
                     Task {
-                        await viewModel.criarCasa()
+                        await houseViewModel.criarCasa()
                         navegarParaConfirmacao = true
                     }
                 }) {
@@ -53,15 +55,19 @@ struct CriarCasaView: View {
                         .fontWeight(.bold)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(viewModel.casaNomeInput.isEmpty ? Color.accentColor.opacity(0.5) : Color.accentColor)
+                        .background(houseViewModel.casaNomeInput.isEmpty ? Color.accentColor.opacity(0.5) : Color.accentColor)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
-                .disabled(viewModel.casaNomeInput.isEmpty)
+                .disabled(houseViewModel.casaNomeInput.isEmpty)
 
                 Spacer()
 
-                NavigationLink(destination: CasaCriadaView(viewModel: viewModel), isActive: $navegarParaConfirmacao) {
+                NavigationLink(
+                    destination: CasaCriadaView()
+                                .environmentObject(appState)
+                                .environmentObject(houseViewModel),
+                    isActive: $navegarParaConfirmacao) {
                     EmptyView()
                 }
             }

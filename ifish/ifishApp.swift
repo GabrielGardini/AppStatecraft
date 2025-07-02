@@ -13,6 +13,7 @@ struct ifishApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     @StateObject private var appState = AppState()
+    @StateObject private var houseViewModel = HouseProfileViewModel()
 
     
     var body: some Scene {
@@ -20,6 +21,7 @@ struct ifishApp: App {
             AppStartView()
                 .background(Color("BackgroundColor").ignoresSafeArea())
                 .environmentObject(appState)
+                .environmentObject(houseViewModel)
         }
     }
 }
