@@ -53,6 +53,7 @@
 		E75ECE702E0192E900E1A579 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE6F2E0192E900E1A579 /* Extensions.swift */; };
 		E75ECE722E01972A00E1A579 /* MainAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE712E01972A00E1A579 /* MainAppView.swift */; };
 		E75ECE742E01A8FF00E1A579 /* AppStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE732E01A8FF00E1A579 /* AppStartView.swift */; };
+		E7AA58052E157BE60099EBF3 /* TarefasProntas.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AA58042E157BE60099EBF3 /* TarefasProntas.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,6 +126,7 @@
 		E75ECE6F2E0192E900E1A579 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		E75ECE712E01972A00E1A579 /* MainAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppView.swift; sourceTree = "<group>"; };
 		E75ECE732E01A8FF00E1A579 /* AppStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartView.swift; sourceTree = "<group>"; };
+		E7AA58042E157BE60099EBF3 /* TarefasProntas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TarefasProntas.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +160,7 @@
 			children = (
 				E75ECE0E2DF088EB00E1A579 /* Assets.xcassets */,
 				4ECAD55E2E0C28D1000F104C /* IconesDisponiveis.swift */,
+				E7AA58042E157BE60099EBF3 /* TarefasProntas.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -547,6 +550,7 @@
 				E75ECE722E01972A00E1A579 /* MainAppView.swift in Sources */,
 				E75ECE492E004D6200E1A579 /* LoginView.swift in Sources */,
 				E75ECE6A2E0062B000E1A579 /* MuralView.swift in Sources */,
+				E7AA58052E157BE60099EBF3 /* TarefasProntas.swift in Sources */,
 				E75ECE4B2E004D9B00E1A579 /* EntrarOuCriarCasaView.swift in Sources */,
 				E6BFC2CD2E14258F0015B671 /* AppDelegate.swift in Sources */,
 				E75ECE6D2E0062C300E1A579 /* TasksView.swift in Sources */,
