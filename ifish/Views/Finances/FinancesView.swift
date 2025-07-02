@@ -87,6 +87,13 @@ struct FinancesView: View {
         }
     }
     
+    var despesasPagasPorTodos: [FinanceModel] {
+        return financeViewModel.despesas.filter {
+            $0.paidBy.count >= viewModel.usuariosDaCasa.count
+        }
+    }
+
+    
     
     var body: some View {
         ZStack {
@@ -138,10 +145,44 @@ struct FinancesView: View {
                             }
                             
                         case "Pagas por todos":
-                            ForEach(financeViewModel.despesas.filter { $0.paidBy.count >= viewModel.usuariosDaCasa.count }, id: \.id) { despesa in
+                            HStack {
+                                Button(action: {
+                                       filtroDataDespesa = Calendar.current.date(byAdding: .month, value: -1, to: filtroDataDespesa) ?? filtroDataDespesa
+                                }) {
+                                   Text("<")
+                                       .font(.title2)
+                                       .padding(.horizontal)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+
+                                Spacer()
+                                
+                                // O filtro volta a ser o mes atual
+                                Button(action: {
+                                    filtroDataDespesa = Date()
+                                }) {
+                                    Text(filtroDataDespesa.formatadoMesAno())
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                                
+                                Spacer()
+                                
+                                Button(action: {
+                                       filtroDataDespesa = Calendar.current.date(byAdding: .month, value: 1, to: filtroDataDespesa) ?? filtroDataDespesa
+                                }) {
+                                   Text(">")
+                                       .font(.title2)
+                                       .padding(.horizontal)
+                               }
+                                .buttonStyle(PlainButtonStyle())
+
+                            }
+
+                            ForEach(despesasPagasPorTodos.filter {
+                                $0.deadline.mesEAno == filtroDataDespesa.mesEAno
+                            }, id: \.id) { despesa in
                                 itemLista(despesa)
                             }
-                            
                         default:
                             EmptyView()
                         }
@@ -258,4 +299,12 @@ func formatarData(_ data: Date) -> String{
     let formatter = DateFormatter()
     formatter.dateFormat = "dd/MM/yyyy"
     return formatter.string(from: data)
+}
+
+extension Date {
+    var mesEAno: (Int, Int) {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.month, .year], from: self)
+        return (components.month ?? 0, components.year ?? 0)
+    }
 }
