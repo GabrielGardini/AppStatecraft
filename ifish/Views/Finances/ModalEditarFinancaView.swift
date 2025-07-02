@@ -11,6 +11,7 @@ import CloudKit
 
 struct ModalEditarFincancaView: View {
     @State private var mostrarConfirmacaoApagar = false
+    @State private var mostrarConfirmacaoCancelar = false
     @State private var numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -23,6 +24,7 @@ struct ModalEditarFincancaView: View {
     @ObservedObject var financeViewModel: FinanceViewModel
     @Environment(\.dismiss) var fecharModalEditar
     var despesa: FinanceModel
+    var despesaInicial: FinanceModel
     
     @State private var nomeFinanca: String = ""
     @State private var valor: Double = 0.0
@@ -38,6 +40,7 @@ struct ModalEditarFincancaView: View {
         _nomeFinanca = State(initialValue: despesa.title)
         _valor = State(initialValue: despesa.amount)
         _dataVencimento = State(initialValue: despesa.deadline)
+        self.despesaInicial = despesa
     }
 
     
@@ -69,13 +72,14 @@ struct ModalEditarFincancaView: View {
                         }
                         .foregroundColor(.red)
                         .confirmationDialog("Tem certeza que deseja apagar?", isPresented: $mostrarConfirmacaoApagar, titleVisibility: .visible) {
-                            Button("Apagar", role: .destructive) {
+                            Button("Apagar despesa", role: .destructive) {
                                 Task {
                                     await financeViewModel.apagarDespesa(despesa)
                                     fecharModalEditar()
                                 }
                             }
                             Button("Cancelar", role: .cancel) { }
+                            .foregroundColor(.accentColor)
                         }
                         Spacer()
                     }
@@ -87,7 +91,23 @@ struct ModalEditarFincancaView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancelar") {
-                        fecharModalEditar()
+                        if(nomeFinanca == despesaInicial.title &&
+                           valor == despesaInicial.amount &&
+                           dataVencimento == despesaInicial.deadline){
+                            fecharModalEditar()
+                        }
+                        else{
+                            mostrarConfirmacaoCancelar = true
+                        }
+                    }
+                    .confirmationDialog("Tem certeza de que deseja descartar as alterações?", isPresented: $mostrarConfirmacaoCancelar, titleVisibility: .visible){
+                        Button("Ignorar alterações", role: .destructive){
+                            Task {
+                                fecharModalEditar()
+                            }
+                        }
+                        Button("Continuar Editando", role: .cancel){}
+                        .foregroundColor(.accentColor)
                     }
                 }
 
@@ -113,4 +133,3 @@ struct ModalEditarFincancaView: View {
         }
     }
 }
-
