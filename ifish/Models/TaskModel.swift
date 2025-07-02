@@ -146,4 +146,17 @@ class TaskModel: ObservableObject, Identifiable {
         record["IsCompleted"] = completo as CKRecordValue
         return record
     }
+    
+    func atualizarCamposEm(_ record: CKRecord) {
+        record["UserID"] = CKRecord.Reference(recordID: userID, action: .none)
+        record["HouseID"] = CKRecord.Reference(recordID: casaID, action: .none)
+        record["Icon"] = icone as CKRecordValue
+        record["Title"] = titulo as CKRecordValue
+        record["Description"] = descricao as CKRecordValue
+        record["Deadline"] = prazo as CKRecordValue
+        record["Frequency"] = repeticao.rawValue as CKRecordValue
+        record["Reminder"] = lembreteToTimestamp(prazo: prazo, lembrete: lembrete) as CKRecordValue
+        record["IsCompleted"] = completo as CKRecordValue
+    }
+
 }

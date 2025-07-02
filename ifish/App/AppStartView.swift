@@ -13,6 +13,7 @@ struct AppStartView: View {
                 .onAppear {
                     Task {
                         await houseViewModel.inicializarAppState(appState)
+                        await houseViewModel.buscarUsuariosDaMinhaCasa()
                         
                         verificando = false
                     }

@@ -4,7 +4,7 @@ import CloudKit
 struct MainAppView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var houseViewModel: HouseProfileViewModel
-
+    @StateObject private var tasksViewModel = TasksViewModel()
     @StateObject private var messageViewModel = MessageViewModel()
 
     var body: some View {
@@ -37,8 +37,10 @@ struct MainAppView: View {
                 Label("Config", systemImage: "gear")
             }
         }
-        .environmentObject(houseViewModel)
         .environmentObject(appState)
+        .environmentObject(houseViewModel)
+        .environmentObject(tasksViewModel)
+
         .onAppear {
             messageViewModel.houseProfileViewModel = houseViewModel
             messageViewModel.avisoPermicaoNotificacoes()

@@ -115,22 +115,22 @@ class TasksViewModel: ObservableObject {
 
     // MARK: - Editar tarefa existente
     func editarTarefa(_ tarefa: TaskModel) async {
+        let database = CKContainer.default().publicCloudDatabase
+
         do {
-            let updatedRecord = try await CKContainer.default().publicCloudDatabase.save(tarefa.toCKRecord())
-            let updatedModel = TaskModel(record: updatedRecord)
+            let record = try await database.record(for: tarefa.id)
+            tarefa.atualizarCamposEm(record)
+            let updatedRecord = try await database.save(record)
 
             if let updatedModel = TaskModel(record: updatedRecord) {
                 await MainActor.run {
-                    var novasTarefas = tarefas
-                    if let index = novasTarefas.firstIndex(where: { $0.id.recordName == tarefa.id.recordName }) {
-                        novasTarefas[index] = updatedModel
-                        tarefas = novasTarefas
+                    if let index = tarefas.firstIndex(where: { $0.id == updatedModel.id }) {
+                        tarefas[index] = updatedModel
                     }
                 }
-                print("✏️ Tarefa atualizada.")
-            } else {
-                print("❌ Erro ao converter CKRecord para TaskModel.")
+                print("✏️ Tarefa atualizada com sucesso.")
             }
+
         } catch {
             print("❌ Erro ao editar tarefa: \(error)")
         }

@@ -12,8 +12,10 @@ struct EditarTaskModalView: View {
     @Environment(\.dismiss) var fecharEditarTaskModalView
     @EnvironmentObject var houseViewModel: HouseProfileViewModel
     @EnvironmentObject var viewModel: TasksViewModel
-
+       
     @ObservedObject var task: TaskModel
+    var onApagar: (() -> Void)? = nil
+
     @State private var erroTituloVazio = false
     @State private var erroIconeVazio = false
     @State private var mostrarAlertaApagar = false
@@ -129,6 +131,7 @@ struct EditarTaskModalView: View {
                         Button("Apagar", role: .destructive) {
                             Task {
                                 await viewModel.apagarTarefa(task)
+                                onApagar?()  // avisa para a view de detalhe fechar
                                 fecharEditarTaskModalView()
                             }
                         }

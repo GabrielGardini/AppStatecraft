@@ -17,11 +17,13 @@ let fundoTasks = LinearGradient(
 struct TasksView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var houseViewModel: HouseProfileViewModel
-    @StateObject var viewModel = TasksViewModel()
-
+    @EnvironmentObject var viewModel: TasksViewModel
+    
     @State private var mostrarCriarTaskModalView: Bool = false
     @State private var mostrarDetalheTaskModalView: Bool = false
+    
     @State private var tarefaSelecionada: TaskModel? = nil
+    
     @StateObject private var novaTask = TaskModel.vazia(
         casaID: CKRecord.ID(recordName: "placeholder-casa"),
         userID: CKRecord.ID(recordName: "placeholder-user")
@@ -131,24 +133,25 @@ struct TasksView: View {
                             tarefas: tarefasFiltradas.filter {
                                 Calendar.current.isDateInToday($0.prazo) && !$0.completo
                             },
-                            viewModel: self.viewModel,
                             aoSelecionar: { tarefa in
                                 tarefaSelecionada = tarefa
                                 mostrarDetalheTaskModalView = true
                             }
                         )
+                        .environmentObject(houseViewModel)
+
 
                         TaskSectionView(
                             titulo: "Amanhã",
                             tarefas: tarefasFiltradas.filter {
                                 Calendar.current.isDateInTomorrow($0.prazo) && !$0.completo
                             },
-                            viewModel: self.viewModel,
                             aoSelecionar: { tarefa in
                                 tarefaSelecionada = tarefa
                                 mostrarDetalheTaskModalView = true
                             }
                         )
+                        .environmentObject(houseViewModel)
 
                         TaskSectionView(
                             titulo: "Outros",
@@ -157,22 +160,23 @@ struct TasksView: View {
                                 !Calendar.current.isDateInToday($0.prazo) &&
                                 !Calendar.current.isDateInTomorrow($0.prazo)
                             },
-                            viewModel: self.viewModel,
                             aoSelecionar: { tarefa in
                                 tarefaSelecionada = tarefa
                                 mostrarDetalheTaskModalView = true
                             }
                         )
+                        .environmentObject(houseViewModel)
 
                         TaskSectionView(
                             titulo: "Concluídas",
                             tarefas: tarefasFiltradas.filter { $0.completo },
-                            viewModel: self.viewModel,
                             aoSelecionar: { tarefa in
                                 tarefaSelecionada = tarefa
                                 mostrarDetalheTaskModalView = true
                             }
                         )
+                        .environmentObject(houseViewModel)
+
                     }
                     .padding(.horizontal, 5)
                 }
@@ -191,7 +195,7 @@ struct TasksView: View {
                     mostrarCriarTaskModalView = true;
                 }) {
                     Text(Image(systemName: "plus"))
-                        .foregroundColor(.blue)
+                        .foregroundColor(Color("TasksMainColor"))
                 }
                 .sheet(isPresented: $mostrarCriarTaskModalView, onDismiss: {
                     resetarNovaTask()
@@ -203,8 +207,9 @@ struct TasksView: View {
                 }
                 .sheet(isPresented: $mostrarDetalheTaskModalView) {
                     if let tarefa = tarefaSelecionada {
-                        DetalheTaskModalView(tasksViewModel: viewModel, tarefa: tarefa)
+                        DetalheTaskModalView(tarefa: tarefa)
                             .environmentObject(houseViewModel)
+                            .environmentObject(viewModel)
                     }
                 }
             }
@@ -217,7 +222,6 @@ struct TasksView: View {
                 }
 
                 await viewModel.buscarTarefasDaCasa(houseModel: house)
-                await houseViewModel.buscarUsuariosDaMinhaCasa()
 
                 if let casaID = appState.casaID, let userID = appState.userID {
                     novaTask.casaID = casaID
@@ -231,9 +235,10 @@ struct TasksView: View {
 }
 
 struct TaskSectionView: View {
+    @EnvironmentObject var houseViewModel: HouseProfileViewModel
+
     var titulo: String
     var tarefas: [TaskModel]
-    @ObservedObject var viewModel: TasksViewModel
     
     var aoSelecionar: (TaskModel) -> Void
     
@@ -253,7 +258,7 @@ struct TaskSectionView: View {
                         task: tarefa,
                         iconeAlterado: isConcluida ? "checkmark" : nil,
                         corFundoIcone: isConcluida ? Color.green.opacity(0.5) : nil,
-                        nomeUsuario: viewModel.nomesDeUsuarios[tarefa.userID] ?? "Desconhecido"
+                        nomeUsuario: houseViewModel.nomeDoUsuario(id: tarefa.userID)
                     )
                     .onTapGesture {
                         aoSelecionar(tarefa)

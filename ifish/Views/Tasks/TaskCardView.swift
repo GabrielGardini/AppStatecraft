@@ -28,7 +28,7 @@ struct TaskCard: View {
             
             // nome do usuario associado
             Text(nomeUsuario ?? "Desconhecido")
-                .font(.subheadline)
+                .font(.footnote)
                 .foregroundColor(.gray)
         }
         .padding(12)
