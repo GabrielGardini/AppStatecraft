@@ -120,6 +120,13 @@ struct TasksView: View {
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 10) {
                         
+                        // se nao há tarefas ou todas estao concluidas
+                        if tarefasFiltradas.isEmpty || (tarefasFiltradas.filter {!$0.completo}).isEmpty {
+                            Text("Não há nenhuma tarefa pendente! 🎉")
+                                .foregroundColor(.secondary)
+                                .padding(.vertical)
+                        }
+                        
                         TaskSectionView(
                             titulo: "Hoje",
                             tarefas: tarefasFiltradas.filter {
