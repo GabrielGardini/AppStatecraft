@@ -69,7 +69,7 @@ struct ModalEditarFincancaView: View {
                         }
                         .foregroundColor(.red)
                         .confirmationDialog("Tem certeza que deseja apagar?", isPresented: $mostrarConfirmacaoApagar, titleVisibility: .visible) {
-                            Button("Apagar", role: .destructive) {
+                            Button("Apagar despesa", role: .destructive) {
                                 Task {
                                     await financeViewModel.apagarDespesa(despesa)
                                     fecharModalEditar()
