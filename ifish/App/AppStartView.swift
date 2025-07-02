@@ -1,9 +1,9 @@
 import SwiftUI
 
 struct AppStartView: View {
-    @StateObject private var appState = AppState()
-
-    @StateObject private var viewModel = HouseProfileViewModel()
+    @EnvironmentObject var appState: AppState
+    @EnvironmentObject var houseViewModel: HouseProfileViewModel
+    
     @State private var verificando = true
 
     var body: some View {
@@ -12,18 +12,21 @@ struct AppStartView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .onAppear {
                     Task {
-                        await viewModel.verificarConta()
-                        await viewModel.verificarSeUsuarioJaTemCasa()
+                        await houseViewModel.inicializarAppState(appState)
+                        
                         verificando = false
                     }
                 }
         } else {
-            if viewModel.usuarioJaVinculado {
-                MainAppView(
-                ).environmentObject(appState)
+            if houseViewModel.usuarioJaVinculado {
+                MainAppView()
+                    .environmentObject(appState)
+                    .environmentObject(houseViewModel)
             } else {
-                NavigationView{
-                    LoginView(viewModel: viewModel)
+                NavigationView {
+                    LoginView()
+                        .environmentObject(appState)
+                        .environmentObject(houseViewModel)
                 }
             }
         }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4E36C2DE2E0D793900276EA7 /* DetalheTaskModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E36C2DD2E0D793900276EA7 /* DetalheTaskModalView.swift */; };
+		4E36C2E02E0EBCF900276EA7 /* CriarTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E36C2DF2E0EBCF900276EA7 /* CriarTaskViewModel.swift */; };
 		4E639E752DF866860034E362 /* HouseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E742DF866860034E362 /* HouseModel.swift */; };
 		4E639E832DF867DB0034E362 /* TaskModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E822DF867DB0034E362 /* TaskModel.swift */; };
 		4E639E852DF867EC0034E362 /* FinanceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E639E842DF867EC0034E362 /* FinanceModel.swift */; };
@@ -27,6 +28,7 @@
 		A9DC66BD2E0ACCF300D50DED /* ModalNovaFinancaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC66BC2E0ACCF300D50DED /* ModalNovaFinancaView.swift */; };
 		E66FF4C72E09918100C0C95B /* NovoAvisoModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66FF4C62E09918100C0C95B /* NovoAvisoModalView.swift */; };
 		E6BFC2C52E0AEC610015B671 /* EditarAvisoModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BFC2C42E0AEC610015B671 /* EditarAvisoModalView.swift */; };
+		E6BFC2CD2E14258F0015B671 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BFC2CC2E14258F0015B671 /* AppDelegate.swift */; };
 		E75ECE0B2DF088E100E1A579 /* ifishApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE0A2DF088E100E1A579 /* ifishApp.swift */; };
 		E75ECE0D2DF088E100E1A579 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75ECE0C2DF088E100E1A579 /* ContentView.swift */; };
 		E75ECE0F2DF088EB00E1A579 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E75ECE0E2DF088EB00E1A579 /* Assets.xcassets */; };
@@ -72,6 +74,7 @@
 
 /* Begin PBXFileReference section */
 		4E36C2DD2E0D793900276EA7 /* DetalheTaskModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetalheTaskModalView.swift; sourceTree = "<group>"; };
+		4E36C2DF2E0EBCF900276EA7 /* CriarTaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CriarTaskViewModel.swift; sourceTree = "<group>"; };
 		4E639E742DF866860034E362 /* HouseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseModel.swift; sourceTree = "<group>"; };
 		4E639E822DF867DB0034E362 /* TaskModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskModel.swift; sourceTree = "<group>"; };
 		4E639E842DF867EC0034E362 /* FinanceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceModel.swift; sourceTree = "<group>"; };
@@ -91,6 +94,8 @@
 		A9DC66BC2E0ACCF300D50DED /* ModalNovaFinancaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalNovaFinancaView.swift; sourceTree = "<group>"; };
 		E66FF4C62E09918100C0C95B /* NovoAvisoModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovoAvisoModalView.swift; sourceTree = "<group>"; };
 		E6BFC2C42E0AEC610015B671 /* EditarAvisoModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditarAvisoModalView.swift; sourceTree = "<group>"; };
+		E6BFC2CB2E1423A30015B671 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E6BFC2CC2E14258F0015B671 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E75ECE072DF088E100E1A579 /* ifish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ifish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E75ECE0A2DF088E100E1A579 /* ifishApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ifishApp.swift; sourceTree = "<group>"; };
 		E75ECE0C2DF088E100E1A579 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -194,6 +199,7 @@
 				4E8C088C2E02E82900655A67 /* AppState.swift */,
 				E75ECE712E01972A00E1A579 /* MainAppView.swift */,
 				E75ECE732E01A8FF00E1A579 /* AppStartView.swift */,
+				E6BFC2CC2E14258F0015B671 /* AppDelegate.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -231,6 +237,7 @@
 		E75ECE092DF088E100E1A579 /* ifish */ = {
 			isa = PBXGroup;
 			children = (
+				E6BFC2CB2E1423A30015B671 /* Info.plist */,
 				E7AA58022E02EAB40099EBF3 /* App */,
 				4E8C088E2E02E83C00655A67 /* App */,
 				E75ECE632E00620F00E1A579 /* Views */,
@@ -311,6 +318,7 @@
 			isa = PBXGroup;
 			children = (
 				E75ECE5B2E0061AC00E1A579 /* TasksViewModel.swift */,
+				4E36C2DF2E0EBCF900276EA7 /* CriarTaskViewModel.swift */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -383,7 +391,6 @@
 				4EC26C532E018CC300C99805 /* TaskCardView.swift */,
 				4E8C08882E02E18E00655A67 /* EditarTaskView.swift */,
 				4E7E231E2E09907300F8E86E /* CriarTaskView.swift */,
-				4ECAD5602E0C30E3000F104C /* IconeEstilo.swift */,
 				4E36C2DD2E0D793900276EA7 /* DetalheTaskModalView.swift */,
 			);
 			path = Tasks;
@@ -392,6 +399,7 @@
 		E7AA58022E02EAB40099EBF3 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				4ECAD5602E0C30E3000F104C /* IconeEstilo.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -540,6 +548,7 @@
 				E75ECE492E004D6200E1A579 /* LoginView.swift in Sources */,
 				E75ECE6A2E0062B000E1A579 /* MuralView.swift in Sources */,
 				E75ECE4B2E004D9B00E1A579 /* EntrarOuCriarCasaView.swift in Sources */,
+				E6BFC2CD2E14258F0015B671 /* AppDelegate.swift in Sources */,
 				E75ECE6D2E0062C300E1A579 /* TasksView.swift in Sources */,
 				E75ECE622E0061F700E1A579 /* UserViewModel.swift in Sources */,
 				E75ECE672E00629600E1A579 /* FinancesView.swift in Sources */,
@@ -547,6 +556,7 @@
 				E75ECE4F2E004DDF00E1A579 /* CasaCriadaView.swift in Sources */,
 				4E639E872DF867F90034E362 /* UserModel.swift in Sources */,
 				4E36C2DE2E0D793900276EA7 /* DetalheTaskModalView.swift in Sources */,
+				4E36C2E02E0EBCF900276EA7 /* CriarTaskViewModel.swift in Sources */,
 				4EC26C542E018CC300C99805 /* TaskCardView.swift in Sources */,
 				E75ECE702E0192E900E1A579 /* Extensions.swift in Sources */,
 				4EE3DEBA2E0983170061172B /* FormatDateExtension.swift in Sources */,
@@ -728,6 +738,7 @@
 				DEVELOPMENT_TEAM = 7JULNSTCHT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ifish/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -758,6 +769,7 @@
 				DEVELOPMENT_TEAM = 7JULNSTCHT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ifish/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

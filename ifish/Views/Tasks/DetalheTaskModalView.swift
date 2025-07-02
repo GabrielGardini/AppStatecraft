@@ -6,10 +6,196 @@
 //
 
 import SwiftUI
+import CloudKit
 
 struct DetalheTaskModalView: View {
-    var tarefa: TaskModel
+    @Environment(\.dismiss) var dismiss
+    @ObservedObject var tasksViewModel: TasksViewModel
+    
+    @State private var mostrarEditarTaskModalView: Bool = false
+    @ObservedObject var tarefa: TaskModel
+    
+    var nomeResponsavel: String = "Desconhecido"
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(tarefa.titulo)
+                            .font(.title)
+                            .fontWeight(.semibold)
+                            .padding(.top)
+                        
+                Text("Prazo")
+                    .font(.callout)
+                    .foregroundColor(.secondary)
+                
+                Text(tarefa.prazo.formatted(date: .abbreviated, time: .shortened))
+                    .font(.body)
+                    .padding(.bottom)
+                            
+                HStack {
+                    Text("Ocorrência")
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    Text(tarefa.repeticao.rawValue.capitalized)
+                        .foregroundColor(.gray)
+                }
+                
+                Divider()
+                
+                HStack {
+                    Text("Responsável")
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    Text(nomeResponsavel)
+                        .foregroundColor(.gray)
+                }
+                .padding(.bottom)
+
+                
+                TextEditor(text: .constant(tarefa.descricao.isEmpty ? "Descrição..." : tarefa.descricao))
+                    .disabled(true)
+                    .foregroundColor(tarefa.descricao.isEmpty ? .gray : .primary)
+                    .frame(height: 100)
+                    .padding(4)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.gray.opacity(0.4))
+                    )
+
+                Spacer()
+
+                Button {
+                    Task {
+                        tarefa.completo.toggle()
+                        await tasksViewModel.editarTarefa(tarefa)
+                        dismiss()
+                    }
+                } label: {
+                    Text("Feito")
+                        .foregroundColor(.white)
+                        .bold()
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(tarefa.completo == false ? Color("TasksMainColor") : .gray)
+                        .cornerRadius(10)
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 10)
+            }
+            .padding()
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Voltar") {
+                        dismiss()
+                    }
+                    .foregroundColor(Color("TasksMainColor"))
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Editar") {
+                        mostrarEditarTaskModalView = true
+                    }
+                    .foregroundColor(Color("TasksMainColor"))
+                    
+                    .sheet(isPresented: $mostrarEditarTaskModalView) {
+                        if let tarefa = tarefa {
+                            EditarTaskView()
+                        }
+                    }
+                }
+            }
+            .navigationViewStyle(.stack)
+        }
     }
+}
+
+struct DetalheTaskModalView_Preview: PreviewProvider {
+        static var previews: some View {
+            // IDs mock
+            let mockUserID = CKRecord.ID(recordName: "mock-user-id")
+            let mockUser2ID = CKRecord.ID(recordName: "mock-user2-id")
+            let mockHouseID = CKRecord.ID(recordName: "mock-house-id")
+            let mockICloudToken1 = CKRecord.ID(recordName: "_mock-icloud-token-1")
+            let mockICloudToken2 = CKRecord.ID(recordName: "_mock-icloud-token-2")
+            
+            // usuários mock
+            let mockUser = UserModel(
+                id: mockUserID,
+                name: "Maria Lucia",
+                houseID: mockHouseID,
+                icloudToken: mockICloudToken1
+            )
+            let mockUser2 = UserModel(
+                id: mockUser2ID,
+                name: "Geronimo",
+                houseID: mockHouseID,
+                icloudToken: mockICloudToken2
+            )
+            
+            let mockTasks = [
+                TaskModel(
+                    id: CKRecord.ID(recordName: "mock-task-id"),
+                    userID: mockUserID,
+                    casaID: mockHouseID,
+                    icone: "trash.fill",
+                    titulo: "Tirar o lixo",
+                    descricao: "",
+                    prazo: Date(),
+                    repeticao: .semanalmente,
+                    lembrete: .quinzeMinutos,
+                    completo: false
+                ),
+                TaskModel(
+                    id: CKRecord.ID(recordName: "mock-task2-id"),
+                    userID: mockUserID,
+                    casaID: mockHouseID,
+                    icone: "leaf.fill",
+                    titulo: "Regar as plantas",
+                    descricao: "",
+                    prazo: Date(),
+                    repeticao: .semanalmente,
+                    lembrete: .quinzeMinutos,
+                    completo: false
+                ),
+                TaskModel(
+                    id: CKRecord.ID(recordName: "mock-task3-id"),
+                    userID: mockUser2ID,
+                    casaID: mockHouseID,
+                    icone: "car.fill",
+                    titulo: "Lavar Garagem",
+                    descricao: "",
+                    prazo: Date(),
+                    repeticao: .nunca,
+                    lembrete: .nenhum,
+                    completo: false
+                ),
+                TaskModel(
+                    id: CKRecord.ID(recordName: "mock-task4-id"),
+                    userID: mockUserID,
+                    casaID: mockHouseID,
+                    icone: "car.fill",
+                    titulo: "Lavar Garagem",
+                    descricao: "",
+                    prazo: Date(),
+                    repeticao: .nunca,
+                    lembrete: .nenhum,
+                    completo: true
+                )
+            ]
+            
+            let houseViewModel = HouseProfileViewModel()
+
+            let viewModel = TasksViewModel()
+            let appState = AppState()
+            appState.userID = mockUserID
+            appState.casaID = mockHouseID
+            
+            return DetalheTaskModalView(tasksViewModel: viewModel, tarefa: mockTasks.first ?? TaskModel.vazia(casaID: appState.casaID, userID: appState.userID))
+            
+        }
 }
