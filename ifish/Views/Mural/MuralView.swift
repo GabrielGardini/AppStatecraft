@@ -17,6 +17,7 @@ struct MuralView: View {
 
             ScrollView {
                 ProgressoTarefasCard(percentageDone: 0.5)
+                    .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
                     .padding(.horizontal)
                     .padding(.top)
                 Spacer().frame(height: 10)
@@ -25,6 +26,7 @@ struct MuralView: View {
                     AvisoView(messageViewModel: messageViewModel, aviso: aviso)
                         .frame(maxWidth: .infinity)
                         .cornerRadius(10)
+                        .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
                         .padding(.horizontal)
                     Spacer().frame(height: 10)
                 }

@@ -35,7 +35,6 @@ struct CriarTaskModalView: View {
                             Image(systemName: "list.bullet")
                             Text("Selecionar tarefa pronta")
                         }
-                        .foregroundColor(.blue)
                     }
                     .sheet(isPresented: $mostrarModalSelecionarTarefa) {
                         SelecionarTarefaProntaView(task: task)
@@ -145,45 +144,6 @@ struct CriarTaskModalView: View {
     }
 }
 
-struct CriarTaskView_Previews: PreviewProvider {
-    static var previews: some View {
-
-        // IDs mock
-        let mockUserID = CKRecord.ID(recordName: "mock-user-id")
-        let mockHouseID = CKRecord.ID(recordName: "mock-house-id")
-        let mockICloudToken1 = CKRecord.ID(recordName: "_mock-icloud-token-1")
-        
-        // usuários mock
-        let mockUser = UserModel(
-            id: mockUserID,
-            name: "Maria Lucia",
-            houseID: mockHouseID,
-            icloudToken: mockICloudToken1
-        )
-        
-        let mockTasks = [
-            TaskModel(
-            id: CKRecord.ID(recordName: "mock-task2-id"),
-            userID: mockUserID,
-            casaID: mockHouseID,
-            icone: "leaf.fill",
-            titulo: "Regar as plantas",
-            descricao: "",
-            prazo: Date(),
-            repeticao: .semanalmente,
-            lembrete: .quinzeMinutos,
-            completo: false
-            )
-        ]
-        
-        let appState = AppState()
-        appState.userID = mockUserID
-        appState.casaID = mockHouseID
-        
-        return TasksView()
-            .environmentObject(appState)
-    }
-}
 
 struct SelecionarTarefaProntaView: View {
     @Environment(\.dismiss) var dismiss
@@ -199,10 +159,6 @@ struct SelecionarTarefaProntaView: View {
             }
         }
     }
-    
-
-   
-
 
     var body: some View {
         NavigationView {
@@ -215,16 +171,8 @@ struct SelecionarTarefaProntaView: View {
                             dismiss()
                         } label: {
                             HStack(spacing: 12) {
-                                ZStack {
-                                    Circle()
-                                        .fill(Color("TasksMainColor"))
-                                        .frame(width: 40, height: 40)
-
-                                    Image(systemName: tarefa.icone)
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 18))
-                                }
-
+                                IconeEstilo(icone: tarefa.icone, selecionado: true)
+                                
                                 Text(tarefa.titulo)
                                     .foregroundColor(.primary)
 

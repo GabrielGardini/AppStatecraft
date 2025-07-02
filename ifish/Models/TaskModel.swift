@@ -83,11 +83,11 @@ class TaskModel: ObservableObject, Identifiable {
         self.completo = completo
     }
     
-    static func vazia(casaID: CKRecord.ID?, userID: CKRecord.ID?) -> TaskModel {
+    static func vazia(casaID: CKRecord.ID? = nil, userID: CKRecord.ID? = nil) -> TaskModel {
         return TaskModel(
             id: CKRecord.ID(recordName: UUID().uuidString),
-            userID: userID ?? CKRecord.ID(recordName: "default_user"),
-            casaID: casaID ?? CKRecord.ID(recordName: "default_house"),
+            userID: userID ?? CKRecord.ID(recordName: "undefined"),
+            casaID: casaID ?? CKRecord.ID(recordName: "undefined"),
             icone: "",
             titulo: "",
             descricao: "",

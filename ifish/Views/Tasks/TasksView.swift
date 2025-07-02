@@ -24,9 +24,9 @@ struct TasksView: View {
     
     @State private var tarefaSelecionada: TaskModel? = nil
     
-    @StateObject private var novaTask = TaskModel.vazia(
-        casaID: CKRecord.ID(recordName: "placeholder-casa"),
-        userID: CKRecord.ID(recordName: "placeholder-user")
+    @State private var novaTask = TaskModel.vazia(
+        casaID: nil,
+        userID: nil
     )
 
     @State private var escolha = "Minhas tarefas"
@@ -34,20 +34,12 @@ struct TasksView: View {
     @State private var filtroData = Date()     // a tela inicia com o filtro no mes e ano atual
     
     private func resetarNovaTask() {
-        novaTask.titulo = ""
-        novaTask.descricao = ""
-        novaTask.prazo = Date()
-        novaTask.repeticao = .nunca
-        novaTask.lembrete = .nenhum
-        novaTask.icone = ""
-
-        if let casaID = appState.casaID {
-            novaTask.casaID = casaID
-        }
-        if let userID = appState.userID {
-            novaTask.userID = userID
-        }
+        novaTask = TaskModel.vazia(
+            casaID: appState.casaID,
+            userID: appState.userID
+        )
     }
+
 
 
     var tarefasFiltradas: [TaskModel] {
@@ -128,6 +120,13 @@ struct TasksView: View {
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 10) {
                         
+                        // se nao há tarefas ou todas estao concluidas
+                        if tarefasFiltradas.isEmpty || (tarefasFiltradas.filter {!$0.completo}).isEmpty {
+                            Text("Não há nenhuma tarefa pendente! 🎉")
+                                .foregroundColor(.secondary)
+                                .padding(.vertical)
+                        }
+                        
                         TaskSectionView(
                             titulo: "Hoje",
                             tarefas: tarefasFiltradas.filter {
@@ -195,7 +194,7 @@ struct TasksView: View {
                     mostrarCriarTaskModalView = true;
                 }) {
                     Text(Image(systemName: "plus"))
-                        .foregroundColor(Color("TasksMainColor"))
+                        .foregroundColor(.black)
                 }
                 .sheet(isPresented: $mostrarCriarTaskModalView, onDismiss: {
                     resetarNovaTask()
@@ -222,10 +221,12 @@ struct TasksView: View {
                 }
 
                 await viewModel.buscarTarefasDaCasa(houseModel: house)
-
+                
                 if let casaID = appState.casaID, let userID = appState.userID {
-                    novaTask.casaID = casaID
-                    novaTask.userID = userID
+                    novaTask = TaskModel.vazia(
+                        casaID: casaID,
+                        userID: userID
+                    )
                 }
             }
         }
