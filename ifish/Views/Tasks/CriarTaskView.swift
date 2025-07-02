@@ -17,7 +17,7 @@ struct CriarTaskModalView: View {
     @ObservedObject var task: TaskModel
     @State private var erroTituloVazio = false
     @State private var erroIconeVazio = false
-
+    @State private var mostrarModalSelecionarTarefa = false
     var body: some View {
         NavigationView {
             Form {
@@ -28,6 +28,19 @@ struct CriarTaskModalView: View {
                                 .stroke(erroTituloVazio ? Color.red : Color.clear, lineWidth: 1)
                         )
                     // retangulo para navegar pra outra tela (modelos pre prontos >)
+                    Button(action: {
+                        mostrarModalSelecionarTarefa = true
+                    }) {
+                        HStack {
+                            Image(systemName: "list.bullet")
+                            Text("Selecionar tarefa pronta")
+                        }
+                        .foregroundColor(.blue)
+                    }
+                    .sheet(isPresented: $mostrarModalSelecionarTarefa) {
+                        SelecionarTarefaProntaView(task: task)
+                    }
+
                 }
                 
                 Section {
@@ -169,5 +182,76 @@ struct CriarTaskView_Previews: PreviewProvider {
         
         return TasksView()
             .environmentObject(appState)
+    }
+}
+
+struct SelecionarTarefaProntaView: View {
+    @Environment(\.dismiss) var dismiss
+    @ObservedObject var task: TaskModel
+    @State private var searchText = ""
+
+    var tarefasFiltradas: [TarefaPronta] {
+        if searchText.isEmpty {
+            return TarefasProntasMock.lista
+        } else {
+            return TarefasProntasMock.lista.filter {
+                $0.titulo.lowercased().contains(searchText.lowercased())
+            }
+        }
+    }
+    
+
+   
+
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 0) {
+                List {
+                    ForEach(tarefasFiltradas) { tarefa in
+                        Button {
+                            task.titulo = tarefa.titulo
+                            task.icone = tarefa.icone
+                            dismiss()
+                        } label: {
+                            HStack(spacing: 12) {
+                                ZStack {
+                                    Circle()
+                                        .fill(Color("TasksMainColor"))
+                                        .frame(width: 40, height: 40)
+
+                                    Image(systemName: tarefa.icone)
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 18))
+                                }
+
+                                Text(tarefa.titulo)
+                                    .foregroundColor(.primary)
+
+                                Spacer()
+                            }
+                            .padding(.vertical, 4)
+                            .padding(.horizontal)
+                        }
+                        .listRowInsets(EdgeInsets()) // remove padding lateral padrão da List
+                        .listRowBackground(Color.white)
+                        .shadow(color: .gray.opacity(0.2), radius: 2, x: 0, y: 2)
+
+                    }
+                }
+                .listStyle(.plain)
+            }
+            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
+            .navigationTitle("Selecionar Tarefa")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancelar") {
+                        dismiss()
+                    }
+                    .foregroundColor(Color("AccentColor"))
+                }
+            }
+        }
     }
 }
