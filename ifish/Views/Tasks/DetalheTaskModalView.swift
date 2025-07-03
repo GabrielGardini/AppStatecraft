@@ -68,6 +68,12 @@ struct DetalheTaskModalView: View {
                     Task {
                         tarefa.completo.toggle()
                         await tasksViewModel.editarTarefa(tarefa)
+
+                        if tarefa.completo, let nova = tarefa.criarProximaTarefaRecorrente(),
+                           let house = houseViewModel.houseModel {
+                            await tasksViewModel.criarTarefa(task: nova, houseModel: house)
+                        }
+
                         dismiss()
                     }
                 } label: {

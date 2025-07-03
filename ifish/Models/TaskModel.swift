@@ -83,11 +83,11 @@ class TaskModel: ObservableObject, Identifiable {
         self.completo = completo
     }
     
-    static func vazia(casaID: CKRecord.ID?, userID: CKRecord.ID?) -> TaskModel {
+    static func vazia(casaID: CKRecord.ID? = nil, userID: CKRecord.ID? = nil) -> TaskModel {
         return TaskModel(
             id: CKRecord.ID(recordName: UUID().uuidString),
-            userID: userID ?? CKRecord.ID(recordName: "default_user"),
-            casaID: casaID ?? CKRecord.ID(recordName: "default_house"),
+            userID: userID ?? CKRecord.ID(recordName: "undefined"),
+            casaID: casaID ?? CKRecord.ID(recordName: "undefined"),
             icone: "",
             titulo: "",
             descricao: "",
@@ -98,6 +98,38 @@ class TaskModel: ObservableObject, Identifiable {
         )
     }
     
+    func criarProximaTarefaRecorrente() -> TaskModel? {
+        var novaData: Date?
+
+        switch repeticao {
+        case .diariamente:
+            novaData = Calendar.current.date(byAdding: .day, value: 1, to: prazo)
+        case .semanalmente:
+            novaData = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: prazo)
+        case .mensalmente:
+            novaData = Calendar.current.date(byAdding: .month, value: 1, to: prazo)
+        case .nunca:
+            return nil
+        }
+
+        guard let novoPrazo = novaData else { return nil }
+
+        let novaTask = TaskModel(
+            id: CKRecord.ID(recordName: UUID().uuidString),
+            userID: userID,
+            casaID: casaID,
+            icone: icone,
+            titulo: titulo,
+            descricao: descricao,
+            prazo: novoPrazo,
+            repeticao: repeticao,
+            lembrete: lembrete,
+            completo: false
+        )
+
+        return novaTask
+    }
+
     convenience init?(record: CKRecord) {
         guard
             let userRef = record["UserID"] as? CKRecord.Reference,
