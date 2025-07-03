@@ -116,7 +116,7 @@ struct FinancesView: View {
                                     Text("Atrasadas")
                                         .font(.subheadline)
                                         .foregroundColor(.gray)
-                                    ForEach(despesasAtrasadas, id: \.id) { despesa in
+                                    ForEach(despesasAtrasadas.sorted(by: {$0.deadline < $1.deadline}), id: \.id) { despesa in
                                         itemLista(despesa).shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 4)
 
                                     }
@@ -128,7 +128,7 @@ struct FinancesView: View {
                                     Text("Pendentes")
                                         .font(.subheadline)
                                         .foregroundColor(.gray)
-                                    ForEach(despesasPendentes, id: \.id) { despesa in
+                                    ForEach(despesasPendentes.sorted(by: {$0.deadline < $1.deadline}), id: \.id) { despesa in
                                         itemLista(despesa).shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 4)
                                     }
                                 }
@@ -139,7 +139,7 @@ struct FinancesView: View {
                                     Text("Pagas por você")
                                         .font(.subheadline)
                                         .foregroundColor(.gray)
-                                    ForEach(despesasPagasPorVoce, id: \.id) { despesa in
+                                    ForEach(despesasPagasPorVoce.sorted(by: {$0.deadline < $1.deadline}), id: \.id) { despesa in
                                         itemLista(despesa).shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 4)
                                     }
                                 }
@@ -179,7 +179,7 @@ struct FinancesView: View {
 
                             }
 
-                            ForEach(despesasPagasPorTodos.filter {
+                            ForEach(despesasPagasPorTodos.sorted(by: {$0.deadline < $1.deadline}).filter {
                                 $0.deadline.mesEAno == filtroDataDespesa.mesEAno
                             }, id: \.id) { despesa in
                                 itemLista(despesa).shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 4)
