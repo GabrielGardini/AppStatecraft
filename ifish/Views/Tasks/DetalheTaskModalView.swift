@@ -10,6 +10,7 @@ import CloudKit
 
 struct DetalheTaskModalView: View {
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var appState: AppState
     @EnvironmentObject var houseViewModel: HouseProfileViewModel
     @EnvironmentObject var tasksViewModel: TasksViewModel
     
@@ -79,9 +80,14 @@ struct DetalheTaskModalView: View {
                         .bold()
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(tarefa.completo == false ? Color("TasksMainColor") : .gray)
+                        .background(
+                            (tarefa.userID != appState.userID || tarefa.completo)
+                                ? .gray
+                                : Color("TasksMainColor")
+                        )
                         .cornerRadius(10)
                 }
+                .disabled(tarefa.userID != appState.userID)
                 .padding(.horizontal)
                 .padding(.bottom, 10)
             }
