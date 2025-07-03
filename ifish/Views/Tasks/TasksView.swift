@@ -132,10 +132,7 @@ struct TasksView: View {
                             tarefas: tarefasFiltradas.filter {
                                 Calendar.current.isDateInToday($0.prazo) && !$0.completo
                             },
-                            aoSelecionar: { tarefa in
-                                tarefaSelecionada = tarefa
-                                mostrarDetalheTaskModalView = true
-                            }
+                            tarefaSelecionada: $tarefaSelecionada
                         )
                         .environmentObject(houseViewModel)
 
@@ -145,10 +142,7 @@ struct TasksView: View {
                             tarefas: tarefasFiltradas.filter {
                                 Calendar.current.isDateInTomorrow($0.prazo) && !$0.completo
                             },
-                            aoSelecionar: { tarefa in
-                                tarefaSelecionada = tarefa
-                                mostrarDetalheTaskModalView = true
-                            }
+                            tarefaSelecionada: $tarefaSelecionada
                         )
                         .environmentObject(houseViewModel)
 
@@ -158,21 +152,15 @@ struct TasksView: View {
                                 !$0.completo &&
                                 !Calendar.current.isDateInToday($0.prazo) &&
                                 !Calendar.current.isDateInTomorrow($0.prazo)
-                            },
-                            aoSelecionar: { tarefa in
-                                tarefaSelecionada = tarefa
-                                mostrarDetalheTaskModalView = true
-                            }
+                                },
+                            tarefaSelecionada: $tarefaSelecionada
                         )
                         .environmentObject(houseViewModel)
 
                         TaskSectionView(
                             titulo: "Concluídas",
                             tarefas: tarefasFiltradas.filter { $0.completo },
-                            aoSelecionar: { tarefa in
-                                tarefaSelecionada = tarefa
-                                mostrarDetalheTaskModalView = true
-                            }
+                            tarefaSelecionada: $tarefaSelecionada
                         )
                         .environmentObject(houseViewModel)
 
@@ -204,13 +192,12 @@ struct TasksView: View {
                         .environmentObject(houseViewModel)
                         .environmentObject(viewModel)
                 }
-                .sheet(isPresented: $mostrarDetalheTaskModalView) {
-                    if let tarefa = tarefaSelecionada {
-                        DetalheTaskModalView(tarefa: tarefa)
-                            .environmentObject(houseViewModel)
-                            .environmentObject(viewModel)
-                    }
+                .sheet(item: $tarefaSelecionada) { tarefa in
+                    DetalheTaskModalView(tarefa: tarefa)
+                        .environmentObject(houseViewModel)
+                        .environmentObject(viewModel)
                 }
+
             }
         }
         .onAppear {
@@ -241,7 +228,7 @@ struct TaskSectionView: View {
     var titulo: String
     var tarefas: [TaskModel]
     
-    var aoSelecionar: (TaskModel) -> Void
+    @Binding var tarefaSelecionada: TaskModel?
     
     var isConcluida: Bool {
         titulo == "Concluídas"
@@ -262,7 +249,7 @@ struct TaskSectionView: View {
                         nomeUsuario: houseViewModel.nomeDoUsuario(id: tarefa.userID)
                     )
                     .onTapGesture {
-                        aoSelecionar(tarefa)
+                        tarefaSelecionada = tarefa
                     }
                     .padding(.bottom, 4)
                 }
