@@ -200,6 +200,7 @@ struct FinancesView: View {
                             mostrarModalNovaFinanca = true
                         }) {
                             Image(systemName: "plus")
+                                .foregroundColor(.black)
                         }
                     }
                 }
@@ -258,7 +259,8 @@ struct DespesaEspecifica: View {
     }
     
     var corTexto: Color{
-        if despesa.deadline < Date() && !despesa.paidBy.contains(nomeUsuario){
+        let hoje = Calendar.current.startOfDay(for: Date())
+        if despesa.deadline < hoje && !despesa.paidBy.contains(nomeUsuario){
             return .red
         }
         else{
