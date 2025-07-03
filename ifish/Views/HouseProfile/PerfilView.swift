@@ -11,89 +11,75 @@ struct PerfilView: View {
             let heightMultiplier = geometry.size.height / 844
 
             ZStack {
-                Color(red: 249/255, green: 249/255, blue: 249/255)
-                    .ignoresSafeArea()
+                LinearGradient(
+                    colors: [Color("AccentColor"), Color("BackgroundColor")],
+                    startPoint: .top,
+                    endPoint: UnitPoint(x: 0.5, y: 0.2)
+                )
+                .opacity(0.5)
+                .ignoresSafeArea()
 
                 ScrollView {
                     VStack(spacing: 20 * heightMultiplier) {
 
-                        // Cabeçalho com ícone de casa e título
-                        VStack(spacing: 8 * heightMultiplier) {
-                            Image(systemName: "house.fill")
-                                .resizable()
-                                .frame(width: 75, height: 63.75)
-                                .foregroundColor(Color.accentColor)
-
-                            Text("Minha casa")
-                                .font(.system(size: 24))
-                                .foregroundColor(.black)
-                        }
-
-                        // Bloco do nome da casa + mascote
+                        // Bloco com nome da casa e mascote
                         VStack(spacing: 0) {
                             HStack {
                                 Text(viewModel.nomeCasaUsuario.isEmpty ? "Nome da casa não disponível" : viewModel.nomeCasaUsuario)
                                     .font(.system(size: 24))
-                                    .foregroundColor(.black)
+                                    .foregroundColor(.white)
                                     .truncationMode(.tail)
-                                    .layoutPriority(1)
 
-                                Spacer(minLength: 20)
+                                Spacer()
 
-                                Image("mascote")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 50, height: 50)
+                                Image("bichinhocortado")
                             }
-                            .padding()
-                            .frame(width: width, height: 106 * heightMultiplier)
-                            .background(Color(red: 0.88, green: 0.88, blue: 0.88))
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 16)
+                            .background(Color("AccentColor"))
                             .clipShape(RoundedCorner(radius: 6, corners: [.topLeft, .topRight]))
                             .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
 
-                            // Lista de moradores
                             VStack(alignment: .leading, spacing: 0) {
                                 Text("Moradores")
-                                    .font(.system(size: 17))
-                                    .foregroundColor(.black)
-                                    .padding(.horizontal, 22)
-                                    .padding(.top)
-                                    .padding(.bottom, 8)
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                                    .padding(.horizontal, 24)
+                                    .padding(.vertical, 8)
 
-                                ScrollView {
-                                    VStack(spacing: 16.5) {
-                                        if viewModel.usuariosDaCasa.isEmpty {
-                                            Text("Nenhum usuário encontrado.")
-                                                .foregroundColor(.gray)
-                                                .padding(.horizontal, 22)
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                        } else {
-                                            ForEach(viewModel.usuariosDaCasa, id: \.id) { usuario in
-                                                HStack(spacing: 10) {
-                                                    Image(systemName: "person.crop.circle")
-                                                        .resizable()
-                                                        .frame(width: 30, height: 30)
-                                                        .foregroundColor(.gray)
+                                VStack(spacing: 16.5) {
+                                    if viewModel.usuariosDaCasa.isEmpty {
+                                        Text("Nenhum usuário encontrado.")
+                                            .foregroundColor(.gray)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding(.horizontal, 24)
+                                    } else {
+                                        ForEach(viewModel.usuariosDaCasa, id: \.id) { usuario in
+                                            HStack(spacing: 10) {
+                                                Image(systemName: "person.crop.circle")
+                                                    .resizable()
+                                                    .frame(width: 30, height: 30)
+                                                    .foregroundColor(.gray)
 
-                                                    Text(usuario.name)
-                                                        .foregroundColor(.black)
-                                                }
-                                                .padding(.horizontal, 22)
-                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                Text(usuario.name)
+                                                    .foregroundColor(.black)
                                             }
+                                            .padding(.horizontal, 24)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
                                         }
                                     }
-                                    .padding(.bottom)
                                 }
-                                .frame(height: 247 * heightMultiplier)
+                                .padding(.bottom)
                             }
                             .frame(width: width)
                             .background(Color.white)
                             .clipShape(RoundedCorner(radius: 6, corners: [.bottomLeft, .bottomRight]))
                             .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
                         }
+                        .padding(.top)
+                        .padding(.horizontal, 24)
 
-                        // Código de convite e botão de copiar
+                        // Seção: Convidar membros
                         HStack {
                             Text("Convidar membros")
                                 .foregroundColor(.black)
@@ -122,52 +108,49 @@ struct PerfilView: View {
                                     .background(Circle().fill(Color.green.opacity(0.1)))
                             }
                         }
+                        .padding(.vertical, 14)
                         .padding(.horizontal)
-                        .frame(width: width, height: 51 * heightMultiplier)
-                        .background(Color.white)
-                        .cornerRadius(15)
+                        .background(Color(UIColor.systemBackground))
+                        .cornerRadius(10)
+                        .padding(.horizontal, 24)
                         .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
 
-                        // Botão de notificações
+                        // Botão: Notificações
                         Button(action: {}) {
                             Text("Notificação")
                                 .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.vertical, 14)
                                 .padding(.horizontal)
-                                .frame(width: width, height: 52 * heightMultiplier)
-                                .background(Color.white)
-                                .foregroundColor(.black)
-                                .cornerRadius(15)
-                                .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
+                                .background(Color(UIColor.systemBackground))
+                                .cornerRadius(10)
                         }
+                        .padding(.horizontal, 24)
+                        .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
 
-                        // Botão "Sair" com alerta de confirmação
-                        Button(action: {
+                        // Botão: Sair
+                        Button("Sair", role: .destructive) {
                             showExitAlert = true
-                        }) {
-                            Text("Sair")
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .frame(width: width, height: 34.2 * heightMultiplier)
-                                .background(RoundedRectangle(cornerRadius: 15).fill(Color.white))
-                                .foregroundColor(.red)
                         }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 14)
+                        .background(Color(UIColor.systemBackground))
+                        .cornerRadius(10)
+                        .padding(.horizontal, 24)
+                        .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
                         .alert("Sair da casa?", isPresented: $showExitAlert) {
                             Button("Cancelar", role: .cancel) {}
                             Button("Sair", role: .destructive) {
                                 Task {
                                     await viewModel.sairDaCasa()
-                                     
                                 }
                             }
                         } message: {
                             Text("Tem certeza que deseja abandonar a casa? Você terá que ser convidado novamente para voltar à casa.")
                         }
                     }
-                    .frame(width: geometry.size.width)
-                    .padding(.top, 0)
+                    .padding(.top)
                 }
 
-                // Alerta de código copiado
                 if showCopyMessage {
                     Text("Código copiado!")
                         .font(.caption)
@@ -179,6 +162,7 @@ struct PerfilView: View {
                         .animation(.easeInOut, value: showCopyMessage)
                 }
             }
+            .navigationTitle("Minha Casa")
             .onAppear {
                 Task {
                     await viewModel.verificarSeUsuarioJaTemCasa()
@@ -207,4 +191,3 @@ struct RoundedCorner: Shape {
         return Path(path.cgPath)
     }
 }
-

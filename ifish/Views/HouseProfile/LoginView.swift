@@ -8,11 +8,9 @@ struct LoginView: View {
     
     var body: some View {
         VStack {
-            Image(systemName: "star.fill")
-                .resizable()
-                .frame(width: 100, height: 100)
+            Image("bichinhologin")//                .frame(width: 100, height: 100)
             
-            Text("Nome do App")
+            Text("Bem vindo ao Habby")
                 .font(.title)
                 .bold()
             

@@ -9,9 +9,9 @@ struct EntrarOuCriarCasaView: View {
 
     var body: some View {
         VStack(spacing: 32) {
-            Image(systemName: "star.fill")
+            Image("bichinhologin")
                 .resizable()
-                .frame(width: 100, height: 100)
+//                .frame(width: 100, height: 100)
 
             VStack(spacing: 16) {
                 Text("Entre com um código de convite")
