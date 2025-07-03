@@ -92,8 +92,8 @@ struct FinancesView: View {
             $0.paidBy.count >= viewModel.usuariosDaCasa.count
         }
     }
-
     
+
     
     var body: some View {
         ZStack {
@@ -111,6 +111,12 @@ struct FinancesView: View {
                     LazyVStack (alignment: .leading, spacing: 16){
                         switch selecao {
                         case "Pendentes":
+                            if despesasPendentes.isEmpty && despesasPagasPorVoce.isEmpty && despesasAtrasadas.isEmpty{
+                                Text("Nenhuma despesa pendente 🎉!")
+                                    .foregroundColor(.gray)
+                                    .padding()
+                            }
+
                             if !despesasAtrasadas.isEmpty {
                                 VStack(alignment: .leading, spacing: 0){
                                     Text("Atrasadas")
@@ -178,12 +184,26 @@ struct FinancesView: View {
                                 .buttonStyle(PlainButtonStyle())
 
                             }
+                            let despesasFiltradas = despesasPagasPorTodos
+                                .sorted(by: { $0.deadline < $1.deadline })
+                                .filter { $0.deadline.mesEAno == filtroDataDespesa.mesEAno }
 
-                            ForEach(despesasPagasPorTodos.sorted(by: {$0.deadline < $1.deadline}).filter {
+                            
+                            if despesasFiltradas.isEmpty {
+                                Text("Nenhuma despesa encontrada para este mês.")
+                                    .foregroundColor(.gray)
+                                    .padding()
+                            } else {
+                                ForEach(despesasFiltradas, id: \.id) { despesa in
+                                    itemLista(despesa)
+                                        .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 4)
+                                }
+                            }
+                            /*ForEach(despesasPagasPorTodos.sorted(by: {$0.deadline < $1.deadline}).filter {
                                 $0.deadline.mesEAno == filtroDataDespesa.mesEAno
                             }, id: \.id) { despesa in
                                 itemLista(despesa).shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 4)
-                            }
+                            }*/
                         default:
                             EmptyView()
                         }
