@@ -78,7 +78,6 @@ struct ModalInfoDespesasView: View {
                         Text("R$ \(despesa.amount, specifier: "%.2f")")
                             .foregroundColor(.gray)
                     }
-                    //não tem ocorrencia no banco, nem descrição
                 }
                 .task{
                    await usuarioPagou()
@@ -92,7 +91,7 @@ struct ModalInfoDespesasView: View {
                             Divider()
                                 .frame(height: 0.5)
                                 .foregroundColor(.gray)
-                            
+
                         }
                 }
                 Spacer()

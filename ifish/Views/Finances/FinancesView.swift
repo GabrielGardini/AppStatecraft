@@ -245,6 +245,10 @@ struct FinancesView: View {
             if novoModelo != nil {
                 Task {
                     await financeViewModel.buscarDespesasDaCasa()
+                    let totalPessoas = viewModel.usuariosDaCasa.count
+                                if totalPessoas > 0 {
+                                    await criarDespesaMensal(financeViewModel: financeViewModel, totalPessoas: totalPessoas)
+                    }
                 }
             }
         }
@@ -329,5 +333,36 @@ extension Date {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.month, .year], from: self)
         return (components.month ?? 0, components.year ?? 0)
+    }
+}
+
+@MainActor
+func criarDespesaMensal(financeViewModel: FinanceViewModel, totalPessoas: Int) async {
+    let duasSemanasAtras = Calendar.current.date(byAdding: .day, value: -14, to: Date())!
+
+    let despesasRepetidas = financeViewModel.despesas
+        .filter { $0.shouldRepeat == true &&
+                  $0.deadline <= duasSemanasAtras
+        }
+
+    for despesa in despesasRepetidas {
+        if let novaData = Calendar.current.date(byAdding: .month, value: 1, to: despesa.deadline) {
+            
+            let jaExiste = financeViewModel.despesas.contains {
+                $0.title == despesa.title &&
+                Calendar.current.isDate($0.deadline, inSameDayAs: novaData)
+            }
+
+            if !jaExiste {
+                await financeViewModel.criarDespesa(
+                    amount: despesa.amount,
+                    deadline: novaData,
+                    paidBy: [],
+                    title: despesa.title,
+                    notification: despesa.notification,
+                    shouldRepeat: despesa.shouldRepeat
+                )
+            }
+        }
     }
 }
