@@ -40,6 +40,8 @@ struct ModalEditarFincancaView: View {
         _nomeFinanca = State(initialValue: despesa.title)
         _valor = State(initialValue: despesa.amount)
         _dataVencimento = State(initialValue: despesa.deadline)
+        _repetirMensalmente = State(initialValue: despesa.shouldRepeat)
+        _notificacoesFinanca = State(initialValue: despesa.notification)
         self.despesaInicial = despesa
     }
 
@@ -117,6 +119,8 @@ struct ModalEditarFincancaView: View {
                             despesa.title = nomeFinanca
                             despesa.amount = valor
                             despesa.deadline = dataVencimento
+                            despesa.shouldRepeat = repetirMensalmente
+                            despesa.notification = notificacoesFinanca
                             
                             print("\(despesa.title)")
                             await financeViewModel.editarDespesa(despesa)
