@@ -202,13 +202,6 @@ struct TasksView: View {
         }
         .onAppear {
             Task {
-                guard let house = houseViewModel.houseModel else {
-                    print("❌ Nenhuma casa carregada no HouseViewModel")
-                    return
-                }
-
-                await viewModel.buscarTarefasDaCasa(houseModel: house)
-                
                 if let casaID = appState.casaID, let userID = appState.userID {
                     novaTask = TaskModel.vazia(
                         casaID: casaID,
