@@ -89,6 +89,10 @@ struct ModalInfoDespesasView: View {
                 Section{
                         ForEach(financeViewModel.houseProfileViewModel.usuariosDaCasa, id: \.self) { pessoa in
                             InfoPessoasPagaram(pessoa: pessoa.name, pagos: pagos)
+                            Divider()
+                                .frame(height: 0.5)
+                                .foregroundColor(.gray)
+                            
                         }
                 }
                 Spacer()
