@@ -21,8 +21,24 @@ struct MuralView: View {
                     .padding(.horizontal)
                     .padding(.top)
                 Spacer().frame(height: 10)
+                if messageViewModel.mensagens.isEmpty  {
+                    VStack{
+                        
+                    Text("Clique em \"+\" e crie um aviso")
+                        .foregroundColor(.secondary)
+                        .font(.title)
+                        .padding(.vertical)
+                    Image("listavazia")
+                    }
 
-                ForEach(messageViewModel.mensagens, id: \.id) { aviso in
+                }
+                ForEach(
+                    messageViewModel.mensagens
+                        .filter { Calendar.current.startOfDay(for: $0.timestamp) >= Calendar.current.startOfDay(for: Date()) }
+                        .sorted(by: { $0.timestamp < $1.timestamp }),
+                    id: \.id
+                ) { aviso in
+
                     AvisoView(messageViewModel: messageViewModel, aviso: aviso)
                         .frame(maxWidth: .infinity)
                         .cornerRadius(10)

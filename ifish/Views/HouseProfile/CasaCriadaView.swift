@@ -9,11 +9,10 @@ struct CasaCriadaView: View {
     var body: some View {
         VStack(spacing: 32) {
 
-            Image(systemName: "house.fill")
+            Image("casalogin")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 64, height: 64)
-                .foregroundColor(.accentColor)
+                .frame(width: 100, height: 100)
 
             VStack(spacing: 8) {
                 Text("Pronto!")

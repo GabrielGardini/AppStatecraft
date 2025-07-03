@@ -122,9 +122,16 @@ struct TasksView: View {
                         
                         // se nao há tarefas ou todas estao concluidas
                         if tarefasFiltradas.isEmpty || (tarefasFiltradas.filter {!$0.completo}).isEmpty {
+                            VStack{
+                                
                             Text("Não há nenhuma tarefa pendente! 🎉")
-                                .foregroundColor(.secondary)
-                                .padding(.vertical)
+                                    .foregroundColor(.secondary)
+                                    .font(.title)
+                                    .padding(.vertical)
+
+                            Image("listavazia")
+                            }
+
                         }
                         
                         TaskSectionView(

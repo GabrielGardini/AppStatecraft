@@ -27,7 +27,7 @@ struct MainAppView: View {
                 FinancesView()
             }
             .tabItem {
-                Label("Finanças", systemImage: "checkmark.circle")
+                Label("Despesas", systemImage: "dollarsign.circle")
             }
 
             NavigationView {
