@@ -23,7 +23,7 @@ class FinanceViewModel: ObservableObject {
     }
     
     // MARK: - Criar nova despesa
-    func criarDespesa(amount: Double, deadline: Date, paidBy: [String], title: String) async {
+    func criarDespesa(amount: Double, deadline: Date, paidBy: [String], title: String, notification: Bool, shouldRepeat: Bool) async {
         guard let houseModel = houseProfileViewModel.houseModel else {
             print("❌ Nenhuma casa vinculada.")
             return
@@ -31,7 +31,7 @@ class FinanceViewModel: ObservableObject {
 
         let houseRef = CKRecord.Reference(recordID: houseModel.id, action: .none)
         let recordID = CKRecord.ID(recordName: UUID().uuidString)
-        let novaDespesa = FinanceModel(id: recordID, amount: amount, deadline: deadline, houseID: houseRef, paidBy: paidBy, title: title)
+        let novaDespesa = FinanceModel(id: recordID, amount: amount, deadline: deadline, houseID: houseRef, paidBy: paidBy, title: title, notification: notification, shouldRepeat: shouldRepeat)
 
         do {
             let savedRecord = try await CKContainer.default().publicCloudDatabase.save(novaDespesa.toCKRecord())
@@ -92,6 +92,8 @@ class FinanceViewModel: ObservableObject {
             record["Amount"] = despesa.amount as CKRecordValue
             record["DeadLine"] = despesa.deadline as CKRecordValue
             record["PaidBy"] = despesa.paidBy as CKRecordValue
+            record["Notification"] = despesa.notification as CKRecordValue
+            record["Repeat"] = despesa.shouldRepeat as CKRecordValue
             let updatedRecord = try await CKContainer.default().publicCloudDatabase.save(record)
             let updatedModel = FinanceModel(record: updatedRecord)
 
@@ -119,30 +121,6 @@ class FinanceViewModel: ObservableObject {
             }
         }
     }
-    
-    func marcarComoPago(despesa: FinanceModel, nomeUsuario: String) async {
-        print("\(nomeUsuario) pagou")
-        /*guard let index = despesas.firstIndex(where: { $0.id == despesa.id }) else {
-            print("❌ Despesa não encontrada")
-            return
-        }
-
-        var despesaAtualizada = despesas[index]
-
-        if despesaAtualizada.paidBy.contains(nomeUsuario) {
-            print("ℹ️ Usuário já marcou como pago")
-            return
-        }
-
-        despesaAtualizada.paidBy.append(nomeUsuario)
-
-        // Atualiza no array (isso sim pode fazer com segurança no MainActor)
-        despesas[index] = despesaAtualizada
-
-        // Agora salva
-        await editarDespesa(despesaAtualizada)*/
-    }
-    
     
     func descobrirNomeDoUsuario(userID: CKRecord.Reference) async -> String {
         if let nome = nomesDeUsuarios[userID.recordID] {
