@@ -53,7 +53,7 @@ struct ModalNovaFinancaView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Adicionar") {
                         Task{
-                        await financeViewModel.criarDespesa(amount: valor, deadline: dataVencimento, paidBy: [], title: nomeFinanca)
+                            await financeViewModel.criarDespesa(amount: valor, deadline: dataVencimento, paidBy: [], title: nomeFinanca, notification: notificacoesFinanca, shouldRepeat: repetirMensalmente)
                             fecharModalNovaFinanca()}
                     } .disabled(nomeFinanca == "" || valor == 0.0)
                 }
