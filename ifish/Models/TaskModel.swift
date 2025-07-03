@@ -68,6 +68,13 @@ class TaskModel: ObservableObject, Identifiable {
     @Published var lembrete: Lembrete
     @Published var completo: Bool
     
+    var dataDoLembrete: Date? {
+        guard lembrete != .nenhum else { return nil }
+
+        return lembreteToTimestamp(prazo: prazo, lembrete: lembrete)
+    }
+
+    
     init(id: CKRecord.ID, userID: CKRecord.ID, casaID: CKRecord.ID, icone: String,
          titulo: String, descricao: String, prazo: Date, repeticao: Repeticao, lembrete: Lembrete, completo: Bool = false,
          user: UserModel? = nil) {

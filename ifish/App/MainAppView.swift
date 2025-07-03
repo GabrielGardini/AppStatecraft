@@ -45,6 +45,12 @@ struct MainAppView: View {
             messageViewModel.houseProfileViewModel = houseViewModel
             messageViewModel.avisoPermicaoNotificacoes()
             messageViewModel.configurarSubscriptionDeAvisos()
+            
+            Task {
+                guard let house = houseViewModel.houseModel else { return }
+                await tasksViewModel.buscarTarefasDaCasa(houseModel: house)
+            }
+            
         }
     }
 }
