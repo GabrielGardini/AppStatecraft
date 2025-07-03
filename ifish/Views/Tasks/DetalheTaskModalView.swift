@@ -16,9 +16,6 @@ struct DetalheTaskModalView: View {
     @State private var mostrarEditarTaskModalView = false
     @ObservedObject var tarefa: TaskModel
 
-    // callback para fechar DetalheTaskModalView
-    var onApagarTarefa: (() -> Void)? = nil
-
     var body: some View {
         NavigationView {
             VStack(alignment: .leading, spacing: 12) {
