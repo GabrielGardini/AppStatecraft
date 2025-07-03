@@ -99,6 +99,17 @@ struct EditarTaskModalView: View {
                         Text("Apagar tarefa")
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
+                    .confirmationDialog("Tem certeza que deseja apagar?", isPresented: $mostrarAlertaApagar, titleVisibility: .visible) {
+                        Button("Apagar tarefa", role: .destructive) {
+                            Task {
+                                await viewModel.apagarTarefa(task)
+                                fecharEditarTaskModalView()
+                                onApagar?()  // avisa para a view de detalhe fechar
+                            }
+                        }
+                        Button("Cancelar", role: .cancel) { }
+                        .foregroundColor(.accentColor)
+                    }
                 }
 
             }
@@ -126,16 +137,6 @@ struct EditarTaskModalView: View {
                             await viewModel.editarTarefa(task)
                             fecharEditarTaskModalView()
                         }
-                    }
-                    .alert("Tem certeza que deseja apagar esta tarefa?", isPresented: $mostrarAlertaApagar) {
-                        Button("Apagar", role: .destructive) {
-                            Task {
-                                await viewModel.apagarTarefa(task)
-                                onApagar?()  // avisa para a view de detalhe fechar
-                                fecharEditarTaskModalView()
-                            }
-                        }
-                        Button("Cancelar", role: .cancel) { }
                     }
                 }
     
