@@ -140,7 +140,11 @@ struct TasksView: View {
                         TaskSectionView(
                             titulo: "Atrasadas",
                             tarefas: tarefasFiltradas
-                                        .filter { ($0.prazo < Date()) && !$0.completo }
+                                        .filter {
+                                            ($0.prazo < Date()) &&
+                                            !Calendar.current.isDateInToday($0.prazo) &&
+                                            !$0.completo
+                                        }
                                         .sorted { $0.prazo < $1.prazo },
                             tarefaSelecionada: $tarefaSelecionada
                         )
@@ -151,7 +155,6 @@ struct TasksView: View {
                             tarefas: tarefasFiltradas
                                         .filter {
                                             Calendar.current.isDateInToday($0.prazo) &&
-                                            $0.prazo > Date() &&
                                             !$0.completo
                                             }
                                         .sorted { $0.prazo < $1.prazo },
