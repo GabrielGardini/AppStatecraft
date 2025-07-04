@@ -112,9 +112,20 @@ struct FinancesView: View {
                         switch selecao {
                         case "Pendentes":
                             if despesasPendentes.isEmpty && despesasPagasPorVoce.isEmpty && despesasAtrasadas.isEmpty{
-                                Text("Nenhuma despesa pendente 🎉!")
-                                    .foregroundColor(.gray)
-                                    .padding()
+                                VStack(spacing: 8) {
+                                    Text("Nenhuma despesa pendente 🎉!")
+                                        .foregroundColor(.gray)
+                                        //.multilineTextAlignment(.center)
+                                        //.font(.subheadline)
+
+                                    Image("listavazia")
+                                        /*.resizable()
+                                        .scaledToFit()
+                                        .frame(maxWidth: 200) // ou ajuste conforme necessário
+                                        .padding(.top, 4)*/
+                                }
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(.top, 24)
                             }
 
                             if !despesasAtrasadas.isEmpty {
@@ -190,9 +201,20 @@ struct FinancesView: View {
 
                             
                             if despesasFiltradas.isEmpty {
-                                Text("Nenhuma despesa encontrada para este mês.")
-                                    .foregroundColor(.gray)
-                                    .padding()
+                                VStack(spacing: 8) {
+                                    Text("Nenhuma despesa encontrada para este mês.")
+                                        .foregroundColor(.gray)
+                                        //.multilineTextAlignment(.center)
+                                        //.font(.subheadline)
+
+                                    Image("listavazia")
+                                        /*.resizable()
+                                        .scaledToFit()
+                                        .frame(maxWidth: 200) // ou ajuste conforme necessário
+                                        .padding(.top, 4)*/
+                                }
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(.top, 24)
                             } else {
                                 ForEach(despesasFiltradas, id: \.id) { despesa in
                                     itemLista(despesa)
