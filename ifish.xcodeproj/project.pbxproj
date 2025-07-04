@@ -197,6 +197,7 @@
 		4E8C088E2E02E83C00655A67 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				E75ECE712E01972A00E1A579 /* MainAppView.swift */,
 				4E8C088C2E02E82900655A67 /* AppState.swift */,
 				E75ECE732E01A8FF00E1A579 /* AppStartView.swift */,
 				E6BFC2CC2E14258F0015B671 /* AppDelegate.swift */,
@@ -246,7 +247,6 @@
 				4E639E732DF866610034E362 /* Models */,
 				E75ECE0A2DF088E100E1A579 /* ifishApp.swift */,
 				E75ECE0C2DF088E100E1A579 /* ContentView.swift */,
-				E75ECE712E01972A00E1A579 /* MainAppView.swift */,
 				E75ECE1A2DF088EB00E1A579 /* ifishTests */,
 				4E639E792DF866E70034E362 /* Utils */,
 				E75ECE102DF088EB00E1A579 /* Preview Content */,
