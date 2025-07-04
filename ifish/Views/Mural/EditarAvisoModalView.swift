@@ -4,6 +4,7 @@ import CloudKit
 struct EditarAvisoModalView: View {
     @Environment(\.dismiss) var fecharModalEditarAviso
     @EnvironmentObject var messageViewModel: MessageViewModel
+    @State private var mostrarConfirmacaoApagar = false
 
     @State private var nomeAviso: String = ""
     @State private var descricaoAviso: String = ""
@@ -42,16 +43,23 @@ struct EditarAvisoModalView: View {
                 Section {
                     Toggle("Notificações", isOn: $notificacoesAviso)
                 }
-
-                Section {
-                    Button(role: .destructive) {
-                        mostrarConfirmacaoExclusao = true
-                    } label: {
-                        HStack {
-                            Image(systemName: "trash")
-                            Text("Excluir Aviso")
-                        }
+                
+                HStack{
+                    Spacer()
+                    Button("Apagar aviso") {
+                        mostrarConfirmacaoApagar = true
                     }
+                    .foregroundColor(.red)
+                    .confirmationDialog("Tem certeza que deseja apagar esse aviso?", isPresented: $mostrarConfirmacaoApagar, titleVisibility: .visible) {
+                        Button("Apagar aviso", role: .destructive) {
+                            Task {
+                                await messageViewModel.deletarMensagem(aviso)
+                                fecharModalEditarAviso()
+                            }                        }
+                        Button("Cancelar", role: .cancel) { }
+                        .foregroundColor(.accentColor)
+                    }
+                    Spacer()
                 }
             }
             .navigationTitle("Editar Aviso")
@@ -70,17 +78,6 @@ struct EditarAvisoModalView: View {
                         }
                     }
                 }
-            }
-            .alert("Excluir aviso?", isPresented: $mostrarConfirmacaoExclusao) {
-                Button("Excluir", role: .destructive) {
-                    Task {
-                        await messageViewModel.deletarMensagem(aviso)
-                        fecharModalEditarAviso()
-                    }
-                }
-                Button("Cancelar", role: .cancel) {}.foregroundColor(Color("AccentColor"))
-            } message: {
-                Text("Tem certeza que deseja excluir este aviso? Esta ação não poderá ser desfeita.")
             }
         }
         .navigationViewStyle(.stack)
