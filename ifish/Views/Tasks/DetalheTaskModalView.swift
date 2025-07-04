@@ -117,6 +117,7 @@ struct DetalheTaskModalView: View {
                                     dismiss()
                                 }
                             )
+                            .environmentObject(appState)
                             .environmentObject(houseViewModel)
                             .environmentObject(tasksViewModel)
                         }

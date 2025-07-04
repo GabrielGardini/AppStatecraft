@@ -148,6 +148,7 @@ struct TasksView: View {
                                         .sorted { $0.prazo < $1.prazo },
                             tarefaSelecionada: $tarefaSelecionada
                         )
+                        .environmentObject(appState)
                         .environmentObject(houseViewModel)
 
                         TaskSectionView(
@@ -160,6 +161,7 @@ struct TasksView: View {
                                         .sorted { $0.prazo < $1.prazo },
                             tarefaSelecionada: $tarefaSelecionada
                         )
+                        .environmentObject(appState)
                         .environmentObject(houseViewModel)
 
 
@@ -172,6 +174,7 @@ struct TasksView: View {
                                         .sorted { $0.prazo < $1.prazo },
                             tarefaSelecionada: $tarefaSelecionada
                         )
+                        .environmentObject(appState)
                         .environmentObject(houseViewModel)
 
                         TaskSectionView(
@@ -186,6 +189,7 @@ struct TasksView: View {
                                         .sorted { $0.prazo < $1.prazo },
                             tarefaSelecionada: $tarefaSelecionada
                         )
+                        .environmentObject(appState)
                         .environmentObject(houseViewModel)
 
                         TaskSectionView(
@@ -195,6 +199,7 @@ struct TasksView: View {
                                         .sorted { $0.prazo > $1.prazo },
                             tarefaSelecionada: $tarefaSelecionada
                         )
+                        .environmentObject(appState)
                         .environmentObject(houseViewModel)
 
                     }
@@ -249,6 +254,7 @@ struct TasksView: View {
 }
 
 struct TaskSectionView: View {
+    @EnvironmentObject var appState: AppState
     @EnvironmentObject var houseViewModel: HouseProfileViewModel
 
     var titulo: String
@@ -281,6 +287,7 @@ struct TaskSectionView: View {
                             isConcluida ? Color.green.opacity(0.5) :
                             isAtrasada ? Color.red : nil,
                         nomeUsuario:
+                            appState.userID == tarefa.userID ? "Eu" :
                             houseViewModel.nomeAbreviado(
                                 nomeCompleto: houseViewModel.nomeDoUsuario(id: tarefa.userID)
                             )
