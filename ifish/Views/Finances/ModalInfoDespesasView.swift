@@ -108,6 +108,7 @@ struct ModalInfoDespesasView: View {
                                 await financeViewModel.editarDespesa(despesa)
                                 pagos = despesa.paidBy
                                 jaPagou = true
+                                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [despesa.id.recordName])
                             }
                         }
                         .buttonStyle(.borderedProminent)
@@ -118,6 +119,7 @@ struct ModalInfoDespesasView: View {
                                 despesa.paidBy.removeAll { $0 == nomeUsuario }
                                 await financeViewModel.editarDespesa(despesa)
                                 pagos = despesa.paidBy
+                                financeViewModel.agendarNotificacaoSeNecessario(despesa, nomeUsuario: nomeUsuario)
                             }
                         }
                         .buttonStyle(.borderedProminent)
