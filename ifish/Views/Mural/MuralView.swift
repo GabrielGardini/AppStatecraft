@@ -5,6 +5,12 @@ struct MuralView: View {
     @EnvironmentObject var appState: AppState
     @ObservedObject var messageViewModel: MessageViewModel
     @State private var mostrarModalNovoAviso = false
+    func formatarDataExtensa(_ data: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "pt_BR")
+        formatter.dateStyle = .full
+        return formatter.string(from: data).capitalized
+    }
 
     var body: some View {
                 ZStack {
@@ -32,20 +38,32 @@ struct MuralView: View {
                     }
 
                 }
-                ForEach(
-                    messageViewModel.mensagens
-                        .filter { Calendar.current.startOfDay(for: $0.timestamp) >= Calendar.current.startOfDay(for: Date()) }
-                        .sorted(by: { $0.timestamp < $1.timestamp }),
-                    id: \.id
-                ) { aviso in
-
-                    AvisoView(messageViewModel: messageViewModel, aviso: aviso)
-                        .frame(maxWidth: .infinity)
-                        .cornerRadius(10)
-                        .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
-                        .padding(.horizontal)
-                    Spacer().frame(height: 10)
+                let mensagensFuturasAgrupadas = Dictionary(grouping: messageViewModel.mensagens.filter {
+                    Calendar.current.startOfDay(for: $0.timestamp) >= Calendar.current.startOfDay(for: Date())
+                }) { mensagem in
+                    Calendar.current.startOfDay(for: mensagem.timestamp)
                 }
+
+                let datasOrdenadas = mensagensFuturasAgrupadas.keys.sorted()
+
+                ForEach(datasOrdenadas, id: \.self) { data in
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text(formatarDataExtensa(data))
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                            .padding(.horizontal)
+                            .padding(.top, 8)
+
+                        ForEach(mensagensFuturasAgrupadas[data]!.sorted(by: { $0.timestamp < $1.timestamp }), id: \.id) { aviso in
+                            AvisoView(messageViewModel: messageViewModel, aviso: aviso)
+                                .frame(maxWidth: .infinity)
+                                .cornerRadius(10)
+                                .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
+                                .padding(.horizontal)
+                        }
+                    }
+                }
+
             }
             .frame(maxHeight: .infinity)
             .navigationTitle("Mural")
@@ -79,6 +97,21 @@ struct AvisoView: View {
     let aviso: MessageModel
     @State private var mostrarModalEditarAviso = false
     @State private var nomeDoUsuario: String = "Carregando..."
+    
+    func formatarNomeParaPrimeiroENicial(_ nomeCompleto: String) -> String {
+        let partes = nomeCompleto.split(separator: " ")
+        
+        guard let primeiro = partes.first else {
+            return nomeCompleto
+        }
+        
+        if partes.count >= 2, let segundaInicial = partes.dropFirst().first?.first {
+            return "\(primeiro) \(segundaInicial)."
+        } else {
+            return String(primeiro)
+        }
+    }
+
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -91,8 +124,10 @@ struct AvisoView: View {
                 Text("•")
                     .font(.headline)
 
-                Text(nomeDoUsuario)
+                Text(formatarNomeParaPrimeiroENicial(nomeDoUsuario))
                     .font(.subheadline)
+//                Text(messageViewModel.houseProfileViewModel.nomeAbreviado(nomeDoUsuario))
+                
 
                 Spacer()
 
@@ -116,9 +151,7 @@ struct AvisoView: View {
             Text(aviso.title)
                 .font(.headline)
             
-            Text(formatarData(aviso.timestamp))
-                .font(.subheadline)
-                .foregroundColor(.gray)
+            
 
             Spacer().frame(height: 4)
 

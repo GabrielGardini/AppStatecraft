@@ -163,7 +163,13 @@ class MessageViewModel: ObservableObject {
             record["Title"] = mensagem.title as CKRecordValue
             record["Content"] = mensagem.content as CKRecordValue
             record["Timestamp"] = mensagem.timestamp as CKRecordValue
-            record["Notification"] = mensagem.notificationMural ? 1:0
+            record["Notification"] = mensagem.notificationMural ? 1 : 0
+
+            if let userRecordID = CKCurrentUserDefaultName as String? {
+                let reference = CKRecord.Reference(recordID: CKRecord.ID(recordName: userRecordID), action: .none)
+                record["UserID"] = reference
+            }
+
 
             let updatedRecord = try await CKContainer.default().publicCloudDatabase.save(record)
             let updatedModel = MessageModel(record: updatedRecord)

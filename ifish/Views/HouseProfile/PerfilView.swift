@@ -35,7 +35,8 @@ struct PerfilView: View {
                                 Image("bichinhocortado")
                             }
                             .padding(.horizontal, 24)
-                            .padding(.vertical, 16)
+                            .padding(.top, 16)
+                            .padding(.bottom, -2)
                             .background(Color("AccentColor"))
                             .clipShape(RoundedCorner(radius: 6, corners: [.topLeft, .topRight]))
                             .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
