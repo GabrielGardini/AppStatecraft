@@ -41,7 +41,6 @@ struct TasksView: View {
     }
 
 
-
     var tarefasFiltradas: [TaskModel] {
         guard let userID = appState.userID else { return [] }
         let calendar = Calendar.current
@@ -122,20 +121,39 @@ struct TasksView: View {
                         
                         // se nao há tarefas ou todas estao concluidas
                         if tarefasFiltradas.isEmpty || (tarefasFiltradas.filter {!$0.completo}).isEmpty {
-                            Text("Não há nenhuma tarefa pendente! 🎉")
-                                .foregroundColor(.secondary)
-                                .padding(.vertical)
+                            VStack(spacing: 10) {
+                                Text("Não há nenhuma tarefa pendente! 🎉")
+                                    .foregroundColor(.secondary)
+                                    .font(.body)
+                                    .padding(.vertical)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                Image("listavazia")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(maxWidth: 300)
+                                    .frame(maxWidth: .infinity)
+                                    .foregroundColor(.secondary)
+                            }
                         }
                         
                         TaskSectionView(
+                            titulo: "Atrasadas",
+                            tarefas: tarefasFiltradas.filter {
+                                ($0.prazo < Date()) && !$0.completo
+                            },
+                            tarefaSelecionada: $tarefaSelecionada
+                        )
+                        .environmentObject(houseViewModel)
+
+                        TaskSectionView(
                             titulo: "Hoje",
                             tarefas: tarefasFiltradas.filter {
-                                Calendar.current.isDateInToday($0.prazo) && !$0.completo
+                                Calendar.current.isDateInToday($0.prazo) &&
+                                $0.prazo > Date() &&
+                                !$0.completo
                             },
-                            aoSelecionar: { tarefa in
-                                tarefaSelecionada = tarefa
-                                mostrarDetalheTaskModalView = true
-                            }
+                            tarefaSelecionada: $tarefaSelecionada
                         )
                         .environmentObject(houseViewModel)
 
@@ -145,34 +163,26 @@ struct TasksView: View {
                             tarefas: tarefasFiltradas.filter {
                                 Calendar.current.isDateInTomorrow($0.prazo) && !$0.completo
                             },
-                            aoSelecionar: { tarefa in
-                                tarefaSelecionada = tarefa
-                                mostrarDetalheTaskModalView = true
-                            }
+                            tarefaSelecionada: $tarefaSelecionada
                         )
                         .environmentObject(houseViewModel)
 
                         TaskSectionView(
-                            titulo: "Outros",
+                            titulo: "Próximas",
                             tarefas: tarefasFiltradas.filter {
                                 !$0.completo &&
+                                $0.prazo > Date() &&
                                 !Calendar.current.isDateInToday($0.prazo) &&
                                 !Calendar.current.isDateInTomorrow($0.prazo)
                             },
-                            aoSelecionar: { tarefa in
-                                tarefaSelecionada = tarefa
-                                mostrarDetalheTaskModalView = true
-                            }
+                            tarefaSelecionada: $tarefaSelecionada
                         )
                         .environmentObject(houseViewModel)
 
                         TaskSectionView(
                             titulo: "Concluídas",
                             tarefas: tarefasFiltradas.filter { $0.completo },
-                            aoSelecionar: { tarefa in
-                                tarefaSelecionada = tarefa
-                                mostrarDetalheTaskModalView = true
-                            }
+                            tarefaSelecionada: $tarefaSelecionada
                         )
                         .environmentObject(houseViewModel)
 
@@ -204,24 +214,17 @@ struct TasksView: View {
                         .environmentObject(houseViewModel)
                         .environmentObject(viewModel)
                 }
-                .sheet(isPresented: $mostrarDetalheTaskModalView) {
-                    if let tarefa = tarefaSelecionada {
-                        DetalheTaskModalView(tarefa: tarefa)
-                            .environmentObject(houseViewModel)
-                            .environmentObject(viewModel)
-                    }
+                .sheet(item: $tarefaSelecionada) { tarefa in
+                    DetalheTaskModalView(tarefa: tarefa)
+                        .environmentObject(appState)
+                        .environmentObject(houseViewModel)
+                        .environmentObject(viewModel)
                 }
+
             }
         }
         .onAppear {
             Task {
-                guard let house = houseViewModel.houseModel else {
-                    print("❌ Nenhuma casa carregada no HouseViewModel")
-                    return
-                }
-
-                await viewModel.buscarTarefasDaCasa(houseModel: house)
-                
                 if let casaID = appState.casaID, let userID = appState.userID {
                     novaTask = TaskModel.vazia(
                         casaID: casaID,
@@ -240,9 +243,13 @@ struct TaskSectionView: View {
 
     var titulo: String
     var tarefas: [TaskModel]
+        
+    @Binding var tarefaSelecionada: TaskModel?
     
-    var aoSelecionar: (TaskModel) -> Void
-    
+    var isAtrasada: Bool {
+        titulo == "Atrasadas"
+    }
+
     var isConcluida: Bool {
         titulo == "Concluídas"
     }
@@ -258,11 +265,13 @@ struct TaskSectionView: View {
                     TaskCard(
                         task: tarefa,
                         iconeAlterado: isConcluida ? "checkmark" : nil,
-                        corFundoIcone: isConcluida ? Color.green.opacity(0.5) : nil,
+                        corFundoIcone:
+                            isConcluida ? Color.green.opacity(0.5) :
+                            isAtrasada ? Color.red.opacity(0.5) : nil,
                         nomeUsuario: houseViewModel.nomeDoUsuario(id: tarefa.userID)
                     )
                     .onTapGesture {
-                        aoSelecionar(tarefa)
+                        tarefaSelecionada = tarefa
                     }
                     .padding(.bottom, 4)
                 }

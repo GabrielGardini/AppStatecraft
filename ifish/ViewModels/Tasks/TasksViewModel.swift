@@ -7,6 +7,7 @@
 
 import Foundation
 import CloudKit
+import UserNotifications
 
 class TasksViewModel: ObservableObject {
     @Published var tarefas: [TaskModel] = []
@@ -24,6 +25,7 @@ class TasksViewModel: ObservableObject {
             if let model = TaskModel(record: savedRecord) {
                 await MainActor.run {
                     tarefas.append(model)
+                    self.atualizarLembreteDaTarefa(model)
                 }
                 print("✅ Tarefa criada com sucesso.")
             } else {
@@ -31,6 +33,76 @@ class TasksViewModel: ObservableObject {
             }
         } catch {
             print("❌ Erro ao salvar tarefa: \(error)")
+        }
+    }
+    
+
+    // MARK: - Apagar tarefa
+    func apagarTarefa(_ tarefa: TaskModel) async {
+        
+        // apagar notificaçao associada
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["lembrete-\(tarefa.id.recordName)"])
+        
+        do {
+            try await CKContainer.default().publicCloudDatabase.deleteRecord(withID: tarefa.id)
+            await MainActor.run {
+                tarefas.removeAll { $0.id.recordName == tarefa.id.recordName }
+            }
+            print("🗑️ Tarefa removida.")
+        } catch {
+            print("❌ Erro ao apagar tarefa: \(error)")
+        }
+    }
+
+    // MARK: - Editar tarefa existente
+    func editarTarefa(_ tarefa: TaskModel) async {
+        let database = CKContainer.default().publicCloudDatabase
+
+        do {
+            let record = try await database.record(for: tarefa.id)
+            tarefa.atualizarCamposEm(record)
+            let updatedRecord = try await database.save(record)
+
+            if let updatedModel = TaskModel(record: updatedRecord) {
+                await MainActor.run {
+                    if let index = tarefas.firstIndex(where: { $0.id == updatedModel.id }) {
+                        tarefas[index] = updatedModel
+                        self.atualizarLembreteDaTarefa(updatedModel)
+                    }
+                }
+                print("✏️ Tarefa atualizada com sucesso.")
+            }
+
+        } catch {
+            print("❌ Erro ao editar tarefa: \(error)")
+        }
+    }
+    
+    func atualizarLembreteDaTarefa(_ task: TaskModel) {
+        let id = "lembrete-\(task.id)"
+        
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id])
+        
+        guard let data = task.dataDoLembrete, data > Date() else {
+            return
+        }
+
+        let conteudo = UNMutableNotificationContent()
+        conteudo.title = task.titulo
+        conteudo.body = "Lembrete da tarefa"
+        conteudo.sound = .default
+
+        let intervalo = data.timeIntervalSinceNow
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: intervalo, repeats: false)
+
+        let requisicao = UNNotificationRequest(identifier: id, content: conteudo, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(requisicao) { erro in
+            if let erro = erro {
+                print("❌ Erro ao agendar notificação: \(erro.localizedDescription)")
+            } else {
+                print("🔔 Notificação agendada para tarefa '\(task.titulo)' em \(data)")
+            }
         }
     }
     
@@ -97,43 +169,4 @@ class TasksViewModel: ObservableObject {
                 return "Usuário desconhecido"
             }
         }
-
-    // MARK: - Apagar tarefa
-    func apagarTarefa(_ tarefa: TaskModel) async {
-        do {
-            try await CKContainer.default().publicCloudDatabase.deleteRecord(withID: tarefa.id)
-            await MainActor.run {
-                var novasTarefas = tarefas
-                novasTarefas.removeAll { $0.id.recordName == tarefa.id.recordName }
-                tarefas = novasTarefas
-            }
-            print("🗑️ Tarefa removida.")
-        } catch {
-            print("❌ Erro ao apagar tarefa: \(error)")
-        }
-    }
-
-    // MARK: - Editar tarefa existente
-    func editarTarefa(_ tarefa: TaskModel) async {
-        let database = CKContainer.default().publicCloudDatabase
-
-        do {
-            let record = try await database.record(for: tarefa.id)
-            tarefa.atualizarCamposEm(record)
-            let updatedRecord = try await database.save(record)
-
-            if let updatedModel = TaskModel(record: updatedRecord) {
-                await MainActor.run {
-                    if let index = tarefas.firstIndex(where: { $0.id == updatedModel.id }) {
-                        tarefas[index] = updatedModel
-                    }
-                }
-                print("✏️ Tarefa atualizada com sucesso.")
-            }
-
-        } catch {
-            print("❌ Erro ao editar tarefa: \(error)")
-        }
-    }
 }
-

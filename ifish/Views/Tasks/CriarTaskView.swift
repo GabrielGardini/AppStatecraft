@@ -15,19 +15,15 @@ struct CriarTaskModalView: View {
     @EnvironmentObject var viewModel: TasksViewModel
 
     @ObservedObject var task: TaskModel
-    @State private var erroTituloVazio = false
-    @State private var erroIconeVazio = false
+
     @State private var mostrarModalSelecionarTarefa = false
+    
     var body: some View {
         NavigationView {
             Form {
                 Section {
                     TextField("Título", text: $task.titulo)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 4)
-                                .stroke(erroTituloVazio ? Color.red : Color.clear, lineWidth: 1)
-                        )
-                    // retangulo para navegar pra outra tela (modelos pre prontos >)
+
                     Button(action: {
                         mostrarModalSelecionarTarefa = true
                     }) {
@@ -73,7 +69,7 @@ struct CriarTaskModalView: View {
                 Section {
                     Label("Ícones", systemImage: "")
                         .labelStyle(.titleOnly)
-                        .foregroundColor(erroIconeVazio ? .red : .gray)
+                        .foregroundColor(.gray)
                     
                     ScrollView(.vertical) {
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: 35))]) {
@@ -116,16 +112,6 @@ struct CriarTaskModalView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Adicionar") {
                         Task {
-                            let tituloValido = !task.titulo.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                            let iconeValido = !task.icone.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-
-                            erroTituloVazio = !tituloValido
-                            erroIconeVazio = !iconeValido
-
-                            if !tituloValido || !iconeValido {
-                                return
-                            }
-                            
                             if let houseModel = houseViewModel.houseModel {
                                 await viewModel.criarTarefa(task: task, houseModel: houseModel)
                             } else {
@@ -134,6 +120,7 @@ struct CriarTaskModalView: View {
                             fecharCriarTaskModalView()
                         }
                     }
+                    .disabled(task.titulo == "" || task.icone == "")
                 }
             }
             .task {
