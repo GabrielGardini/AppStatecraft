@@ -91,7 +91,7 @@ struct EditarAvisoModalView: View {
                         Task {
                             await salvarEdicao()
                         }
-                    }
+                    } .disabled(nomeAviso == avisoInicial.title && descricaoAviso == avisoInicial.content && dataAviso == aviso.timestamp)
                 }
             }
         }
