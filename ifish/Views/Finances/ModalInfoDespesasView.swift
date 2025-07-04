@@ -78,7 +78,6 @@ struct ModalInfoDespesasView: View {
                         Text("R$ \(despesa.amount, specifier: "%.2f")")
                             .foregroundColor(.gray)
                     }
-                    //não tem ocorrencia no banco, nem descrição
                 }
                 .task{
                    await usuarioPagou()
@@ -89,6 +88,10 @@ struct ModalInfoDespesasView: View {
                 Section{
                         ForEach(financeViewModel.houseProfileViewModel.usuariosDaCasa, id: \.self) { pessoa in
                             InfoPessoasPagaram(pessoa: pessoa.name, pagos: pagos)
+                            Divider()
+                                .frame(height: 0.5)
+                                .foregroundColor(.gray)
+
                         }
                 }
                 Spacer()

@@ -92,8 +92,8 @@ struct FinancesView: View {
             $0.paidBy.count >= viewModel.usuariosDaCasa.count
         }
     }
-
     
+
     
     var body: some View {
         ZStack {
@@ -111,13 +111,20 @@ struct FinancesView: View {
                     LazyVStack (alignment: .leading, spacing: 16){
                         switch selecao {
                         case "Pendentes":
+                            if despesasPendentes.isEmpty && despesasPagasPorVoce.isEmpty && despesasAtrasadas.isEmpty{
+                                Text("Nenhuma despesa pendente 🎉!")
+                                    .foregroundColor(.gray)
+                                    .padding()
+                            }
+
                             if !despesasAtrasadas.isEmpty {
                                 VStack(alignment: .leading, spacing: 0){
                                     Text("Atrasadas")
                                         .font(.subheadline)
                                         .foregroundColor(.gray)
-                                    ForEach(despesasAtrasadas, id: \.id) { despesa in
-                                        itemLista(despesa)
+                                    ForEach(despesasAtrasadas.sorted(by: {$0.deadline < $1.deadline}), id: \.id) { despesa in
+                                        itemLista(despesa).shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 4)
+
                                     }
                                 }
                             }
@@ -127,8 +134,8 @@ struct FinancesView: View {
                                     Text("Pendentes")
                                         .font(.subheadline)
                                         .foregroundColor(.gray)
-                                    ForEach(despesasPendentes, id: \.id) { despesa in
-                                        itemLista(despesa)
+                                    ForEach(despesasPendentes.sorted(by: {$0.deadline < $1.deadline}), id: \.id) { despesa in
+                                        itemLista(despesa).shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 4)
                                     }
                                 }
                             }
@@ -138,8 +145,8 @@ struct FinancesView: View {
                                     Text("Pagas por você")
                                         .font(.subheadline)
                                         .foregroundColor(.gray)
-                                    ForEach(despesasPagasPorVoce, id: \.id) { despesa in
-                                        itemLista(despesa)
+                                    ForEach(despesasPagasPorVoce.sorted(by: {$0.deadline < $1.deadline}), id: \.id) { despesa in
+                                        itemLista(despesa).shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 4)
                                     }
                                 }
                             }
@@ -177,12 +184,26 @@ struct FinancesView: View {
                                 .buttonStyle(PlainButtonStyle())
 
                             }
+                            let despesasFiltradas = despesasPagasPorTodos
+                                .sorted(by: { $0.deadline < $1.deadline })
+                                .filter { $0.deadline.mesEAno == filtroDataDespesa.mesEAno }
 
-                            ForEach(despesasPagasPorTodos.filter {
+                            
+                            if despesasFiltradas.isEmpty {
+                                Text("Nenhuma despesa encontrada para este mês.")
+                                    .foregroundColor(.gray)
+                                    .padding()
+                            } else {
+                                ForEach(despesasFiltradas, id: \.id) { despesa in
+                                    itemLista(despesa)
+                                        .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 4)
+                                }
+                            }
+                            /*ForEach(despesasPagasPorTodos.sorted(by: {$0.deadline < $1.deadline}).filter {
                                 $0.deadline.mesEAno == filtroDataDespesa.mesEAno
                             }, id: \.id) { despesa in
-                                itemLista(despesa)
-                            }
+                                itemLista(despesa).shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 4)
+                            }*/
                         default:
                             EmptyView()
                         }
@@ -191,7 +212,7 @@ struct FinancesView: View {
                 .listStyle(.insetGrouped)
                 //.listStyle(PlainListStyle())
                 .background(Color.clear)
-                .padding(.horizontal, 16)
+                .padding(.horizontal, 24)
                 .navigationTitle("Despesas")
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
@@ -199,6 +220,7 @@ struct FinancesView: View {
                             mostrarModalNovaFinanca = true
                         }) {
                             Image(systemName: "plus")
+                                .foregroundColor(.black)
                         }
                     }
                 }
@@ -223,6 +245,10 @@ struct FinancesView: View {
             if novoModelo != nil {
                 Task {
                     await financeViewModel.buscarDespesasDaCasa()
+                    let totalPessoas = viewModel.usuariosDaCasa.count
+                                if totalPessoas > 0 {
+                                    await criarDespesaMensal(financeViewModel: financeViewModel, totalPessoas: totalPessoas)
+                    }
                 }
             }
         }
@@ -257,7 +283,8 @@ struct DespesaEspecifica: View {
     }
     
     var corTexto: Color{
-        if despesa.deadline < Date() && !despesa.paidBy.contains(nomeUsuario){
+        let hoje = Calendar.current.startOfDay(for: Date())
+        if despesa.deadline < hoje && !despesa.paidBy.contains(nomeUsuario){
             return .red
         }
         else{
@@ -306,5 +333,36 @@ extension Date {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.month, .year], from: self)
         return (components.month ?? 0, components.year ?? 0)
+    }
+}
+
+@MainActor
+func criarDespesaMensal(financeViewModel: FinanceViewModel, totalPessoas: Int) async {
+    let duasSemanasAtras = Calendar.current.date(byAdding: .day, value: -14, to: Date())!
+
+    let despesasRepetidas = financeViewModel.despesas
+        .filter { $0.shouldRepeat == true &&
+                  $0.deadline <= duasSemanasAtras
+        }
+
+    for despesa in despesasRepetidas {
+        if let novaData = Calendar.current.date(byAdding: .month, value: 1, to: despesa.deadline) {
+            
+            let jaExiste = financeViewModel.despesas.contains {
+                $0.title == despesa.title &&
+                Calendar.current.isDate($0.deadline, inSameDayAs: novaData)
+            }
+
+            if !jaExiste {
+                await financeViewModel.criarDespesa(
+                    amount: despesa.amount,
+                    deadline: novaData,
+                    paidBy: [],
+                    title: despesa.title,
+                    notification: despesa.notification,
+                    shouldRepeat: despesa.shouldRepeat
+                )
+            }
+        }
     }
 }
