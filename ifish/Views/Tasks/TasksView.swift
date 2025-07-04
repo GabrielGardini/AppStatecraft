@@ -139,20 +139,22 @@ struct TasksView: View {
                         
                         TaskSectionView(
                             titulo: "Atrasadas",
-                            tarefas: tarefasFiltradas.filter {
-                                ($0.prazo < Date()) && !$0.completo
-                            },
+                            tarefas: tarefasFiltradas
+                                        .filter { ($0.prazo < Date()) && !$0.completo }
+                                        .sorted { $0.prazo < $1.prazo },
                             tarefaSelecionada: $tarefaSelecionada
                         )
                         .environmentObject(houseViewModel)
 
                         TaskSectionView(
                             titulo: "Hoje",
-                            tarefas: tarefasFiltradas.filter {
-                                Calendar.current.isDateInToday($0.prazo) &&
-                                $0.prazo > Date() &&
-                                !$0.completo
-                            },
+                            tarefas: tarefasFiltradas
+                                        .filter {
+                                            Calendar.current.isDateInToday($0.prazo) &&
+                                            $0.prazo > Date() &&
+                                            !$0.completo
+                                            }
+                                        .sorted { $0.prazo < $1.prazo },
                             tarefaSelecionada: $tarefaSelecionada
                         )
                         .environmentObject(houseViewModel)
@@ -160,28 +162,34 @@ struct TasksView: View {
 
                         TaskSectionView(
                             titulo: "Amanhã",
-                            tarefas: tarefasFiltradas.filter {
-                                Calendar.current.isDateInTomorrow($0.prazo) && !$0.completo
-                            },
+                            tarefas: tarefasFiltradas
+                                        .filter {
+                                            Calendar.current.isDateInTomorrow($0.prazo) && !$0.completo
+                                            }
+                                        .sorted { $0.prazo < $1.prazo },
                             tarefaSelecionada: $tarefaSelecionada
                         )
                         .environmentObject(houseViewModel)
 
                         TaskSectionView(
                             titulo: "Próximas",
-                            tarefas: tarefasFiltradas.filter {
-                                !$0.completo &&
-                                $0.prazo > Date() &&
-                                !Calendar.current.isDateInToday($0.prazo) &&
-                                !Calendar.current.isDateInTomorrow($0.prazo)
-                            },
+                            tarefas: tarefasFiltradas
+                                        .filter {
+                                            !$0.completo &&
+                                            $0.prazo > Date() &&
+                                            !Calendar.current.isDateInToday($0.prazo) &&
+                                            !Calendar.current.isDateInTomorrow($0.prazo)
+                                            }
+                                        .sorted { $0.prazo < $1.prazo },
                             tarefaSelecionada: $tarefaSelecionada
                         )
                         .environmentObject(houseViewModel)
 
                         TaskSectionView(
                             titulo: "Concluídas",
-                            tarefas: tarefasFiltradas.filter { $0.completo },
+                            tarefas: tarefasFiltradas
+                                        .filter { $0.completo }
+                                        .sorted { $0.prazo > $1.prazo },
                             tarefaSelecionada: $tarefaSelecionada
                         )
                         .environmentObject(houseViewModel)
@@ -190,7 +198,6 @@ struct TasksView: View {
                     .padding(.horizontal, 5)
                 }
 
-                
                 Spacer()
             }
             .padding()
@@ -263,13 +270,18 @@ struct TaskSectionView: View {
                 
                 ForEach(tarefas) { tarefa in
                     TaskCard(
-                        task: tarefa,
-                        iconeAlterado: isConcluida ? "checkmark" : nil,
+                        task:
+                            tarefa,
+                        iconeAlterado:
+                            isConcluida ? "checkmark" : nil,
                         corFundoIcone:
                             isConcluida ? Color.green.opacity(0.5) :
-                            isAtrasada ? Color.red.opacity(0.5) : nil,
-                        nomeUsuario: houseViewModel.nomeDoUsuario(id: tarefa.userID)
-                    )
+                            isAtrasada ? Color.red : nil,
+                        nomeUsuario:
+                            houseViewModel.nomeAbreviado(
+                                nomeCompleto: houseViewModel.nomeDoUsuario(id: tarefa.userID)
+                            )
+                        )
                     .onTapGesture {
                         tarefaSelecionada = tarefa
                     }
