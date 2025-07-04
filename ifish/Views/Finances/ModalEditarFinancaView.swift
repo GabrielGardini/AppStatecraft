@@ -122,10 +122,11 @@ struct ModalEditarFincancaView: View {
                             despesa.shouldRepeat = repetirMensalmente
                             despesa.notification = notificacoesFinanca
                             
-                            print("\(despesa.title)")
                             await financeViewModel.editarDespesa(despesa)
                             fecharModalEditar()}
-                    }
+                    } .disabled(nomeFinanca == despesaInicial.title &&
+                                valor == despesaInicial.amount &&
+                                dataVencimento == despesaInicial.deadline)
                 }
             }
         }
@@ -137,3 +138,4 @@ struct ModalEditarFincancaView: View {
         }
     }
 }
+
