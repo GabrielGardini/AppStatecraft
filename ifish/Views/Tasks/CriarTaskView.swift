@@ -39,7 +39,7 @@ struct CriarTaskModalView: View {
                 }
                 
                 Section {
-                    DatePicker("Prazo", selection: $task.prazo, displayedComponents: [.date, .hourAndMinute])
+                    DatePicker("Prazo", selection: $task.prazo, in: Date()...,displayedComponents: [.date, .hourAndMinute])
                 }
                 
                 Section {
