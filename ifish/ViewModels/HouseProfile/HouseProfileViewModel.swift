@@ -281,4 +281,18 @@ class HouseProfileViewModel: ObservableObject {
             return nil
         }
     }
+    
+    func nomeAbreviado(nomeCompleto: String) -> String {
+        let componentes = nomeCompleto.split(separator: " ")
+        
+        guard let primeiroNome = componentes.first else {
+            return nomeCompleto
+        }
+
+        if componentes.count > 1, let inicialSobrenome = componentes.dropFirst().first?.first {
+            return "\(primeiroNome) \(inicialSobrenome)."
+        } else {
+            return String(primeiroNome)
+        }
+    }
 }
