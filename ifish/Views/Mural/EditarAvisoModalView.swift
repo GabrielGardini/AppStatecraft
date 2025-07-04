@@ -5,6 +5,8 @@ struct EditarAvisoModalView: View {
     @Environment(\.dismiss) var fecharModalEditarAviso
     @EnvironmentObject var messageViewModel: MessageViewModel
     @State private var mostrarConfirmacaoApagar = false
+    @State private var mostrarConfirmacaoCancelar = false
+    var avisoInicial: MessageModel
 
     @State private var nomeAviso: String = ""
     @State private var descricaoAviso: String = ""
@@ -67,10 +69,23 @@ struct EditarAvisoModalView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancelar") {
-                        fecharModalEditarAviso()
+                        if(nomeAviso == avisoInicial.title && descricaoAviso == avisoInicial.content && dataAviso == aviso.timestamp){
+                            fecharModalEditarAviso()
+                        }
+                        else {
+                            mostrarConfirmacaoCancelar = true
+                        }
+                    }
+                    .confirmationDialog("Tem certeza de que deseja descartar as alterações?", isPresented: $mostrarConfirmacaoCancelar, titleVisibility: .visible){
+                        Button("Ignorar alterações", role: .destructive){
+                            Task {
+                                fecharModalEditarAviso()
+                            }
+                        }
+                        Button("Continuar Editando", role: .cancel){}
+                        .foregroundColor(.accentColor)
                     }
                 }
-
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Salvar") {
                         Task {

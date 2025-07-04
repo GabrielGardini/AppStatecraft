@@ -132,7 +132,7 @@ struct AvisoView: View {
             nomeDoUsuario = await messageViewModel.descobrirNomeDoUsuario(userID: aviso.userID)
         }
         .sheet(isPresented: $mostrarModalEditarAviso) {
-            EditarAvisoModalView(aviso: aviso).environmentObject(messageViewModel)
+            EditarAvisoModalView(avisoInicial: aviso, aviso: aviso).environmentObject(messageViewModel)
         }
     }
     func formatarData(_ date: Date) -> String {
