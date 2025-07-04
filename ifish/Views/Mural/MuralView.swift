@@ -87,6 +87,7 @@ struct MuralView: View {
                         .imageScale(.large)
                         .foregroundColor(.black)
                 }
+                .accessibilityLabel("Adicionar")
             }
         }
         
@@ -145,6 +146,8 @@ struct AvisoView: View {
             Text(aviso.content)
                 .font(.body)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("aviso de \(nomeDoUsuario): \(aviso.title). Dia \(formatarData(aviso.timestamp)). descrição: \(aviso.content)")
         .padding()
         .background(Color.white)
         .cornerRadius(10)
@@ -157,7 +160,7 @@ struct AvisoView: View {
     }
     func formatarData(_ date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/yyyy"
+        formatter.dateFormat = "dd/MM/yy"
         return formatter.string(from: date)
     }
 }

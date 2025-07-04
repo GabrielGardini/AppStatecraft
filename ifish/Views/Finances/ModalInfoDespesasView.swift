@@ -85,15 +85,19 @@ struct ModalInfoDespesasView: View {
                     
                 }
                 Spacer()
-                Section{
-                        ForEach(financeViewModel.houseProfileViewModel.usuariosDaCasa, id: \.self) { pessoa in
-                            InfoPessoasPagaram(pessoa: pessoa.name, pagos: pagos)
-                            Divider()
-                                .frame(height: 0.5)
-                                .foregroundColor(.gray)
 
-                        }
+                Section {
+                    ForEach(financeViewModel.houseProfileViewModel.usuariosDaCasa, id: \.self) { pessoa in
+                        InfoPessoasPagaram(pessoa: pessoa.name, pagos: pagos)
+                            .accessibilityElement(children: .combine)
+                            .accessibilityLabel(
+                                despesa.paidBy.contains(pessoa.name)
+                                ? "\(pessoa.name) já pagou"
+                                : "\(pessoa.name) não pagou"
+                            )
+                    }
                 }
+
                 Spacer()
                 HStack{
                     Spacer()

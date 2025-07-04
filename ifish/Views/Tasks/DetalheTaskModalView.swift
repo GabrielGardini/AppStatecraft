@@ -50,6 +50,9 @@ struct DetalheTaskModalView: View {
                     Text(houseViewModel.nomeDoUsuario(id: tarefa.userID))
                         .foregroundColor(.gray)
                 }
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Responsável: \(houseViewModel.nomeDoUsuario(id: tarefa.userID))")
+
                 .padding(.bottom)
 
                 
