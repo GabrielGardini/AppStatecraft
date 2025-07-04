@@ -115,14 +115,9 @@ struct FinancesView: View {
                                 VStack(spacing: 8) {
                                     Text("Nenhuma despesa pendente 🎉!")
                                         .foregroundColor(.gray)
-                                        //.multilineTextAlignment(.center)
-                                        //.font(.subheadline)
 
                                     Image("listavazia")
-                                        /*.resizable()
-                                        .scaledToFit()
-                                        .frame(maxWidth: 200) // ou ajuste conforme necessário
-                                        .padding(.top, 4)*/
+                                  
                                 }
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .padding(.top, 24)
@@ -175,7 +170,6 @@ struct FinancesView: View {
 
                                 Spacer()
                                 
-                                // O filtro volta a ser o mes atual
                                 Button(action: {
                                     filtroDataDespesa = Date()
                                 }) {
@@ -204,14 +198,8 @@ struct FinancesView: View {
                                 VStack(spacing: 8) {
                                     Text("Nenhuma despesa encontrada para este mês.")
                                         .foregroundColor(.gray)
-                                        //.multilineTextAlignment(.center)
-                                        //.font(.subheadline)
-
                                     Image("listavazia")
-                                        /*.resizable()
-                                        .scaledToFit()
-                                        .frame(maxWidth: 200) // ou ajuste conforme necessário
-                                        .padding(.top, 4)*/
+                                   
                                 }
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .padding(.top, 24)

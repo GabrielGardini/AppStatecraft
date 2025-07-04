@@ -67,7 +67,7 @@ struct NovoAvisoModalView: View {
 
                             fecharModalNovoAviso()
                         }
-                    }
+                    } .disabled(nomeAviso == "")
                 }
             }
         }
