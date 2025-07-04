@@ -39,6 +39,9 @@ class FinanceViewModel: ObservableObject {
             await MainActor.run {
                 despesas.append(model)
             }
+            if(notification == true){
+                agendarNotificacaoSeNecessario(model, nomeUsuario: houseProfileViewModel.usuarioAtual?.name ?? "")
+            }
             print("✅ Despesa criada com sucesso.")
         } catch {
             print("❌ Erro ao criar despesa: \(error)")
@@ -78,6 +81,7 @@ class FinanceViewModel: ObservableObject {
                 novasDespesas.removeAll { $0.id.recordName == despesa.id.recordName }
                 despesas = novasDespesas
             }
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [despesa.id.recordName])
             print("🗑️ Despesa removida.")
         } catch {
             print("❌ Erro ao apagar despesa: \(error)")
@@ -152,6 +156,32 @@ class FinanceViewModel: ObservableObject {
             return "Usuário desconhecido"
         }
     }
+    
+    func agendarNotificacaoSeNecessario(_ despesa: FinanceModel, nomeUsuario: String) {
+        guard !despesa.paidBy.contains(nomeUsuario) else { return }
+
+        let content = UNMutableNotificationContent()
+        content.title = "Despesa vencendo hoje"
+        content.body = "A despesa \"\(despesa.title)\" vence hoje e ainda não foi paga."
+        content.sound = .default
+
+        var triggerDate = Calendar.current.dateComponents([.year, .month, .day], from: despesa.deadline)
+        triggerDate.hour = 12
+        triggerDate.minute = 02
+        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
+
+        let request = UNNotificationRequest(identifier: despesa.id.recordName, content: content, trigger: trigger)
+
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("❌ Erro ao agendar notificação: \(error.localizedDescription)")
+            } else {
+                print("🔔 Notificação agendada para \(despesa.title)")
+            }
+        }
+    }
+
 
 }
+
 
