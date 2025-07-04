@@ -7,6 +7,7 @@ struct EditarAvisoModalView: View {
     @State private var mostrarConfirmacaoApagar = false
     @State private var mostrarConfirmacaoCancelar = false
     var avisoInicial: MessageModel
+    var aviso: MessageModel
 
     @State private var nomeAviso: String = ""
     @State private var descricaoAviso: String = ""
@@ -15,8 +16,15 @@ struct EditarAvisoModalView: View {
 
     @State private var mostrarConfirmacaoExclusao = false
 
-    var aviso: MessageModel
 
+    init(aviso: MessageModel){
+        self.aviso = aviso
+        self.avisoInicial = aviso
+        _nomeAviso = State(initialValue: aviso.title)
+        _descricaoAviso = State(initialValue: aviso.content)
+        _dataAviso = State(initialValue: aviso.timestamp)
+    }
+    
     var body: some View {
         NavigationView {
             List {
