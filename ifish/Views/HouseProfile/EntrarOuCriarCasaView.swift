@@ -10,7 +10,7 @@ struct EntrarOuCriarCasaView: View {
     var body: some View {
         VStack(spacing: 32) {
             Image("bichinhologin")
-                .resizable()
+//                .resizable()
 //                .frame(width: 100, height: 100)
 
             VStack(spacing: 16) {
