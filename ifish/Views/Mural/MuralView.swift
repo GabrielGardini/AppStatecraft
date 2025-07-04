@@ -3,8 +3,28 @@ import CloudKit
 
 struct MuralView: View {
     @EnvironmentObject var appState: AppState
+    @EnvironmentObject var tasksViewModel: TasksViewModel
     @ObservedObject var messageViewModel: MessageViewModel
     @State private var mostrarModalNovoAviso = false
+        
+    @State private var filtroData = Date()     // a filtro de mes e ano atual
+    
+    var percentageDone: Double {
+        let calendar = Calendar.current
+        let filtroMes = calendar.component(.month, from: filtroData)
+        let filtroAno = calendar.component(.year, from: filtroData)
+
+        let tarefasDoMes = tasksViewModel.tarefas.filter { tarefa in
+            let tarefaMes = calendar.component(.month, from: tarefa.prazo)
+            let tarefaAno = calendar.component(.year, from: tarefa.prazo)
+            return tarefaMes == filtroMes && tarefaAno == filtroAno
+        }
+
+        guard !tarefasDoMes.isEmpty else { return -1 } // se nao tem nada, ele fica neutro
+
+        let tarefasCompletas = tarefasDoMes.filter { $0.completo }
+        return Double(tarefasCompletas.count) / Double(tarefasDoMes.count)
+    }
 
     var body: some View {
                 ZStack {
@@ -16,7 +36,7 @@ struct MuralView: View {
             .ignoresSafeArea()
 
             ScrollView {
-                ProgressoTarefasCard(percentageDone: 0.5)
+                ProgressoTarefasCard(percentageDone: percentageDone)
                     .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
                     .padding(.horizontal)
                     .padding(.top)
@@ -161,7 +181,7 @@ struct ProgressoTarefasCard: View {
                             .stroke(Color.white.opacity(0.3), lineWidth: 10)
 
                         Circle()
-                            .trim(from: 0, to: percentageDone)
+                            .trim(from: 0, to: percentageDone >= 0.0 ? percentageDone : 0.0)
                             .stroke(Color.white, style: StrokeStyle(lineWidth: 10, lineCap: .round))
                             .rotationEffect(.degrees(-90))
                             .shadow(color: .white.opacity(0.6), radius: 4, x: 0, y: 2)
@@ -205,7 +225,7 @@ struct ProgressoTarefasCard: View {
         case 0.8..<1:
             return "bichinhonirvana"
         default:
-            return "bichinhonirvana"
+            return "bichinhoneutro"
         }
     }
 
@@ -222,7 +242,7 @@ struct ProgressoTarefasCard: View {
         case 0.8..<1:
             return [Color(hex: "4E7DC3"), Color(hex: "7D7DAF")]
         default:
-            return [Color(hex: "4E7DC3"), Color(hex: "7D7DAF")]
+            return [Color(hex: "A4A36D"), Color(hex: "D8BF35")]
         }
     }
 }
