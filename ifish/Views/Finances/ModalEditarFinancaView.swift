@@ -31,7 +31,16 @@ struct ModalEditarFincancaView: View {
     @State private var dataVencimento: Date = Date()
     @State private var repetirMensalmente: Bool = true
     @State private var notificacoesFinanca: Bool = true
-    
+    @State private var valorTexto: String = ""
+
+    var formatter: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: "pt_BR")
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        return formatter
+    }
     
 
     init(financeViewModel: FinanceViewModel, despesa: FinanceModel) {
@@ -43,6 +52,7 @@ struct ModalEditarFincancaView: View {
         _repetirMensalmente = State(initialValue: despesa.shouldRepeat)
         _notificacoesFinanca = State(initialValue: despesa.notification)
         self.despesaInicial = despesa
+        _valorTexto = State(initialValue: formatter.string(from: NSNumber(value: despesa.amount)) ?? "")
     }
 
     
@@ -52,7 +62,22 @@ struct ModalEditarFincancaView: View {
                 List {
                     Section {
                         TextField("Título", text: $nomeFinanca)
-                        TextField("Valor", value: $valor, formatter: numberFormatter)
+                        //TextField("Valor", value: $valor, formatter: numberFormatter)
+                        TextField("Valor", text: $valorTexto)
+                                .keyboardType(.decimalPad)
+                                .onChange(of: valorTexto) { newValue in
+                                    // Filtra: só números, ponto ou vírgula
+                                    let filtrado = newValue.filter { "0123456789.,".contains($0) }
+                                    if filtrado != newValue {
+                                        valorTexto = filtrado
+                                    }
+
+                                    // Tenta converter para Double
+                                    let convertido = filtrado.replacingOccurrences(of: ",", with: ".")
+                                    if let numero = Double(convertido) {
+                                        valor = numero
+                                    }
+                                }
                     }
 
                     Section {
