@@ -6,15 +6,16 @@ struct MuralView: View {
     @EnvironmentObject var tasksViewModel: TasksViewModel
     @ObservedObject var messageViewModel: MessageViewModel
     @State private var mostrarModalNovoAviso = false
+
     func formatarDataExtensa(_ data: Date) -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "pt_BR")
         formatter.dateStyle = .full
         return formatter.string(from: data).capitalized
+    }
 
-        
-    @State private var filtroData = Date()     // a filtro de mes e ano atual
-    
+    @State private var filtroData = Date()
+
     var percentageDone: Double {
         let calendar = Calendar.current
         let filtroMes = calendar.component(.month, from: filtroData)
@@ -26,7 +27,7 @@ struct MuralView: View {
             return tarefaMes == filtroMes && tarefaAno == filtroAno
         }
 
-        guard !tarefasDoMes.isEmpty else { return -1 } // se nao tem nada, ele fica neutro
+        guard !tarefasDoMes.isEmpty else { return -1 }
 
         let tarefasCompletas = tarefasDoMes.filter { $0.completo }
         return Double(tarefasCompletas.count) / Double(tarefasDoMes.count)
@@ -39,77 +40,64 @@ struct MuralView: View {
                 startPoint: .top,
                 endPoint: UnitPoint(x: 0.5, y: 0.2)
             )
-                .ignoresSafeArea()
-            
+            .ignoresSafeArea()
+
             ScrollView {
                 ProgressoTarefasCard(percentageDone: percentageDone)
                     .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
                     .padding(.horizontal)
                     .padding(.top)
                 Spacer().frame(height: 10)
-                if messageViewModel.mensagens.filter { Calendar.current.startOfDay(for: $0.timestamp) >= Calendar.current.startOfDay(for: Date()) }.isEmpty  {
-                        VStack{
-                            
-                            Text("Clique em \"+\" e crie um aviso")
-                                .foregroundColor(.gray)
-                                .padding(.vertical)
-                            Image("listavazia")
-                        }
-                        
-                    }
 
-                }
-                let mensagensFuturasAgrupadas = Dictionary(grouping: messageViewModel.mensagens.filter {
+                let mensagensFuturas = messageViewModel.mensagens.filter {
                     Calendar.current.startOfDay(for: $0.timestamp) >= Calendar.current.startOfDay(for: Date())
-                }) { mensagem in
-                    Calendar.current.startOfDay(for: mensagem.timestamp)
                 }
 
-                let datasOrdenadas = mensagensFuturasAgrupadas.keys.sorted()
-
-                ForEach(datasOrdenadas, id: \.self) { data in
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text(formatarDataExtensa(data))
-                            .font(.subheadline)
+                if mensagensFuturas.isEmpty {
+                    VStack {
+                        Text("Clique em \"+\" e crie um aviso")
                             .foregroundColor(.gray)
-                            .padding(.horizontal)
-                            .padding(.top, 8)
+                            .padding(.vertical)
+                        Image("listavazia")
+                    }
+                } else {
+                    let mensagensAgrupadas = Dictionary(grouping: mensagensFuturas) { mensagem in
+                        Calendar.current.startOfDay(for: mensagem.timestamp)
+                    }
 
-                        ForEach(mensagensFuturasAgrupadas[data]!.sorted(by: { $0.timestamp < $1.timestamp }), id: \.id) { aviso in
-                            AvisoView(messageViewModel: messageViewModel, aviso: aviso)
-                                .frame(maxWidth: .infinity)
-                                .cornerRadius(10)
-                                .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
+                    let datasOrdenadas = mensagensAgrupadas.keys.sorted()
+
+                    ForEach(datasOrdenadas, id: \.self) { data in
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text(formatarDataExtensa(data))
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
                                 .padding(.horizontal)
+                                .padding(.top, 8)
+
+                            ForEach(mensagensAgrupadas[data]!.sorted(by: { $0.timestamp < $1.timestamp }), id: \.id) { aviso in
+                                AvisoView(messageViewModel: messageViewModel, aviso: aviso)
+                                    .frame(maxWidth: .infinity)
+                                    .cornerRadius(10)
+                                    .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
+                                    .padding(.horizontal)
+                                
+                            }
                         }
                     }
-                ForEach(
-                    messageViewModel.mensagens
-                        .filter { Calendar.current.startOfDay(for: $0.timestamp) >= Calendar.current.startOfDay(for: Date()) }
-                        .sorted(by: { $0.timestamp < $1.timestamp }),
-                    id: \.id
-                ) { aviso in
-                    
-                    AvisoView(messageViewModel: messageViewModel, aviso: aviso)
-                        .frame(maxWidth: .infinity)
-                        .cornerRadius(10)
-                        .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
-                        .padding(.horizontal)
-                    Spacer().frame(height: 10)
                 }
-
             }
             .frame(maxHeight: .infinity)
             .navigationTitle("Mural")
             .sheet(isPresented: $mostrarModalNovoAviso) {
-                NovoAvisoModalView()        .environmentObject(messageViewModel)
+                NovoAvisoModalView()
+                    .environmentObject(messageViewModel)
             }
         }
         .navigationBarBackButtonHidden(true)
         .task {
             await messageViewModel.houseProfileViewModel?.verificarSeUsuarioJaTemCasa()
             await messageViewModel.buscarMensagens()
-            //            print(appState.casaID)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -122,7 +110,6 @@ struct MuralView: View {
                 }
             }
         }
-        
     }
 }
 
@@ -161,12 +148,10 @@ struct AvisoView: View {
 
                 Text(formatarNomeParaPrimeiroENicial(nomeDoUsuario))
                     .font(.subheadline)
-//                Text(messageViewModel.houseProfileViewModel.nomeAbreviado(nomeDoUsuario))
-                
+               
 
                 
-                Text(nomeDoUsuario)
-                    .font(.subheadline)
+
                 
                 Spacer()
                 
@@ -303,3 +288,4 @@ struct ProgressoTarefasCard: View {
         }
     }
 }
+
