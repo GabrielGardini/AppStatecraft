@@ -1,6 +1,7 @@
 
 import Foundation
 import SwiftUI
+import CloudKit
 
 struct ModalNovaFinancaView: View {
     @ObservedObject var financeViewModel: FinanceViewModel
@@ -11,8 +12,18 @@ struct ModalNovaFinancaView: View {
     @State private var repetirMensalmente: Bool = true
     @State private var notificacoesFinanca: Bool = true
     @State private var valorTexto: String = ""
+    @State private var nomeUsuario: String = ""
     var onSave: (() -> Void)? = nil
 
+    func setNomeUsuario() async {
+        guard let userRecordID = try? await CKContainer.default().userRecordID() else {
+            print("❌ Não foi possível obter o userRecordID")
+            return
+        }
+
+        let userReference = CKRecord.Reference(recordID: userRecordID, action: .none)
+        await nomeUsuario = financeViewModel.descobrirNomeDoUsuario(userID: userReference)
+    }
 
     
     @State private var numberFormatter: NumberFormatter = {
@@ -75,6 +86,7 @@ struct ModalNovaFinancaView: View {
         .navigationViewStyle(.stack)
     }
 }
+
 
 
 
