@@ -189,7 +189,9 @@ struct ProgressoTarefasCard: View {
                     }
                     .frame(width: 60, height: 60)
                     
-                    Text("Tarefas \(Int(percentageDone * 100))% feitas")
+                    Text(
+                        percentageDone >= 0.0 ? "Tarefas \(Int(percentageDone * 100))% feitas" :
+                                                "Não há tarefas no mês")
                         .font(.caption)
                         .foregroundColor(.white)
                         .bold()
@@ -222,7 +224,7 @@ struct ProgressoTarefasCard: View {
             return "bichinhoneutro"
         case 0.6..<0.8:
             return "bichinhojoia"
-        case 0.8..<1:
+        case 0.8...1:
             return "bichinhonirvana"
         default:
             return "bichinhoneutro"
@@ -239,7 +241,7 @@ struct ProgressoTarefasCard: View {
             return [Color(hex: "A4A36D"), Color(hex: "D8BF35")]
         case 0.6..<0.8:
             return [Color(hex: "628B63"), Color(hex: "BADEAB")]
-        case 0.8..<1:
+        case 0.8...1:
             return [Color(hex: "4E7DC3"), Color(hex: "7D7DAF")]
         default:
             return [Color(hex: "A4A36D"), Color(hex: "D8BF35")]
