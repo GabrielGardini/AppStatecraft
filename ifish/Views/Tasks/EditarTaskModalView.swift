@@ -10,6 +10,7 @@ import CloudKit
 
 struct EditarTaskModalView: View {
     @Environment(\.dismiss) var fecharEditarTaskModalView
+    @EnvironmentObject var appState: AppState
     @EnvironmentObject var houseViewModel: HouseProfileViewModel
     @EnvironmentObject var viewModel: TasksViewModel
        
@@ -53,7 +54,10 @@ struct EditarTaskModalView: View {
                 Section {
                     Picker("Responsável", selection: $task.userID) {
                         ForEach(houseViewModel.usuariosDaCasa) { usuario in
-                            Text(usuario.name)
+                            Text(
+                                appState.userID == usuario.icloudToken ? "Eu" :
+                                                                        usuario.name
+                                )
                                 .tag(usuario.icloudToken)
                         }
                     }

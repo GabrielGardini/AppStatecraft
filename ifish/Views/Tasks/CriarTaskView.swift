@@ -39,7 +39,7 @@ struct CriarTaskModalView: View {
                 }
                 
                 Section {
-                    DatePicker("Prazo", selection: $task.prazo, displayedComponents: [.date, .hourAndMinute])
+                    DatePicker("Prazo", selection: $task.prazo, in: Date()...,displayedComponents: [.date, .hourAndMinute])
                 }
                 
                 Section {
@@ -60,7 +60,10 @@ struct CriarTaskModalView: View {
                 Section {
                     Picker("Responsável", selection: $task.userID) {
                         ForEach(houseViewModel.usuariosDaCasa) { usuario in
-                            Text(usuario.name)
+                            Text(
+                                appState.userID == usuario.icloudToken ? "Eu" :
+                                                                        usuario.name
+                            )
                                 .tag(usuario.icloudToken)
                         }
                     }

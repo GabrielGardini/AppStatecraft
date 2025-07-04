@@ -3,6 +3,7 @@ import CloudKit
 
 struct MuralView: View {
     @EnvironmentObject var appState: AppState
+    @EnvironmentObject var tasksViewModel: TasksViewModel
     @ObservedObject var messageViewModel: MessageViewModel
     @State private var mostrarModalNovoAviso = false
     func formatarDataExtensa(_ data: Date) -> String {
@@ -10,31 +11,51 @@ struct MuralView: View {
         formatter.locale = Locale(identifier: "pt_BR")
         formatter.dateStyle = .full
         return formatter.string(from: data).capitalized
+
+        
+    @State private var filtroData = Date()     // a filtro de mes e ano atual
+    
+    var percentageDone: Double {
+        let calendar = Calendar.current
+        let filtroMes = calendar.component(.month, from: filtroData)
+        let filtroAno = calendar.component(.year, from: filtroData)
+
+        let tarefasDoMes = tasksViewModel.tarefas.filter { tarefa in
+            let tarefaMes = calendar.component(.month, from: tarefa.prazo)
+            let tarefaAno = calendar.component(.year, from: tarefa.prazo)
+            return tarefaMes == filtroMes && tarefaAno == filtroAno
+        }
+
+        guard !tarefasDoMes.isEmpty else { return -1 } // se nao tem nada, ele fica neutro
+
+        let tarefasCompletas = tarefasDoMes.filter { $0.completo }
+        return Double(tarefasCompletas.count) / Double(tarefasDoMes.count)
     }
 
     var body: some View {
-                ZStack {
+        ZStack {
             LinearGradient(
                 colors: [Color("LaranjaFundoMural"), Color("BackgroundColor")],
                 startPoint: .top,
                 endPoint: UnitPoint(x: 0.5, y: 0.2)
             )
-            .ignoresSafeArea()
-
+                .ignoresSafeArea()
+            
             ScrollView {
-                ProgressoTarefasCard(percentageDone: 0.5)
+                ProgressoTarefasCard(percentageDone: percentageDone)
                     .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
                     .padding(.horizontal)
                     .padding(.top)
                 Spacer().frame(height: 10)
-                if messageViewModel.mensagens.isEmpty  {
-                    VStack{
+                if messageViewModel.mensagens.filter { Calendar.current.startOfDay(for: $0.timestamp) >= Calendar.current.startOfDay(for: Date()) }.isEmpty  {
+                        VStack{
+                            
+                            Text("Clique em \"+\" e crie um aviso")
+                                .foregroundColor(.gray)
+                                .padding(.vertical)
+                            Image("listavazia")
+                        }
                         
-                    Text("Clique em \"+\" e crie um aviso")
-                        .foregroundColor(.secondary)
-                        .font(.title)
-                        .padding(.vertical)
-                    Image("listavazia")
                     }
 
                 }
@@ -62,6 +83,19 @@ struct MuralView: View {
                                 .padding(.horizontal)
                         }
                     }
+                ForEach(
+                    messageViewModel.mensagens
+                        .filter { Calendar.current.startOfDay(for: $0.timestamp) >= Calendar.current.startOfDay(for: Date()) }
+                        .sorted(by: { $0.timestamp < $1.timestamp }),
+                    id: \.id
+                ) { aviso in
+                    
+                    AvisoView(messageViewModel: messageViewModel, aviso: aviso)
+                        .frame(maxWidth: .infinity)
+                        .cornerRadius(10)
+                        .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
+                        .padding(.horizontal)
+                    Spacer().frame(height: 10)
                 }
 
             }
@@ -75,7 +109,7 @@ struct MuralView: View {
         .task {
             await messageViewModel.houseProfileViewModel?.verificarSeUsuarioJaTemCasa()
             await messageViewModel.buscarMensagens()
-//            print(appState.casaID)
+            //            print(appState.casaID)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -84,6 +118,7 @@ struct MuralView: View {
                 }) {
                     Image(systemName: "plus")
                         .imageScale(.large)
+                        .foregroundColor(.black)
                 }
             }
         }
@@ -93,7 +128,7 @@ struct MuralView: View {
 
 struct AvisoView: View {
     @ObservedObject var messageViewModel: MessageViewModel
-
+    
     let aviso: MessageModel
     @State private var mostrarModalEditarAviso = false
     @State private var nomeDoUsuario: String = "Carregando..."
@@ -120,7 +155,7 @@ struct AvisoView: View {
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .foregroundColor(Color("LaranjaMural"))
-
+                
                 Text("•")
                     .font(.headline)
 
@@ -129,8 +164,12 @@ struct AvisoView: View {
 //                Text(messageViewModel.houseProfileViewModel.nomeAbreviado(nomeDoUsuario))
                 
 
+                
+                Text(nomeDoUsuario)
+                    .font(.subheadline)
+                
                 Spacer()
-
+                
                 Button(action: {
                     mostrarModalEditarAviso = true
                 }) {
@@ -144,17 +183,20 @@ struct AvisoView: View {
                     .foregroundColor(.gray.opacity(0.3)),
                 alignment: .bottom
             )
-
+            
             Spacer().frame(height: 4)
-
+            
             
             Text(aviso.title)
                 .font(.headline)
             
+
+            Text(formatarData(aviso.timestamp))
+                .font(.subheadline)
+                .foregroundColor(.gray)
             
-
             Spacer().frame(height: 4)
-
+            
             Text(aviso.content)
                 .font(.body)
         }
@@ -176,7 +218,7 @@ struct AvisoView: View {
 }
 struct ProgressoTarefasCard: View {
     var percentageDone: Double  // Ex: 0.75 = 75%
-
+    
     var body: some View {
         ZStack {
             LinearGradient(
@@ -184,38 +226,40 @@ struct ProgressoTarefasCard: View {
                 startPoint: .top,
                 endPoint: UnitPoint(x: 0.5, y: 0.5)
             )
-            .cornerRadius(12)
-            .shadow(radius: 4)
-
+                .cornerRadius(12)
+                .shadow(radius: 4)
+            
             HStack(spacing: 20) {
                 VStack {
                     ZStack {
                         Circle()
                             .stroke(Color.white.opacity(0.3), lineWidth: 10)
-
+                        
                         Circle()
-                            .trim(from: 0, to: percentageDone)
+                            .trim(from: 0, to: percentageDone >= 0.0 ? percentageDone : 0.0)
                             .stroke(Color.white, style: StrokeStyle(lineWidth: 10, lineCap: .round))
                             .rotationEffect(.degrees(-90))
                             .shadow(color: .white.opacity(0.6), radius: 4, x: 0, y: 2)
-                            
+                        
                     }
                     .frame(width: 60, height: 60)
-
-                    Text("Tarefas \(Int(percentageDone * 100))% feitas")
+                    
+                    Text(
+                        percentageDone >= 0.0 ? "Tarefas \(Int(percentageDone * 100))% feitas" :
+                                                "Não há tarefas no mês")
                         .font(.caption)
                         .foregroundColor(.white)
                         .bold()
                 }
-
+                
                 Spacer()
-
+                
                 GeometryReader { geo in
                     Image(bichinhoImageName)
                         .resizable()
                         .scaledToFit()
                         .frame(maxWidth: geo.size.width, maxHeight: geo.size.height)
-                       
+                    
                 }
                 .frame(maxHeight: .infinity)
             }
@@ -224,7 +268,7 @@ struct ProgressoTarefasCard: View {
         }
         .frame(height: 130)
     }
-
+    
     var bichinhoImageName: String {
         switch percentageDone {
         case 0..<0.2:
@@ -235,13 +279,13 @@ struct ProgressoTarefasCard: View {
             return "bichinhoneutro"
         case 0.6..<0.8:
             return "bichinhojoia"
-        case 0.8..<1:
+        case 0.8...1:
             return "bichinhonirvana"
         default:
-            return "bichinhonirvana"
+            return "bichinhoneutro"
         }
     }
-
+    
     var gradientColors: [Color] {
         switch percentageDone {
         case 0..<0.2:
@@ -252,10 +296,10 @@ struct ProgressoTarefasCard: View {
             return [Color(hex: "A4A36D"), Color(hex: "D8BF35")]
         case 0.6..<0.8:
             return [Color(hex: "628B63"), Color(hex: "BADEAB")]
-        case 0.8..<1:
+        case 0.8...1:
             return [Color(hex: "4E7DC3"), Color(hex: "7D7DAF")]
         default:
-            return [Color(hex: "4E7DC3"), Color(hex: "7D7DAF")]
+            return [Color(hex: "A4A36D"), Color(hex: "D8BF35")]
         }
     }
 }

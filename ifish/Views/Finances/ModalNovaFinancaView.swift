@@ -10,6 +10,7 @@ struct ModalNovaFinancaView: View {
     @State private var dataVencimento: Date = Date()
     @State private var repetirMensalmente: Bool = true
     @State private var notificacoesFinanca: Bool = true
+    @State private var valorTexto: String = ""
     var onSave: (() -> Void)? = nil
 
 
@@ -26,8 +27,20 @@ struct ModalNovaFinancaView: View {
             List {
                 Section {
                     TextField("Título", text: $nomeFinanca)
-                    TextField("Valor", value: $valor, formatter: numberFormatter)
-                }
+                    TextField("Valor", text: $valorTexto)
+                            .keyboardType(.decimalPad)
+                            .onChange(of: valorTexto) { newValue in
+                                let filtrado = newValue.filter { "0123456789.,".contains($0) }
+                                if filtrado != newValue {
+                                    valorTexto = filtrado
+                                }
+
+                                let convertido = filtrado.replacingOccurrences(of: ",", with: ".")
+                                if let numero = Double(convertido) {
+                                    valor = numero
+                                }
+                            }
+                    }
 
                 Section {
                     DatePicker("Vencimento", selection: $dataVencimento, displayedComponents: [.date])
