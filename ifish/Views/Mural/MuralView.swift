@@ -5,40 +5,39 @@ struct MuralView: View {
     @EnvironmentObject var appState: AppState
     @ObservedObject var messageViewModel: MessageViewModel
     @State private var mostrarModalNovoAviso = false
-
+    
     var body: some View {
-                ZStack {
+        ZStack {
             LinearGradient(
                 colors: [Color("LaranjaFundoMural"), Color("BackgroundColor")],
                 startPoint: .top,
                 endPoint: UnitPoint(x: 0.5, y: 0.2)
             )
-            .ignoresSafeArea()
-
+                .ignoresSafeArea()
+            
             ScrollView {
                 ProgressoTarefasCard(percentageDone: 0.5)
                     .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
                     .padding(.horizontal)
                     .padding(.top)
                 Spacer().frame(height: 10)
-                if messageViewModel.mensagens.isEmpty  {
-                    VStack{
+                if messageViewModel.mensagens.filter { Calendar.current.startOfDay(for: $0.timestamp) >= Calendar.current.startOfDay(for: Date()) }.isEmpty  {
+                        VStack{
+                            
+                            Text("Clique em \"+\" e crie um aviso")
+                                .foregroundColor(.gray)
+                                .padding(.vertical)
+                            Image("listavazia")
+                        }
                         
-                    Text("Clique em \"+\" e crie um aviso")
-                        .foregroundColor(.secondary)
-                        .font(.title)
-                        .padding(.vertical)
-                    Image("listavazia")
                     }
-
-                }
                 ForEach(
                     messageViewModel.mensagens
                         .filter { Calendar.current.startOfDay(for: $0.timestamp) >= Calendar.current.startOfDay(for: Date()) }
                         .sorted(by: { $0.timestamp < $1.timestamp }),
                     id: \.id
                 ) { aviso in
-
+                    
                     AvisoView(messageViewModel: messageViewModel, aviso: aviso)
                         .frame(maxWidth: .infinity)
                         .cornerRadius(10)
@@ -57,7 +56,7 @@ struct MuralView: View {
         .task {
             await messageViewModel.houseProfileViewModel?.verificarSeUsuarioJaTemCasa()
             await messageViewModel.buscarMensagens()
-//            print(appState.casaID)
+            //            print(appState.casaID)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -66,6 +65,7 @@ struct MuralView: View {
                 }) {
                     Image(systemName: "plus")
                         .imageScale(.large)
+                        .foregroundColor(.black)
                 }
             }
         }
@@ -75,11 +75,11 @@ struct MuralView: View {
 
 struct AvisoView: View {
     @ObservedObject var messageViewModel: MessageViewModel
-
+    
     let aviso: MessageModel
     @State private var mostrarModalEditarAviso = false
     @State private var nomeDoUsuario: String = "Carregando..."
-
+    
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -87,15 +87,15 @@ struct AvisoView: View {
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .foregroundColor(Color("LaranjaMural"))
-
+                
                 Text("•")
                     .font(.headline)
-
+                
                 Text(nomeDoUsuario)
                     .font(.subheadline)
-
+                
                 Spacer()
-
+                
                 Button(action: {
                     mostrarModalEditarAviso = true
                 }) {
@@ -109,9 +109,9 @@ struct AvisoView: View {
                     .foregroundColor(.gray.opacity(0.3)),
                 alignment: .bottom
             )
-
+            
             Spacer().frame(height: 4)
-
+            
             
             Text(aviso.title)
                 .font(.headline)
@@ -119,9 +119,9 @@ struct AvisoView: View {
             Text(formatarData(aviso.timestamp))
                 .font(.subheadline)
                 .foregroundColor(.gray)
-
+            
             Spacer().frame(height: 4)
-
+            
             Text(aviso.content)
                 .font(.body)
         }
@@ -143,7 +143,7 @@ struct AvisoView: View {
 }
 struct ProgressoTarefasCard: View {
     var percentageDone: Double  // Ex: 0.75 = 75%
-
+    
     var body: some View {
         ZStack {
             LinearGradient(
@@ -151,38 +151,38 @@ struct ProgressoTarefasCard: View {
                 startPoint: .top,
                 endPoint: UnitPoint(x: 0.5, y: 0.5)
             )
-            .cornerRadius(12)
-            .shadow(radius: 4)
-
+                .cornerRadius(12)
+                .shadow(radius: 4)
+            
             HStack(spacing: 20) {
                 VStack {
                     ZStack {
                         Circle()
                             .stroke(Color.white.opacity(0.3), lineWidth: 10)
-
+                        
                         Circle()
                             .trim(from: 0, to: percentageDone)
                             .stroke(Color.white, style: StrokeStyle(lineWidth: 10, lineCap: .round))
                             .rotationEffect(.degrees(-90))
                             .shadow(color: .white.opacity(0.6), radius: 4, x: 0, y: 2)
-                            
+                        
                     }
                     .frame(width: 60, height: 60)
-
+                    
                     Text("Tarefas \(Int(percentageDone * 100))% feitas")
                         .font(.caption)
                         .foregroundColor(.white)
                         .bold()
                 }
-
+                
                 Spacer()
-
+                
                 GeometryReader { geo in
                     Image(bichinhoImageName)
                         .resizable()
                         .scaledToFit()
                         .frame(maxWidth: geo.size.width, maxHeight: geo.size.height)
-                       
+                    
                 }
                 .frame(maxHeight: .infinity)
             }
@@ -191,7 +191,7 @@ struct ProgressoTarefasCard: View {
         }
         .frame(height: 130)
     }
-
+    
     var bichinhoImageName: String {
         switch percentageDone {
         case 0..<0.2:
@@ -208,7 +208,7 @@ struct ProgressoTarefasCard: View {
             return "bichinhonirvana"
         }
     }
-
+    
     var gradientColors: [Color] {
         switch percentageDone {
         case 0..<0.2:

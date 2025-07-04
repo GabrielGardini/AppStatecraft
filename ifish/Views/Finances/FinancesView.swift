@@ -112,9 +112,15 @@ struct FinancesView: View {
                         switch selecao {
                         case "Pendentes":
                             if despesasPendentes.isEmpty && despesasPagasPorVoce.isEmpty && despesasAtrasadas.isEmpty{
-                                Text("Nenhuma despesa pendente 🎉!")
-                                    .foregroundColor(.gray)
-                                    .padding()
+                                VStack(spacing: 8) {
+                                    Text("Nenhuma despesa pendente 🎉!")
+                                        .foregroundColor(.gray)
+
+                                    Image("listavazia")
+                                  
+                                }
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(.top, 24)
                             }
 
                             if !despesasAtrasadas.isEmpty {
@@ -164,7 +170,6 @@ struct FinancesView: View {
 
                                 Spacer()
                                 
-                                // O filtro volta a ser o mes atual
                                 Button(action: {
                                     filtroDataDespesa = Date()
                                 }) {
@@ -190,9 +195,14 @@ struct FinancesView: View {
 
                             
                             if despesasFiltradas.isEmpty {
-                                Text("Nenhuma despesa encontrada para este mês.")
-                                    .foregroundColor(.gray)
-                                    .padding()
+                                VStack(spacing: 8) {
+                                    Text("Nenhuma despesa encontrada para este mês.")
+                                        .foregroundColor(.gray)
+                                    Image("listavazia")
+                                   
+                                }
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(.top, 24)
                             } else {
                                 ForEach(despesasFiltradas, id: \.id) { despesa in
                                     itemLista(despesa)
