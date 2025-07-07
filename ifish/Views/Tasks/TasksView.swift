@@ -213,6 +213,7 @@ struct TasksView: View {
         
         .frame(maxHeight: .infinity)
         .navigationTitle("Tarefas")
+        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
