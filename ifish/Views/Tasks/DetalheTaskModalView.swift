@@ -96,7 +96,7 @@ struct DetalheTaskModalView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Voltar") {
+                    Button("Cancelar") {
                         dismiss()
                     }
                     .foregroundColor(Color("TasksMainColor"))
