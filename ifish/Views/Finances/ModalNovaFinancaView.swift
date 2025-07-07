@@ -39,7 +39,7 @@ struct ModalNovaFinancaView: View {
             List {
                 Section {
                     TextField("Título", text: $nomeFinanca)
-                    TextField("Valor", text: $valorTexto)
+                    TextField("Valor total", text: $valorTexto)
                             .keyboardType(.decimalPad)
                             .onChange(of: valorTexto) { newValue in
                                 let filtrado = newValue.filter { "0123456789.,".contains($0) }
@@ -71,7 +71,7 @@ struct ModalNovaFinancaView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancelar") {
-                        if(valorTexto == "" && nomeFinanca == "" && dataVencimento == Date() && repetirMensalmente == true && notificacoesFinanca == true){
+                        if(valor == 0.0 && nomeFinanca == "" && Calendar.current.isDate(dataVencimento, inSameDayAs: Date())  && repetirMensalmente == true && notificacoesFinanca == true){
                             fecharModalNovaFinanca()
                         } else{
                             mostrarConfirmacaoCancelar = true
