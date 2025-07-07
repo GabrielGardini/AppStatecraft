@@ -213,6 +213,7 @@ struct TasksView: View {
         
         .frame(maxHeight: .infinity)
         .navigationTitle("Tarefas")
+        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
@@ -221,6 +222,7 @@ struct TasksView: View {
                     Text(Image(systemName: "plus"))
                         .foregroundColor(.black)
                 }
+                .accessibilityLabel("adicionar")
                 .sheet(isPresented: $mostrarCriarTaskModalView, onDismiss: {
                     resetarNovaTask()
                 }) {

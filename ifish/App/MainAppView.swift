@@ -13,7 +13,7 @@ struct MainAppView: View {
                 MuralView(messageViewModel: messageViewModel)
             }
             .tabItem {
-                Label("Mural", systemImage: "house")
+                Label("Mural", systemImage: "rectangle.grid.2x2")
             }
 
             NavigationView {
@@ -34,7 +34,7 @@ struct MainAppView: View {
                 PerfilView()
             }
             .tabItem {
-                Label("Config", systemImage: "gear")
+                Label("Minha Casa", systemImage: "house.fill")
             }
         }
         .environmentObject(appState)
