@@ -4,6 +4,7 @@ import SwiftUI
 import CloudKit
 
 struct ModalNovaFinancaView: View {
+    @State private var mostrarConfirmacaoCancelar = false
     @ObservedObject var financeViewModel: FinanceViewModel
     @Environment(\.dismiss) var fecharModalNovaFinanca
     @State private var nomeFinanca: String = ""
@@ -70,9 +71,24 @@ struct ModalNovaFinancaView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancelar") {
-                        fecharModalNovaFinanca()
+                        if(valorTexto == "" && nomeFinanca == "" && dataVencimento == Date() && repetirMensalmente == true && notificacoesFinanca == true){
+                            fecharModalNovaFinanca()
+                        } else{
+                            mostrarConfirmacaoCancelar = true
+                        }
+                    }
+                    .confirmationDialog("Tem certeza de que deseja descartar as alterações?", isPresented: $mostrarConfirmacaoCancelar, titleVisibility: .visible){
+                        Button("Ignorar alterações", role: .destructive){
+                            Task {
+                                fecharModalNovaFinanca()
+                            }
+                        }
+                        Button("Continuar Editando", role: .cancel){}
+                        .foregroundColor(.accentColor)
                     }
                 }
+
+                
 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Adicionar") {
