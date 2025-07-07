@@ -222,6 +222,7 @@ struct TasksView: View {
                     Text(Image(systemName: "plus"))
                         .foregroundColor(.black)
                 }
+                .accessibilityLabel("adicionar")
                 .sheet(isPresented: $mostrarCriarTaskModalView, onDismiss: {
                     resetarNovaTask()
                 }) {

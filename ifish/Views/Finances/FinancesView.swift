@@ -232,6 +232,7 @@ struct FinancesView: View {
                             Image(systemName: "plus")
                                 .foregroundColor(.black)
                         }
+                        .accessibilityLabel("adicionar")
                     }
                 }
                 .sheet(isPresented: $mostrarModalNovaFinanca) {
@@ -327,6 +328,13 @@ struct DespesaEspecifica: View {
             .background(Color.white.opacity(0.2))
             .cornerRadius(10)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(
+            despesa.paidBy.contains(nomeUsuario)
+            ? "\(despesa.title). No valor de \((valorIndividualConta), specifier: "%.2f") reais já foi paga por você. Vencimento dia \(despesa.deadline.formatted(date: .numeric, time: .omitted)). Valor total: \(despesa.amount, specifier: "%.2f") reais"
+            : "\(despesa.title). No valor de \((valorIndividualConta), specifier: "%.2f") reais ainda não foi paga por você. Vencimento dia \(despesa.deadline.formatted(date: .numeric, time: .omitted)).  Valor total: \(despesa.amount, specifier: "%.2f") reais"
+        )
+
     }
 }
 
