@@ -55,12 +55,18 @@ struct ModalInfoDespesasView: View {
         NavigationView{
             VStack(alignment: .leading){
                 Text(despesa.title)
-                    .font(.system(size: 24))
-                    .padding(.vertical, 5)
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    //.padding(.top)                    //.padding(.vertical, 5)
+                    .padding(.bottom, 12)
                 Text("Prazo")
-                    .font(.system(size: 20))
-                    .bold()
-                Text(despesa.deadline.formatted(date: .numeric, time: .omitted))
+                    .font(.callout)
+                    .foregroundColor(.secondary)
+                //Text(despesa.deadline.formatted(date: .numeric, time: .omitted))
+                Text(despesa.deadline.formatted(.dateTime.day().month(.wide).year()))
+                    .font(.body)
+                    .padding(.bottom)
+
                 Spacer()
                 Section{
                     HStack{
@@ -82,7 +88,6 @@ struct ModalInfoDespesasView: View {
                 .task{
                    await usuarioPagou()
                     await setNomeUsuario()
-                    
                 }
                 Spacer()
                 Section{
@@ -98,18 +103,28 @@ struct ModalInfoDespesasView: View {
                 HStack{
                     Spacer()
                     if(jaPagou == false){
-                        Button("Marcar como pago"){
+                        Button {
                             Task{
                                 despesa.paidBy.append(nomeUsuario)
                                 await financeViewModel.editarDespesa(despesa)
                                 pagos = despesa.paidBy
                                 jaPagou = true
                                 UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [despesa.id.recordName])
+                            } }label: {
+                                Text("Marcar como pago")
+                                    .foregroundColor(.white)
+                                    .bold()
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color("AccentColor"))
+                                    .cornerRadius(10)
                             }
-                        }
-                        .buttonStyle(.borderedProminent)
+                        
+                        .padding(.horizontal)
+                        .padding(.bottom, 10)
+
                     } else {
-                        Button("Desmarcar como pago"){
+                        Button{
                             Task{
                                 jaPagou = false
                                 despesa.paidBy.removeAll { $0 == nomeUsuario }
@@ -117,8 +132,18 @@ struct ModalInfoDespesasView: View {
                                 pagos = despesa.paidBy
                                 financeViewModel.agendarNotificacaoSeNecessario(despesa, nomeUsuario: nomeUsuario)
                             }
+                        } label:{
+                            Text("Desmarcar como pago")
+                                .foregroundColor(.white)
+                                .bold()
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(.gray)
+                                .cornerRadius(10)
+                            
                         }
-                        .buttonStyle(.borderedProminent)
+                        .padding(.horizontal)
+                        .padding(.bottom, 10)
                     }
                     Spacer()
                 }

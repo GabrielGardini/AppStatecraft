@@ -63,7 +63,7 @@ struct ModalEditarFincancaView: View {
                     Section {
                         TextField("Título", text: $nomeFinanca)
                         //TextField("Valor", value: $valor, formatter: numberFormatter)
-                        TextField("Valor", text: $valorTexto)
+                        TextField("Valor total", text: $valorTexto)
                                 .keyboardType(.decimalPad)
                                 .onChange(of: valorTexto) { newValue in
                                     // Filtra: só números, ponto ou vírgula
