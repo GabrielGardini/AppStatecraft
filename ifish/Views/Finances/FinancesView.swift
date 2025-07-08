@@ -11,7 +11,7 @@ struct FinancesView: View {
     @State private var selecao = "Pendentes"
     let opcoes = ["Pendentes", "Pagas por todos"]
     @State private var mostrarModalNovaFinanca = false
-    @State private var mostrarModalInfo = false
+    @State var mostrarModalInfo = false
     @StateObject var viewModel = HouseProfileViewModel()
     @StateObject var appState = AppState()
     @StateObject var financeViewModel: FinanceViewModel
@@ -238,12 +238,28 @@ struct FinancesView: View {
                 .sheet(isPresented: $mostrarModalNovaFinanca) {
                     ModalNovaFinancaView(financeViewModel: financeViewModel)
                 }
-                .sheet(item: $despesaSelecionada) { despesa in
-                    ModalInfoDespesasView(financeViewModel: financeViewModel, despesa: despesa, valorIndividual: DespesaEspecifica(despesa: despesa, viewModel: viewModel, nomeUsuario: nomeUsuario).valorIndividualConta)
+                /*.sheet(item: $despesaSelecionada) { despesa in
+                    ModalInfoDespesasView(financeViewModel: financeViewModel, despesa: despesa, valorIndividual: DespesaEspecifica(despesa: despesa, viewModel: viewModel, nomeUsuario: nomeUsuario).valorIndividualConta, mostrarModalInfo: $mostrarModalInfo)
                         .onDisappear {
                             despesaSelecionada = nil
                         }
+                }*/
+                .sheet(isPresented: $mostrarModalInfo) {
+                    if let despesa = despesaSelecionada {
+                        ModalInfoDespesasView(
+                            financeViewModel: financeViewModel,
+                            despesa: despesa,
+                            valorIndividual: DespesaEspecifica(despesa: despesa, viewModel: viewModel, nomeUsuario: nomeUsuario).valorIndividualConta,
+                            mostrarModalInfo: $mostrarModalInfo
+                        )
+                    }
                 }
+                .onChange(of: mostrarModalInfo) { novoValor in
+                    if !novoValor {
+                        despesaSelecionada = nil
+                    }
+                }
+
             }
         }
         .onAppear {

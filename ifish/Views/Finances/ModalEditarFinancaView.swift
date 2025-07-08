@@ -10,6 +10,7 @@ import SwiftUI
 import CloudKit
 
 struct ModalEditarFincancaView: View {
+    @Binding var mostrarModalInfo: Bool
     @State private var mostrarConfirmacaoApagar = false
     @State private var mostrarConfirmacaoCancelar = false
     @State private var numberFormatter: NumberFormatter = {
@@ -43,7 +44,8 @@ struct ModalEditarFincancaView: View {
     }
     
 
-    init(financeViewModel: FinanceViewModel, despesa: FinanceModel) {
+    init(financeViewModel: FinanceViewModel, despesa: FinanceModel, mostrarModalInfo: Binding<Bool>) {
+        self._mostrarModalInfo = mostrarModalInfo
         self.financeViewModel = financeViewModel
         self.despesa = despesa
         _nomeFinanca = State(initialValue: despesa.title)
@@ -102,6 +104,7 @@ struct ModalEditarFincancaView: View {
                             Button("Apagar despesa", role: .destructive) {
                                 Task {
                                     await financeViewModel.apagarDespesa(despesa)
+                                    mostrarModalInfo = false
                                     fecharModalEditar()
                                 }
                             }
