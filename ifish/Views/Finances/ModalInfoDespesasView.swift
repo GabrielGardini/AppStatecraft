@@ -153,6 +153,8 @@ struct ModalInfoDespesasView: View {
                 }
             }
             .padding(24)
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancelar") {
