@@ -2,6 +2,7 @@ import SwiftUI
 import CloudKit
 
 struct MuralView: View {
+    @Binding var selectedTab: Int
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var tasksViewModel: TasksViewModel
     @ObservedObject var messageViewModel: MessageViewModel
@@ -43,7 +44,7 @@ struct MuralView: View {
                 .ignoresSafeArea()
             
             ScrollView {
-                ProgressoTarefasCard(percentageDone: percentageDone)
+                ProgressoTarefasCard(percentageDone: percentageDone, selectedTab: $selectedTab)
                     .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
                     .padding(.horizontal)
                     .padding(.top)
@@ -204,6 +205,7 @@ struct AvisoView: View {
 
 struct ProgressoTarefasCard: View {
     var percentageDone: Double  // Ex: 0.75 = 75%
+    @Binding var selectedTab: Int
     @State private var irParaTarefas = false
 
     var body: some View {
@@ -263,9 +265,9 @@ struct ProgressoTarefasCard: View {
                 .padding(.vertical, 12)
             }
             .frame(height: 130)
-//            .onTapGesture {
-//                irParaTarefas = true
-//            }
+            .onTapGesture {
+                selectedTab = 1     
+            }
         }
     }
 
