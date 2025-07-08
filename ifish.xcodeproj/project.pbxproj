@@ -197,8 +197,8 @@
 		4E8C088E2E02E83C00655A67 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				4E8C088C2E02E82900655A67 /* AppState.swift */,
 				E75ECE712E01972A00E1A579 /* MainAppView.swift */,
+				4E8C088C2E02E82900655A67 /* AppState.swift */,
 				E75ECE732E01A8FF00E1A579 /* AppStartView.swift */,
 				E6BFC2CC2E14258F0015B671 /* AppDelegate.swift */,
 			);

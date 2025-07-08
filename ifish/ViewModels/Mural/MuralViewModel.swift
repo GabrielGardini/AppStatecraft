@@ -197,11 +197,6 @@ class MessageViewModel: ObservableObject {
                     UIApplication.shared.registerForRemoteNotifications()
                 }
             }
-            if let error = error{
-                print("erro ao pedir")
-            } else {
-                print("permitiu")
-            }
         }
     }
     

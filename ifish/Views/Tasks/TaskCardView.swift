@@ -31,6 +31,8 @@ struct TaskCard: View {
                 .font(.footnote)
                 .foregroundColor(.gray)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("tarefa de \(nomeUsuario ?? "desconhecido"): \(task.titulo)")
         .padding(12)
         .background(Color.white)
         .cornerRadius(10)
