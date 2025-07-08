@@ -8,6 +8,7 @@ struct NovoAvisoModalView: View {
     @State private var descricaoAviso: String = ""
     @State private var dataAviso: Date = Date()
     @State private var notificacoesAviso: Bool = true
+    @State private var mostrarConfirmacaoCancelar: Bool = false
 
     var body: some View {
         NavigationView {
@@ -43,7 +44,22 @@ struct NovoAvisoModalView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancelar") {
-                        fecharModalNovoAviso()
+                        if(nomeAviso == "" &&
+                           descricaoAviso == ""){
+                            fecharModalNovoAviso()
+                        }
+                        else{
+                            mostrarConfirmacaoCancelar = true
+                        }
+                    }
+                    .confirmationDialog("Tem certeza de que deseja descartar as alterações?", isPresented: $mostrarConfirmacaoCancelar, titleVisibility: .visible){
+                        Button("Ignorar alterações", role: .destructive){
+                            Task {
+                                fecharModalNovoAviso()
+                            }
+                        }
+                        Button("Continuar Editando", role: .cancel){}
+                        .foregroundColor(.accentColor)
                     }
                 }
 
