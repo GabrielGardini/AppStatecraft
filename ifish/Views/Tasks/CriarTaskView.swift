@@ -110,7 +110,7 @@ struct CriarTaskModalView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancelar") {
-                        if (task.titulo == "" && task.icone == "") {
+                        if (task.titulo == "") {
                             fecharCriarTaskModalView()
                         } else {
                             mostrarConfirmacaoCancelar = true
@@ -137,7 +137,7 @@ struct CriarTaskModalView: View {
                             fecharCriarTaskModalView()
                         }
                     }
-                    .disabled(task.titulo == "" || task.icone == "")
+                    .disabled(task.titulo == "")
                 }
             }
             .task {

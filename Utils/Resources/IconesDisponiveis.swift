@@ -9,6 +9,7 @@ import Foundation
 
 struct IconesDisponiveis {
     static let todos: [String] = [
+        "house.fill",
         "trash.fill",
         "leaf.fill",
         "tshirt.fill",
