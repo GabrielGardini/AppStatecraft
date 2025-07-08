@@ -113,7 +113,9 @@ struct ModalInfoDespesasView: View {
                                 await financeViewModel.editarDespesa(despesa)
                                 pagos = despesa.paidBy
                                 jaPagou = true
-                                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [despesa.id.recordName])
+                                let id1 = "\(despesa.id.recordName)-1"
+                                let id2 = "\(despesa.id.recordName)-2"
+                                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id1, id2])
                             } }label: {
                                 Text("Marcar como pago")
                                     .foregroundColor(.white)

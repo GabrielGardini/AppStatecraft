@@ -160,27 +160,51 @@ class FinanceViewModel: ObservableObject {
     func agendarNotificacaoSeNecessario(_ despesa: FinanceModel, nomeUsuario: String) {
         guard !despesa.paidBy.contains(nomeUsuario) else { return }
 
-        let content = UNMutableNotificationContent()
-        content.title = "Despesa vencendo hoje"
-        content.body = "A despesa \"\(despesa.title)\" vence hoje e ainda não foi paga."
-        content.sound = .default
+        let content1 = UNMutableNotificationContent()
+        content1.title = "Despesa vence amanhã"
+        content1.body = "A despesa \"\(despesa.title)\" vence amanhã e ainda não foi paga."
+        content1.sound = .default
+        
+        let content2 = UNMutableNotificationContent()
+        content2.title = "Despesa vence hoje"
+        content2.body = "A despesa \"\(despesa.title)\" vence hoje e ainda não foi paga."
+        content2.sound = .default
 
-        var triggerDate = Calendar.current.dateComponents([.year, .month, .day], from: despesa.deadline)
-        triggerDate.hour = 12
-        triggerDate.minute = 02
-        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
+        let diaAnterior = Calendar.current.date(byAdding: .day, value: -1, to: despesa.deadline)!
+        var triggerDate1 = Calendar.current.dateComponents([.year, .month, .day], from: diaAnterior)
+        triggerDate1.hour = 9
+        triggerDate1.minute = 00
+        let trigger1 = UNCalendarNotificationTrigger(dateMatching: triggerDate1, repeats: false)
 
-        let request = UNNotificationRequest(identifier: despesa.id.recordName, content: content, trigger: trigger)
 
-        UNUserNotificationCenter.current().add(request) { error in
+        var triggerDate2 = Calendar.current.dateComponents([.year, .month, .day], from: despesa.deadline)
+        triggerDate2.hour = 09
+        triggerDate2.minute = 00
+        let trigger2 = UNCalendarNotificationTrigger(dateMatching: triggerDate2, repeats: false)
+
+        let id1 = "\(despesa.id.recordName)-1"
+        let id2 = "\(despesa.id.recordName)-2"
+        
+        let request1 = UNNotificationRequest(identifier: id1, content: content1, trigger: trigger1)
+        let request2 = UNNotificationRequest(identifier: id2, content: content2, trigger: trigger2)
+
+
+        UNUserNotificationCenter.current().add(request1) { error in
             if let error = error {
                 print("❌ Erro ao agendar notificação: \(error.localizedDescription)")
             } else {
-                print("🔔 Notificação agendada para \(despesa.title)")
+                print("🔔 Notificação agendada para \(despesa.title) no dia anterior")
+            }
+        }
+        
+        UNUserNotificationCenter.current().add(request2) { error in
+            if let error = error {
+                print("❌ Erro ao agendar notificação: \(error.localizedDescription)")
+            } else {
+                print("🔔 Notificação agendada para \(despesa.title) no dia")
             }
         }
     }
-
 
 }
 
