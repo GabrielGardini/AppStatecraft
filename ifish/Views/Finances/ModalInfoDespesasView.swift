@@ -10,6 +10,7 @@ import CloudKit
 import SwiftUI
 
 struct ModalInfoDespesasView: View {
+    @Binding var mostrarModalInfo: Bool
     @State private var mostrarModalEditar = false
     @ObservedObject var financeViewModel: FinanceViewModel
     @Environment(\.dismiss) var fecharModalInfo
@@ -19,7 +20,8 @@ struct ModalInfoDespesasView: View {
     @State var jaPagou = false
     @State var nomeUsuario: String = ""
 
-    init(financeViewModel: FinanceViewModel, despesa: FinanceModel, valorIndividual: Double) {
+    init(financeViewModel: FinanceViewModel, despesa: FinanceModel, valorIndividual: Double, mostrarModalInfo: Binding<Bool>) {
+        self._mostrarModalInfo = mostrarModalInfo
         self.despesa = despesa
         self.valorIndividual = valorIndividual
         self.financeViewModel = financeViewModel
@@ -173,7 +175,7 @@ struct ModalInfoDespesasView: View {
 
         }
         .sheet(isPresented: $mostrarModalEditar) {
-            ModalEditarFincancaView(financeViewModel: financeViewModel, despesa: despesa)
+            ModalEditarFincancaView(financeViewModel: financeViewModel, despesa: despesa, mostrarModalInfo: $mostrarModalInfo)
         }
     }
 }
