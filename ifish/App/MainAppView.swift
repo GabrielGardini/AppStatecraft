@@ -6,12 +6,14 @@ struct MainAppView: View {
     @EnvironmentObject var houseViewModel: HouseProfileViewModel
     @StateObject private var tasksViewModel = TasksViewModel()
     @StateObject private var messageViewModel = MessageViewModel()
+    @State private var selectedTab = 0
 
     var body: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             NavigationView {
-                MuralView(messageViewModel: messageViewModel)
+                MuralView(selectedTab: $selectedTab, messageViewModel: messageViewModel)
             }
+            .tag(0)
             .tabItem {
                 Label("Mural", systemImage: "rectangle.grid.2x2")
             }
@@ -19,6 +21,7 @@ struct MainAppView: View {
             NavigationView {
                 TasksView()
             }
+            .tag(1)
             .tabItem {
                 Label("Tarefas", systemImage: "checkmark.circle")
             }
@@ -26,6 +29,7 @@ struct MainAppView: View {
             NavigationView {
                 FinancesView()
             }
+            .tag(2)
             .tabItem {
                 Label("Despesas", systemImage: "dollarsign.circle")
             }
@@ -33,6 +37,7 @@ struct MainAppView: View {
             NavigationView {
                 PerfilView()
             }
+            .tag(3)
             .tabItem {
                 Label("Minha Casa", systemImage: "house.fill")
             }
