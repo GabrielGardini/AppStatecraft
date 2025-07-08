@@ -208,12 +208,12 @@ struct ProgressoTarefasCard: View {
 
     var body: some View {
         ZStack {
-            NavigationLink(
-                destination: TasksView(), // <-- substitua com sua tela de tarefas
-                isActive: $irParaTarefas
-            ) {
-                EmptyView()
-            }
+//            NavigationLink(
+//                destination: TasksView(), // <-- substitua com sua tela de tarefas
+//                isActive: $irParaTarefas
+//            ) {
+//                EmptyView()
+//            }
 
             // Conteúdo clicável
             ZStack {
@@ -263,9 +263,9 @@ struct ProgressoTarefasCard: View {
                 .padding(.vertical, 12)
             }
             .frame(height: 130)
-            .onTapGesture {
-                irParaTarefas = true
-            }
+//            .onTapGesture {
+//                irParaTarefas = true
+//            }
         }
     }
 
