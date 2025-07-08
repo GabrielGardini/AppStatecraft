@@ -95,7 +95,7 @@ class TaskModel: ObservableObject, Identifiable {
             id: CKRecord.ID(recordName: UUID().uuidString),
             userID: userID ?? CKRecord.ID(recordName: "undefined"),
             casaID: casaID ?? CKRecord.ID(recordName: "undefined"),
-            icone: "",
+            icone: "house.fill",
             titulo: "",
             descricao: "",
             prazo: Date(),

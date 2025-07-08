@@ -177,9 +177,6 @@ struct AvisoView: View {
                 .font(.headline)
             
             
-            Text(formatarData(aviso.timestamp))
-                .font(.subheadline)
-                .foregroundColor(.gray)
             
             Spacer().frame(height: 4)
             

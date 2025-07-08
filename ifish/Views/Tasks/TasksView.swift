@@ -126,7 +126,7 @@ struct TasksView: View {
                                     .foregroundColor(.secondary)
                                     .font(.body)
                                     .padding(.vertical)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .frame(maxWidth: .infinity)
                                 
                                 Image("listavazia")
                                     .resizable()

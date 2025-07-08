@@ -16,6 +16,7 @@ struct CriarTaskModalView: View {
 
     @ObservedObject var task: TaskModel
 
+    @State private var mostrarConfirmacaoCancelar = false
     @State private var mostrarModalSelecionarTarefa = false
     
     var body: some View {
@@ -109,7 +110,20 @@ struct CriarTaskModalView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancelar") {
-                        fecharCriarTaskModalView()
+                        if (task.titulo == "") {
+                            fecharCriarTaskModalView()
+                        } else {
+                            mostrarConfirmacaoCancelar = true
+                    }
+                    }
+                    .confirmationDialog("Tem certeza de que deseja descartar as alterações?", isPresented: $mostrarConfirmacaoCancelar, titleVisibility: .visible){
+                        Button("Ignorar alterações", role: .destructive){
+                            Task {
+                                fecharCriarTaskModalView()
+                            }
+                        }
+                        Button("Continuar Editando", role: .cancel){}
+                        .foregroundColor(.accentColor)
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -123,7 +137,7 @@ struct CriarTaskModalView: View {
                             fecharCriarTaskModalView()
                         }
                     }
-                    .disabled(task.titulo == "" || task.icone == "")
+                    .disabled(task.titulo == "")
                 }
             }
             .task {

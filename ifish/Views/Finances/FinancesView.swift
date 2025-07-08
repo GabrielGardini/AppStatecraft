@@ -356,6 +356,7 @@ extension Date {
 
 @MainActor
 func criarDespesaMensal(financeViewModel: FinanceViewModel, totalPessoas: Int) async {
+    
     let duasSemanasAtras = Calendar.current.date(byAdding: .day, value: -14, to: Date())!
 
     let despesasRepetidas = financeViewModel.despesas
