@@ -116,17 +116,7 @@ struct PerfilView: View {
                         .padding(.horizontal, 24)
                         .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
 
-                        // Botão: Notificações
-                        Button(action: {}) {
-                            Text("Notificação")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.vertical, 14)
-                                .padding(.horizontal)
-                                .background(Color(UIColor.systemBackground))
-                                .cornerRadius(10)
-                        }
-                        .padding(.horizontal, 24)
-                        .shadow(color: .black.opacity(0.07), radius: 3.5, x: 0, y: 4)
+                      
 
                         // Botão: Sair
                         Button("Sair", role: .destructive) {
