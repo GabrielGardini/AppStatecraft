@@ -30,7 +30,7 @@ struct LoginView: View {
                 houseViewModel.verificarConta()
                 navegarParaProximaEtapa = true
             }) {
-                Label("Entrar com iCloud", systemImage: "icloud")
+                Text("Entrar")
                     .font(.body.bold())
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)

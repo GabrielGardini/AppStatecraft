@@ -209,7 +209,7 @@ struct ProgressoTarefasCard: View {
     @State private var irParaTarefas = false
 
     var body: some View {
-        ZStack {
+       
 //            NavigationLink(
 //                destination: TasksView(), // <-- substitua com sua tela de tarefas
 //                isActive: $irParaTarefas
@@ -222,7 +222,7 @@ struct ProgressoTarefasCard: View {
                 LinearGradient(
                     colors: gradientColors,
                     startPoint: .top,
-                    endPoint: UnitPoint(x: 0.5, y: 0.5)
+                    endPoint: UnitPoint(x: 0.5, y: 0.7)
                 )
                 .cornerRadius(12)
                 .shadow(radius: 4)
@@ -235,11 +235,13 @@ struct ProgressoTarefasCard: View {
 
                             Circle()
                                 .trim(from: 0, to: percentageDone >= 0.0 ? percentageDone : 0.0)
-                                .stroke(Color.white, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                                .stroke(Color(hex:bichinhoColorText), style: StrokeStyle(lineWidth: 10, lineCap: .round))
                                 .rotationEffect(.degrees(-90))
                                 .shadow(color: .white.opacity(0.6), radius: 4, x: 0, y: 2)
                         }
                         .frame(width: 60, height: 60)
+                        .padding(5)
+                        
 
                         Text(
                             percentageDone >= 0.0
@@ -247,7 +249,7 @@ struct ProgressoTarefasCard: View {
                             : "Não há tarefas no mês"
                         )
                         .font(.caption)
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(hex: bichinhoColorText))
                         .bold()
                     }
 
@@ -269,39 +271,57 @@ struct ProgressoTarefasCard: View {
                 selectedTab = 1     
             }
         }
-    }
+    
 
     var bichinhoImageName: String {
         switch percentageDone {
         case 0..<0.2:
-            return "bichinhomuitotriste"
+            return "bichinhomuitosujo"
         case 0.2..<0.4:
-            return "bichinhotriste"
+            return "bichinhosujo"
         case 0.4..<0.6:
             return "bichinhoneutro"
         case 0.6..<0.8:
-            return "bichinhojoia"
+            return "bichinholimpo"
         case 0.8...1:
-            return "bichinhonirvana"
+            return "bichinhomuitolimpo"
         default:
             return "bichinhoneutro"
         }
     }
+    
+    var bichinhoColorText: String {
+        switch percentageDone {
+        case 0..<0.2:
+            return "ffffff"
+        case 0.2..<0.4:
+            return "ffffff"
+        case 0.4..<0.6:
+            return "ffffff"
+        case 0.6..<0.8:
+            return "ffffff"
+        case 0.8...1:
+            return "ffffff"
+        default:
+            return "ffffff"
+        }
+    }
+
 
     var gradientColors: [Color] {
         switch percentageDone {
         case 0..<0.2:
             return [Color(hex: "703F11"), Color(hex: "8F4018")]
         case 0.2..<0.4:
-            return [Color(hex: "DE9B5C"), Color(hex: "F09C15")]
+            return [Color(hex: "DE9B5C"), Color(hex: "6E4707")]
         case 0.4..<0.6:
-            return [Color(hex: "A4A36D"), Color(hex: "D8BF35")]
+            return [Color(hex: "AB972A"), Color(hex: "585837")]
         case 0.6..<0.8:
-            return [Color(hex: "628B63"), Color(hex: "BADEAB")]
+            return [Color(hex: "8DA87E"), Color(hex: "485C3D")]
         case 0.8...1:
-            return [Color(hex: "4E7DC3"), Color(hex: "7D7DAF")]
+            return [Color(hex: "4E7DC3"), Color(hex: "4E7DC3")]
         default:
-            return [Color(hex: "A4A36D"), Color(hex: "D8BF35")]
+            return [Color(hex: "AB972A"), Color(hex: "585837")]
         }
     }
 }

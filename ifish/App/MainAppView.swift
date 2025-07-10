@@ -39,7 +39,7 @@ struct MainAppView: View {
             }
             .tag(3)
             .tabItem {
-                Label("Minha Casa", systemImage: "house.fill")
+                Label("Minha Casa", systemImage: "person.2.fill")
             }
         }
         .environmentObject(appState)
