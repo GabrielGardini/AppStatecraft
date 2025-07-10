@@ -204,9 +204,11 @@ struct FinancesView: View {
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .padding(.top, 24)
                             } else {
+                                VStack(alignment: .leading, spacing: 0){
                                 ForEach(despesasFiltradas, id: \.id) { despesa in
                                     itemLista(despesa)
                                         .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 4)
+                                }
                                 }
                             }
                             /*ForEach(despesasPagasPorTodos.sorted(by: {$0.deadline < $1.deadline}).filter {
