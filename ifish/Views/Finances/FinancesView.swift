@@ -83,7 +83,7 @@ struct FinancesView: View {
     
     var despesasPagasPorVoce: [FinanceModel]{
         return financeViewModel.despesas.filter {
-            $0.paidBy.contains(nomeUsuario)
+            $0.paidBy.contains(nomeUsuario) && $0.paidBy.count < viewModel.usuariosDaCasa.count
         }
     }
     
