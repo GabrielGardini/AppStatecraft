@@ -72,8 +72,8 @@ struct EntrarOuCriarCasaView: View {
             }
 
             VStack(spacing: 8) {
-                Text("Ainda não possui uma casa?")
-
+                //Text("Ainda não possui uma casa?")
+                Text("Ainda não está vinculado a uma casa?")
                 NavigationLink {
                     CriarCasaView()
                         .environmentObject(appState)
