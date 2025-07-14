@@ -118,6 +118,7 @@ struct ModalInfoDespesasView: View {
                                 let id1 = "\(despesa.id.recordName)-1"
                                 let id2 = "\(despesa.id.recordName)-2"
                                 UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id1, id2])
+                                fecharModalInfo()
                             } }label: {
                                 Text("Marcar como pago")
                                     .foregroundColor(.white)
@@ -139,6 +140,7 @@ struct ModalInfoDespesasView: View {
                                 await financeViewModel.editarDespesa(despesa)
                                 pagos = despesa.paidBy
                                 financeViewModel.agendarNotificacaoSeNecessario(despesa, nomeUsuario: nomeUsuario)
+                                fecharModalInfo()
                             }
                         } label:{
                             Text("Desmarcar como pago")
