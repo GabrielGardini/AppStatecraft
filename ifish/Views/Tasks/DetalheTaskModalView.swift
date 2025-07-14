@@ -86,7 +86,7 @@ struct DetalheTaskModalView: View {
                         .background(
                             (tarefa.userID != appState.userID || tarefa.completo)
                                 ? .gray
-                                : Color("TasksMainColor")
+                                : Color("AccentColor")
                         )
                         .cornerRadius(10)
                 }
@@ -102,14 +102,12 @@ struct DetalheTaskModalView: View {
                     Button("Cancelar") {
                         dismiss()
                     }
-                    .foregroundColor(Color("TasksMainColor"))
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Editar") {
                         mostrarEditarTaskModalView = true
                     }
-                    .foregroundColor(Color("TasksMainColor"))
                     
                     .sheet(isPresented: $mostrarEditarTaskModalView) {
                         if let tarefa = tarefa {
