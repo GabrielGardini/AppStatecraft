@@ -78,15 +78,16 @@ struct DetalheTaskModalView: View {
                         dismiss()
                     }
                 } label: {
-                    Text("Feito")
+                    
+                    Text((tarefa.completo) ? "Desmarcar como feito" : "Feito")
                         .foregroundColor(.white)
                         .bold()
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(
                             (tarefa.userID != appState.userID || tarefa.completo)
-                                ? .gray
-                                : Color("AccentColor")
+                                ? .green
+                            : Color("AccentColor")
                         )
                         .cornerRadius(10)
                 }

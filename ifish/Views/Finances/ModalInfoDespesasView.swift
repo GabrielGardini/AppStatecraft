@@ -148,7 +148,7 @@ struct ModalInfoDespesasView: View {
                                 .bold()
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(.gray)
+                                .background(.green)
                                 .cornerRadius(10)
                             
                         }
