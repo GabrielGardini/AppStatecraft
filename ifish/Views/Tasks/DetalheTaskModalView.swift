@@ -111,7 +111,6 @@ struct DetalheTaskModalView: View {
                     }
                     
                     .sheet(isPresented: $mostrarEditarTaskModalView) {
-                        if let tarefa = tarefa {
                             EditarTaskModalView(
                                 task: tarefa,
                                 onApagar: {
@@ -122,7 +121,7 @@ struct DetalheTaskModalView: View {
                             .environmentObject(appState)
                             .environmentObject(houseViewModel)
                             .environmentObject(tasksViewModel)
-                        }
+                        
                     }
                 }
             }
